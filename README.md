@@ -12,3 +12,12 @@ TODO :
 MultiPoint
 MultiLineString
 MultiPolygon
+
+
+# Installation
+npm install ssh://git@gitlab.dockerforge.ign.fr:10022/sai/ol-geometry-editor.git && grunt
+
+# Utilisation 
+Regarder depuis les exemples.
+
+
