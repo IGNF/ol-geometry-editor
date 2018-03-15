@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../dist/ol-geometry-editor-bundle.css" />
+    <script type="text/javascript" src="../dist/ol-geometry-editor-bundle.min.js"></script>
+    <script type="text/javascript" src="customize-geoportal.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            $('#point').geometryEditor({
+                geometryType: 'Point',
+                height: 300
+            });
+            $('#linestring').geometryEditor({
+                geometryType: 'LineString',
+                height: 300
+            });
+            $('#polygon').geometryEditor({
+                geometryType: 'Polygon',
+                height: 300
+            });
+
+            $('#multipoint').geometryEditor({
+                geometryType: 'MultiPoint',
+                height: 300
+            });
+            $('#multilinestring').geometryEditor({
+                geometryType: 'MultiLineString',
+                height: 300
+            });
+            $('#multipolygon').geometryEditor({
+                geometryType: 'MultiPolygon',
+                height: 300
+            });
+
+            $('#rectangle').geometryEditor({
+                geometryType: 'Rectangle',
+                height: 300,
+                hide: false
+            });
+            $('#geometry').geometryEditor({
+                geometryType: 'Geometry',
+                height: 300
+            });
+        });
+
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <h2>Point</h2>
+
+                <span id="point" class="geometry">
+                    {"type":"Point","coordinates":[2.424059808254242,48.844580316300906]}
+                </span>
+            </div>
+
+            <div class="col-sm-4">
+                <h2>LineString</h2>
+
+                <span id="linestring" class="geometry">
+                    {"type":"LineString","coordinates":[[2.406005859375,48.87338678327761],[2.779541015625,48.248088874525514],[3.922119140625,47.64466657284537],[4.976806640625,47.04916590489654],[6.009521484375,47.228521621233796],[6.60552978515625,47.05667443815281]]}
+                </span>
+            </div>
+
+            <div class="col-sm-4">
+                <h2>Polygon</h2>
+
+                <span id="polygon" class="geometry">
+                    {"type":"Polygon","coordinates":[[[2.47467041015625,49.0796231770863],[1.95831298828125,48.97156360565644],[2.10113525390625,48.68225690458381],[2.57904052734375,48.55879557208034],[2.83172607421875,48.78732358929034],[2.68341064453125,48.97516937226341],[2.47467041015625,49.0796231770863]]]}
+                </span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <h2>MultiPoint</h2>
+
+                <span id="multipoint" class="geometry">
+                    {"type":"MultiPoint","coordinates":[[2.424059808254242,48.844580316300906],[2.472782135009765,48.84949007255205],[2.4823951721191406,48.872302780090024]]}
+                </span>
+            </div>
+
+            <div class="col-sm-4">
+                <h2>MultiLineString</h2>
+
+                <span id="multilinestring" class="geometry">
+                    {"type":"MultiLineString","coordinates":[[[2.044830322265625,48.88928134706652],[2.344207763671875,48.85857124408756],[2.6930236816406246,48.8712188636798]],[[2.5138092041015625,48.9338677246169],[2.424545288085937,48.88964252469111],[2.3297882080078125,48.89686563951971]],[[2.2693634033203125,48.93025894405523],[2.3448944091796875,48.8670635367441]]]}
+                </span>
+            </div>
+
+            <div class="col-sm-4">
+                <h2>MultiPolygon</h2>
+
+                <span id="multipolygon" class="geometry">
+                    {"type":"MultiPolygon","coordinates":[[[[2.350797951221466,48.85334892310108],[2.350679934024811,48.8532077338677],[2.351146638393402,48.85304536575706],[2.3512324690818787,48.85320067439557],[2.350797951221466,48.85334892310108]]],[[[2.350824773311615,48.853355982552294],[2.3509374260902405,48.85353952793456],[2.350996434688568,48.85355364678225],[2.3511090874671936,48.853479522787474],[2.3512324690818787,48.85322538254365],[2.351227104663849,48.85319361492245],[2.350824773311615,48.853355982552294]]]]}
+                </span>
+            </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-sm-4">
+              <h2>Rectangle (bounding box)</h2>
+
+              <span id="rectangle" class="geometry">
+                [2.0,40.0,7.0,50.0]
+              </span>
+          </div>
+
+          <div class="col-sm-8">
+              <h2>GeometryCollection</h2>
+
+              <span id="geometry" class="geometry">
+                  {"type":"GeometryCollection","geometries":[{"type":"Polygon","coordinates":[[[36.5185546875,4.092220009695959],[40.2978515625,1.0194779877865527],[45.74707031249999,4.267533636729139],[53.4814453125,8.633162217505648],[50.7568359375,13.034529203403467],[48.7353515625,13.20572184080919],[41.9677734375,13.71857434958457],[36.5185546875,4.092220009695959]]]},{"type":"Point","coordinates":[39.5068359375,-1.5291147865363532]},{"type":"LineString","coordinates":[[47.50488281249999,1.5466876521512973],[47.4169921875,-4.16234908830769],[55.7666015625,-5.301014227618511],[58.3154296875,-0.035155711352275194]]},{"type":"Polygon","coordinates":[[[36.1669921875,-5.476018597004294],[36.1669921875,-3.7239373247422463],[37.6611328125,-3.7239373247422463],[37.6611328125,-5.476018597004294],[36.1669921875,-5.476018597004294]]]},{"type":"Point","coordinates":[43.5498046875,-4.863289802428317]}]}
+              </span>
+          </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+.ol-draw.ol-control{
+    position: absolute;
+    top : 5em;
+    left: 0.5em;
+}
+
+.ol-draw.ol-control{
+    position: absolute;
+    top : 5em;
+    left: 0.5em;
+}
+
+.ol-draw.ol-control button,
+.ol-draw.ol-control button:focus{
+    background-color: #fff;
+}
+
+
+.ol-draw.ol-control button.active,
+.ol-draw.ol-control button:active,
+.ol-draw.ol-control button:hover{
+    background-color: #f4f4f4;
+}
+
+
+.ol-draw.ol-control button {
+    display:none;
+    background-image: url('images/spritesheet.png');
+}
+
+.ol-draw.ol-control button.ol-draw-point {
+    display: block;
+    background-position: -125px -4px;
+    background-repeat: no-repeat;
+}
+
+.ol-draw.ol-control button.ol-draw-circle {
+    display: block;
+    background-position: -95px -4px;
+    background-repeat: no-repeat;
+}
+
+.ol-draw.ol-control button.ol-draw-linestring {
+    display: block;
+    background-position: -4px -4px;
+    background-repeat: no-repeat;
+}
+
+.ol-draw.ol-control button.ol-draw-square,
+.ol-draw.ol-control button.ol-draw-rectangle {
+    display: block;
+    background-position: -64px -4px;
+    background-repeat: no-repeat;
+}
+
+.ol-draw.ol-control button.ol-draw-polygon {
+    display: block;
+    background-position: -33px -4px;
+    background-repeat: no-repeat;
+}
+
+.ol-draw.ol-control button.ol-edit {
+    display: block;
+    background-position: -154px -4px;
+    background-repeat: no-repeat;
+}
+
+.ol-draw.ol-control button.ol-edit.inactive {
+    display: block;
+    background-position: -214px -4px;
+    background-repeat: no-repeat;
+}
+
+.ol-draw.ol-control button.ol-delete {
+    display: block;
+    background-position: -184px -4px;
+    background-repeat: no-repeat;
+}
+
+.ol-draw.ol-control button.ol-delete.inactive {
+    display: block;
+    background-position: -244px -4px;
+    background-repeat: no-repeat;
+}
