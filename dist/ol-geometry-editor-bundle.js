@@ -1601,15 +1601,16 @@ GeometryEditor.prototype.serializeGeometry = function () {
 
 module.exports = GeometryEditor;
 
-},{"./Viewer":6,"./defaultParams.js":7,"./util/geometryToSimpleGeometries":10,"turf-bbox-polygon":1,"turf-extent":2}],6:[function(require,module,exports){
+},{"./Viewer":6,"./defaultParams.js":8,"./util/geometryToSimpleGeometries":13,"turf-bbox-polygon":1,"turf-extent":2}],6:[function(require,module,exports){
 (function (global){
-var guid = require('./util/guid');
-
-
 var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
-var DrawControl = require('./util/openlayers/DrawControl');
+
+var DrawControl = require('./controls/DrawControl');
+
+var guid = require('./util/guid');
 var featureCollectionToGeometry = require('./util/featureCollectionToGeometry.js');
 var isSingleGeometryType = require('./util/isSingleGeometryType.js');
+
 
 
 
@@ -1853,199 +1854,11 @@ Viewer.prototype.getFeaturesCount = function (featuresCollection) {
 module.exports = Viewer;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./util/featureCollectionToGeometry.js":8,"./util/guid":11,"./util/isSingleGeometryType.js":12,"./util/openlayers/DrawControl":13}],7:[function(require,module,exports){
-
-/**
- * Default GeometryEditor parameters
- */
-var defaultParams = {
-    tileLayers: [
-       {
-           url: "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-           attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-       }
-    ],
-    /*
-     * display or hide corresponding form item
-     */
-    hide: true,
-    editable: true,
-    width: '100%',
-    height: '500',
-    lon: 2.0,
-    lat: 45.0,
-    zoom: 4,
-    maxZoom: 18,
-    geometryType: 'Geometry',
-    centerOnResults: true,
-    onResult: function(){}
-} ;
-
-module.exports = defaultParams ;
-
-},{}],8:[function(require,module,exports){
-
-var geometriesToCollection = require('./geometriesToCollection.js') ;
-
-/**
- * Converts FeatureCollection to a normalized geometry
- */
-var featureCollectionToGeometry = function(featureCollection){
-    var geometries = [] ;
-    featureCollection.features.forEach(function(feature){
-        geometries.push( feature.geometry ) ;
-    });
-
-    if ( geometries.length === 0 ){
-        return null ;
-    }
-
-    if ( geometries.length == 1 ){
-        return geometries[0];
-    }else{
-        return geometriesToCollection(geometries) ;
-    }
-} ;
-
-module.exports = featureCollectionToGeometry ;
-
-},{"./geometriesToCollection.js":9}],9:[function(require,module,exports){
-
-/**
- * Converts an array of geometries to a collection (MultiPoint, MultiLineString,
- * MultiPolygon, GeometryCollection).
- */
-var geometriesToCollection = function(geometries){
-    // count by geometry type
-    var counts = {};
-    geometries.forEach(function(geometry){
-        if ( typeof counts[geometry.type] === 'undefined' ){
-            counts[geometry.type] = 1 ;
-        }else{
-            counts[geometry.type]++ ;
-        }
-    }) ;
-
-    var geometryTypes = Object.keys(counts) ;
-    if ( geometryTypes.length > 1 ){
-        return {
-            "type": "GeometryCollection",
-            "geometries": geometries
-        } ;
-    }else{
-        var multiType = "Multi"+Object.keys(counts)[0] ;
-        var coordinates = [];
-        geometries.forEach(function(geometry){
-            coordinates.push(geometry.coordinates);
-        }) ;
-        return {
-            "type": multiType,
-            "coordinates": coordinates
-        } ;
-    }
-} ;
-
-module.exports = geometriesToCollection ;
-
-},{}],10:[function(require,module,exports){
-
-/**
- * Converts a multi-geometry to an array of geometries
- * @param {MultiPoint|MultiPolygon|MultiLineString} multi-geometry
- * @returns {Geometry[]} simple geometries
- */
-var multiToGeometries = function(multiGeometry){
-    var geometries = [] ;
-
-    var simpleType = multiGeometry.type.substring("Multi".length) ;
-    multiGeometry.coordinates.forEach(function(subCoordinates){
-        geometries.push(
-            {
-                "type": simpleType,
-                "coordinates": subCoordinates
-            }
-        );
-    });
-
-    return geometries ;
-} ;
-
-/**
- * Converts a geometry collection to an array of geometries
- * @param {GeometryCollection} geometry collection
- * @returns {Geometry[]} simple geometries
- */
-var geometryCollectionToGeometries = function(geometryCollection){
-    var geometries = [] ;
-    geometryCollection.geometries.forEach(function(geometry){
-        geometries.push(geometry);
-    });
-    return geometries ;
-} ;
-
-
-/**
- *
- * Converts a geometry to an array of single geometries. For
- * example, MultiPoint is converted to Point[].
- *
- * @param {Geometry} geometry
- * @returns {Geometry[]} simple geometries
- */
-var geometryToSimpleGeometries = function(geometry){
-    switch (geometry.type){
-    case "Point":
-    case "LineString":
-    case "Polygon":
-        return [geometry];
-    case "MultiPoint":
-    case "MultiLineString":
-    case "MultiPolygon":
-        return multiToGeometries(geometry);
-    case "GeometryCollection":
-        return geometryCollectionToGeometries(geometry);
-    default:
-        throw "unsupported geometry type : "+geometry.type;
-    }
-} ;
-
-module.exports = geometryToSimpleGeometries ;
-
-},{}],11:[function(require,module,exports){
-
-/**
- * Generates uuidv4
- * @return {String} the generated uuid
- */
-var guid = function() {
-    function s4() {
-        return Math.floor((1 + Math.random()) * 0x10000)
-        .toString(16)
-        .substring(1);
-    }
-    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-        s4() + '-' + s4() + s4() + s4();
-} ;
-
-module.exports = guid ;
-
-},{}],12:[function(require,module,exports){
-
-/**
- * Indicates if the given type corresponds to a mutli geometry
- * @param {String} geometryType tested geometry type
- */
-var isSingleGeometryType = function(geometryType) {
-    return ["Point","LineString","Polygon","Rectangle"].indexOf(geometryType) !== -1 ;
-};
-
-module.exports = isSingleGeometryType ;
-
-},{}],13:[function(require,module,exports){
+},{"./controls/DrawControl":7,"./util/featureCollectionToGeometry.js":11,"./util/guid":14,"./util/isSingleGeometryType.js":15}],7:[function(require,module,exports){
 (function (global){
 var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
-var DeleteInteraction = require('./customInteractions/DeleteInteraction');
-var ModifyBoxInteraction = require('./customInteractions/ModifyBoxInteraction');
+var DeleteInteraction = require('../interactions/DeleteInteraction');
+var ModifyBoxInteraction = require('../interactions/ModifyBoxInteraction');
 
 
 /**
@@ -2444,7 +2257,37 @@ DrawControl.prototype.getFeatureStyleByGeometryType = function (geometryType) {
 module.exports = DrawControl;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./customInteractions/DeleteInteraction":14,"./customInteractions/ModifyBoxInteraction":15}],14:[function(require,module,exports){
+},{"../interactions/DeleteInteraction":9,"../interactions/ModifyBoxInteraction":10}],8:[function(require,module,exports){
+
+/**
+ * Default GeometryEditor parameters
+ */
+var defaultParams = {
+    tileLayers: [
+       {
+           url: "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+           attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+       }
+    ],
+    /*
+     * display or hide corresponding form item
+     */
+    hide: true,
+    editable: true,
+    width: '100%',
+    height: '500',
+    lon: 2.0,
+    lat: 45.0,
+    zoom: 4,
+    maxZoom: 18,
+    geometryType: 'Geometry',
+    centerOnResults: true,
+    onResult: function(){}
+} ;
+
+module.exports = defaultParams ;
+
+},{}],9:[function(require,module,exports){
 (function (global){
 var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
 
@@ -2612,7 +2455,7 @@ DeleteInteraction.prototype.handleUpEvent = function (evt) {
 
 module.exports = DeleteInteraction;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],15:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 (function (global){
 var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
 
@@ -2996,6 +2839,164 @@ ModifyBoxInteraction.prototype.getModifyPointsOfFeature_ = function (feature) {
 
 module.exports = ModifyBoxInteraction;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],11:[function(require,module,exports){
+
+var geometriesToCollection = require('./geometriesToCollection.js') ;
+
+/**
+ * Converts FeatureCollection to a normalized geometry
+ */
+var featureCollectionToGeometry = function(featureCollection){
+    var geometries = [] ;
+    featureCollection.features.forEach(function(feature){
+        geometries.push( feature.geometry ) ;
+    });
+
+    if ( geometries.length === 0 ){
+        return null ;
+    }
+
+    if ( geometries.length == 1 ){
+        return geometries[0];
+    }else{
+        return geometriesToCollection(geometries) ;
+    }
+} ;
+
+module.exports = featureCollectionToGeometry ;
+
+},{"./geometriesToCollection.js":12}],12:[function(require,module,exports){
+
+/**
+ * Converts an array of geometries to a collection (MultiPoint, MultiLineString,
+ * MultiPolygon, GeometryCollection).
+ */
+var geometriesToCollection = function(geometries){
+    // count by geometry type
+    var counts = {};
+    geometries.forEach(function(geometry){
+        if ( typeof counts[geometry.type] === 'undefined' ){
+            counts[geometry.type] = 1 ;
+        }else{
+            counts[geometry.type]++ ;
+        }
+    }) ;
+
+    var geometryTypes = Object.keys(counts) ;
+    if ( geometryTypes.length > 1 ){
+        return {
+            "type": "GeometryCollection",
+            "geometries": geometries
+        } ;
+    }else{
+        var multiType = "Multi"+Object.keys(counts)[0] ;
+        var coordinates = [];
+        geometries.forEach(function(geometry){
+            coordinates.push(geometry.coordinates);
+        }) ;
+        return {
+            "type": multiType,
+            "coordinates": coordinates
+        } ;
+    }
+} ;
+
+module.exports = geometriesToCollection ;
+
+},{}],13:[function(require,module,exports){
+
+/**
+ * Converts a multi-geometry to an array of geometries
+ * @param {MultiPoint|MultiPolygon|MultiLineString} multi-geometry
+ * @returns {Geometry[]} simple geometries
+ */
+var multiToGeometries = function(multiGeometry){
+    var geometries = [] ;
+
+    var simpleType = multiGeometry.type.substring("Multi".length) ;
+    multiGeometry.coordinates.forEach(function(subCoordinates){
+        geometries.push(
+            {
+                "type": simpleType,
+                "coordinates": subCoordinates
+            }
+        );
+    });
+
+    return geometries ;
+} ;
+
+/**
+ * Converts a geometry collection to an array of geometries
+ * @param {GeometryCollection} geometry collection
+ * @returns {Geometry[]} simple geometries
+ */
+var geometryCollectionToGeometries = function(geometryCollection){
+    var geometries = [] ;
+    geometryCollection.geometries.forEach(function(geometry){
+        geometries.push(geometry);
+    });
+    return geometries ;
+} ;
+
+
+/**
+ *
+ * Converts a geometry to an array of single geometries. For
+ * example, MultiPoint is converted to Point[].
+ *
+ * @param {Geometry} geometry
+ * @returns {Geometry[]} simple geometries
+ */
+var geometryToSimpleGeometries = function(geometry){
+    switch (geometry.type){
+    case "Point":
+    case "LineString":
+    case "Polygon":
+        return [geometry];
+    case "MultiPoint":
+    case "MultiLineString":
+    case "MultiPolygon":
+        return multiToGeometries(geometry);
+    case "GeometryCollection":
+        return geometryCollectionToGeometries(geometry);
+    default:
+        throw "unsupported geometry type : "+geometry.type;
+    }
+} ;
+
+module.exports = geometryToSimpleGeometries ;
+
+},{}],14:[function(require,module,exports){
+
+/**
+ * Generates uuidv4
+ * @return {String} the generated uuid
+ */
+var guid = function() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
+} ;
+
+module.exports = guid ;
+
+},{}],15:[function(require,module,exports){
+
+/**
+ * Indicates if the given type corresponds to a mutli geometry
+ * @param {String} geometryType tested geometry type
+ */
+var isSingleGeometryType = function(geometryType) {
+    return ["Point","LineString","Polygon","Rectangle"].indexOf(geometryType) !== -1 ;
+};
+
+module.exports = isSingleGeometryType ;
+
 },{}],16:[function(require,module,exports){
 (function (global){
 // TODO check browserify usage (http://dontkry.com/posts/code/browserify-and-the-universal-module-definition.html)
@@ -3021,4 +3022,4 @@ jQuery.fn.geometryEditor = function( options ){
 global.ge = ge ;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./ge/GeometryEditor":5,"./ge/defaultParams":7}]},{},[16]);
+},{"./ge/GeometryEditor":5,"./ge/defaultParams":8}]},{},[16]);

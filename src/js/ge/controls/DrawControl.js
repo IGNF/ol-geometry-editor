@@ -1,6 +1,6 @@
 var ol = require('openlayers');
-var DeleteInteraction = require('./customInteractions/DeleteInteraction');
-var ModifyBoxInteraction = require('./customInteractions/ModifyBoxInteraction');
+var DeleteInteraction = require('../interactions/DeleteInteraction');
+var ModifyBoxInteraction = require('../interactions/ModifyBoxInteraction');
 
 
 /**

@@ -1,10 +1,11 @@
-var guid = require('./util/guid');
-
-
 var ol = require('openlayers');
-var DrawControl = require('./util/openlayers/DrawControl');
+
+var DrawControl = require('./controls/DrawControl');
+
+var guid = require('./util/guid');
 var featureCollectionToGeometry = require('./util/featureCollectionToGeometry.js');
 var isSingleGeometryType = require('./util/isSingleGeometryType.js');
+
 
 
 
