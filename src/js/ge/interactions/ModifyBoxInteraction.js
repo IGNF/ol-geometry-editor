@@ -7,8 +7,7 @@ var ol = require('openlayers');
 var ModifyBoxInteraction = function (opt_options) {
 
     opt_options = $.extend({
-        features: null,
-        type: "Rectangle"
+        features: null
     }, opt_options);
 
     ol.interaction.Pointer.call(this, {
@@ -19,8 +18,6 @@ var ModifyBoxInteraction = function (opt_options) {
     });
 
     this.features = opt_options.features;
-    this.type = opt_options.type;
-
 
     /**
      * @type {ol.Pixel}

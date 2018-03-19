@@ -1,84 +1,88 @@
-.ol-draw.ol-control{
+.ol-draw-tools{
     position: absolute;
     top : 5em;
     left: 0.5em;
 }
 
-.ol-draw.ol-control{
-    position: absolute;
-    top : 5em;
-    left: 0.5em;
+.ol-draw-tools .ol-control{
+    position: static;
 }
 
-.ol-draw.ol-control button,
-.ol-draw.ol-control button:focus{
+.ol-draw-tools .ol-control button,
+.ol-draw-tools button.ol-control:focus{
     background-color: #fff;
 }
 
 
-.ol-draw.ol-control button.active,
-.ol-draw.ol-control button:active,
-.ol-draw.ol-control button:hover{
+.ol-draw-tools .ol-control.active button,
+.ol-draw-tools .ol-control button:active,
+.ol-draw-tools .ol-control button:hover{
     background-color: #f4f4f4;
 }
 
 
-.ol-draw.ol-control button {
+.ol-draw-tools .ol-control button {
     display:none;
     background-image: url('images/spritesheet.png');
 }
 
-.ol-draw.ol-control button.ol-draw-point {
+.ol-draw-tools .ol-control.ol-draw-point button {
     display: block;
     background-position: -125px -4px;
     background-repeat: no-repeat;
 }
 
-.ol-draw.ol-control button.ol-draw-circle {
+.ol-draw-tools .ol-control.ol-draw-circle button {
     display: block;
     background-position: -95px -4px;
     background-repeat: no-repeat;
 }
 
-.ol-draw.ol-control button.ol-draw-linestring {
+.ol-draw-tools .ol-control.ol-draw-linestring button {
     display: block;
     background-position: -4px -4px;
     background-repeat: no-repeat;
 }
 
-.ol-draw.ol-control button.ol-draw-square,
-.ol-draw.ol-control button.ol-draw-rectangle {
+.ol-draw-tools .ol-control.ol-draw-square button,
+.ol-draw-tools .ol-control.ol-draw-rectangle button {
     display: block;
     background-position: -64px -4px;
     background-repeat: no-repeat;
 }
 
-.ol-draw.ol-control button.ol-draw-polygon {
+.ol-draw-tools .ol-control.ol-draw-polygon button {
     display: block;
     background-position: -33px -4px;
     background-repeat: no-repeat;
 }
 
-.ol-draw.ol-control button.ol-edit {
+.ol-draw-tools .ol-control.ol-edit button {
     display: block;
     background-position: -154px -4px;
     background-repeat: no-repeat;
 }
 
-.ol-draw.ol-control button.ol-edit.inactive {
+.ol-draw-tools .ol-control.ol-edit.inactive button {
     display: block;
     background-position: -214px -4px;
     background-repeat: no-repeat;
 }
 
-.ol-draw.ol-control button.ol-delete {
+.ol-draw-tools .ol-control.ol-delete button {
     display: block;
     background-position: -184px -4px;
     background-repeat: no-repeat;
 }
 
-.ol-draw.ol-control button.ol-delete.inactive {
+.ol-draw-tools .ol-control.ol-delete.inactive button {
     display: block;
     background-position: -244px -4px;
+    background-repeat: no-repeat;
+}
+
+.ol-draw-tools .ol-control.ol-translate button {
+    display: block;
+    background-image: url('images/translate.png');
     background-repeat: no-repeat;
 }

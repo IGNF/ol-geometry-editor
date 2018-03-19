@@ -1,6 +1,6 @@
 var ol = require('openlayers');
 
-var DrawControl = require('./controls/DrawControl');
+var DrawToolsControl = require('./controls/DrawToolsControl');
 
 var guid = require('./util/guid');
 var featureCollectionToGeometry = require('./util/featureCollectionToGeometry.js');
@@ -187,14 +187,6 @@ Viewer.prototype.removeFeatures = function (featuresCollection) {
     featuresCollection.clear();
 };
 
-Viewer.prototype.drawCreatedHandler = function (featuresCollection, e) {
-    if (isSingleGeometryType(this.getGeometryType())) {
-        this.removeFeatures(featuresCollection);
-        featuresCollection.push(e.feature);
-    }
-
-};
-
 /**
  * Get output geometry type
  * @returns {String}
@@ -203,15 +195,16 @@ Viewer.prototype.getGeometryType = function () {
     return this.settings.geometryType;
 };
 
-Viewer.prototype.addDrawControl = function (drawOptions) {
+Viewer.prototype.addDrawToolsControl = function (drawOptions) {
 
 
     var drawControlOptions = {
         features: drawOptions.features,
-        type: drawOptions.geometryType
+        type: drawOptions.geometryType,
+        multiple: !isSingleGeometryType(drawOptions.geometryType)
     };
 
-    var drawControl = new DrawControl(drawControlOptions);
+    var drawControl = new DrawToolsControl(drawControlOptions);
     this.addControl(drawControl);
 };
 
@@ -220,7 +213,7 @@ Viewer.prototype.addDrawControl = function (drawOptions) {
  * addDrawEvents
  * @param {Object} events
  */
-Viewer.prototype.addDrawEvents = function (events) {
+Viewer.prototype.addDrawToolsEvents = function (events) {
     this.getMap().on('draw:created', events.onDrawCreated);
     this.getMap().on('draw:edited', events.onDrawModified);
     this.getMap().on('draw:deleted', events.onDrawDeleted);

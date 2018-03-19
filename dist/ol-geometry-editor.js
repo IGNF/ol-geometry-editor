@@ -477,13 +477,10 @@ GeometryEditor.prototype.initDrawControls = function () {
         features: this.featuresCollection
     };
 
-    this.viewer.addDrawControl(drawOptions);
+    this.viewer.addDrawToolsControl(drawOptions);
 
     var events = {
         onDrawCreated: function (e) {
-
-            this.viewer.drawCreatedHandler(this.featuresCollection, e);
-
             if (this.settings.centerOnResults && this.viewer.getFeaturesCount(this.featuresCollection) > 0) {
                 this.viewer.fitViewToFeaturesCollection(this.featuresCollection);
             }
@@ -500,7 +497,7 @@ GeometryEditor.prototype.initDrawControls = function () {
         }.bind(this)
     };
 
-    this.viewer.addDrawEvents(events);
+    this.viewer.addDrawToolsEvents(events);
 };
 
 
@@ -528,11 +525,11 @@ GeometryEditor.prototype.serializeGeometry = function () {
 
 module.exports = GeometryEditor;
 
-},{"./Viewer":6,"./defaultParams.js":8,"./util/geometryToSimpleGeometries":13,"turf-bbox-polygon":1,"turf-extent":2}],6:[function(require,module,exports){
+},{"./Viewer":6,"./defaultParams.js":12,"./util/geometryToSimpleGeometries":17,"turf-bbox-polygon":1,"turf-extent":2}],6:[function(require,module,exports){
 (function (global){
 var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
 
-var DrawControl = require('./controls/DrawControl');
+var DrawToolsControl = require('./controls/DrawToolsControl');
 
 var guid = require('./util/guid');
 var featureCollectionToGeometry = require('./util/featureCollectionToGeometry.js');
@@ -719,14 +716,6 @@ Viewer.prototype.removeFeatures = function (featuresCollection) {
     featuresCollection.clear();
 };
 
-Viewer.prototype.drawCreatedHandler = function (featuresCollection, e) {
-    if (isSingleGeometryType(this.getGeometryType())) {
-        this.removeFeatures(featuresCollection);
-        featuresCollection.push(e.feature);
-    }
-
-};
-
 /**
  * Get output geometry type
  * @returns {String}
@@ -735,15 +724,16 @@ Viewer.prototype.getGeometryType = function () {
     return this.settings.geometryType;
 };
 
-Viewer.prototype.addDrawControl = function (drawOptions) {
+Viewer.prototype.addDrawToolsControl = function (drawOptions) {
 
 
     var drawControlOptions = {
         features: drawOptions.features,
-        type: drawOptions.geometryType
+        type: drawOptions.geometryType,
+        multiple: !isSingleGeometryType(drawOptions.geometryType)
     };
 
-    var drawControl = new DrawControl(drawControlOptions);
+    var drawControl = new DrawToolsControl(drawControlOptions);
     this.addControl(drawControl);
 };
 
@@ -752,7 +742,7 @@ Viewer.prototype.addDrawControl = function (drawOptions) {
  * addDrawEvents
  * @param {Object} events
  */
-Viewer.prototype.addDrawEvents = function (events) {
+Viewer.prototype.addDrawToolsEvents = function (events) {
     this.getMap().on('draw:created', events.onDrawCreated);
     this.getMap().on('draw:edited', events.onDrawModified);
     this.getMap().on('draw:deleted', events.onDrawDeleted);
@@ -781,42 +771,43 @@ Viewer.prototype.getFeaturesCount = function (featuresCollection) {
 module.exports = Viewer;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./controls/DrawControl":7,"./util/featureCollectionToGeometry.js":11,"./util/guid":14,"./util/isSingleGeometryType.js":15}],7:[function(require,module,exports){
+},{"./controls/DrawToolsControl":8,"./util/featureCollectionToGeometry.js":15,"./util/guid":18,"./util/isSingleGeometryType.js":19}],7:[function(require,module,exports){
 (function (global){
 var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
-var DeleteInteraction = require('../interactions/DeleteInteraction');
-var ModifyBoxInteraction = require('../interactions/ModifyBoxInteraction');
-
 
 /**
- * Contrôle de création d'une feature de type
  *
  * @constructor
  * @extends {ol.control.Control}
  * 
  * @param {object} options
- * @param {String} options.type le type d'élément dessiné ('Text', 'Point', 'LineString' ou 'Polygon')
+ * @param {String} options.type le type d'élément dessiné ('Point', 'LineString', 'Polygon' ou 'Rectangle')
  * 
- * @alias gpu.control.DrawControl
  */
 var DrawControl = function (options) {
 
-    var settings = {
-        layer: null,
-        features: null,
-        type: "",
-        title: "",
-    };
+    this.featuresCollection = options.featuresCollection;
+    this.type = options.type || "Point";
+    this.style = options.style;
+    this.multiple = options.multiple;
 
-    this.settings = $.extend(settings, options);
+    var element = $("<div>").addClass('ol-draw-' + this.type.toLowerCase() + ' ol-unselectable ol-control');
 
-    this.active = false;
+    $("<button>").attr('title', 'Draw a ' + this.type.toLowerCase())
+            .on("touchstart click", function (e)
+            {
+                if (e && e.preventDefault)
+                    e.preventDefault();
 
-    this.drawBar = $("<div>").addClass('ol-draw ol-unselectable ol-control');
+                this.setActive(!this.active);
+
+            }.bind(this))
+            .appendTo(element);
+
 
 
     ol.control.Control.call(this, {
-        element: this.drawBar.get(0),
+        element: element.get(0),
         target: options.target
     });
 };
@@ -830,326 +821,238 @@ DrawControl.prototype.setMap = function (map) {
 };
 
 DrawControl.prototype.initControl = function () {
-    this.createDrawLayer();
-    this.addDrawInteraction();
-    this.addModifyInteraction();
-    this.addDeleteInteraction();
-    this.configureInteractionSwitching();
+    this.addInteraction();
+    this.active = false;
+    this.setActive(this.active);
+};
+
+DrawControl.prototype.getActive = function () {
+    return this.active;
+};
+
+DrawControl.prototype.setActive = function (active) {
+
+    this.getInteraction().setActive(active);
+
+    if (active && !this.getActive()) {
+        this.dispatchEvent('draw:active');
+        $(this.element).addClass('active');
+        this.active = true;
+    }
+
+    if (!active && this.getActive()) {
+        this.dispatchEvent('draw:inactive');
+        $(this.element).removeClass('active');
+        this.active = false;
+    }
+};
+
+DrawControl.prototype.addInteraction = function () {
+
+    var drawParams = {
+        type: this.type,
+        style: this.style,
+        features: this.featuresCollection
+    };
+
+    if (this.type === 'Square') {
+        drawParams.type = "Circle";
+        drawParams.geometryFunction = ol.interaction.Draw.createRegularPolygon(4);
+    }
+
+    if (this.type === 'Rectangle') {
+        drawParams.type = "Circle";
+        drawParams.geometryFunction = ol.interaction.Draw.createBox();
+    }
+
+
+    var drawInteraction = new ol.interaction.Draw(drawParams);
+
+
+    drawInteraction.on('drawend', function (e) {
+        
+        if(!this.multiple){
+            this.featuresCollection.clear();
+        }
+        
+        e.feature.set('type', this.type);
+        e.feature.setStyle(this.style);
+    }.bind(this));
+
+    this.featuresCollection.on('add', function (e) {
+        
+        this.getMap().dispatchEvent($.extend(e, {
+            type: "draw:created"
+        }));
+        
+    }.bind(this));
+
+    this.getInteraction = function () {
+        return drawInteraction;
+    };
+
+    this.getMap().addInteraction(drawInteraction);
+};
+
+
+module.exports = DrawControl;
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],8:[function(require,module,exports){
+(function (global){
+var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
+
+var DrawControl = require('./DrawControl');
+var EditControl = require('./EditControl');
+var TranslateControl = require('./TranslateControl');
+var RemoveControl = require('./RemoveControl');
+
+
+/**
+ * Contrôle d'outils de dessins
+ *
+ * @constructor
+ * @extends {ol.control.Control}
+ * 
+ * @param {object} options
+ * @param {String} options.type le type d'élément dessiné ('Text', 'Point', 'LineString' ou 'Polygon')
+ * 
+ */
+var DrawToolsControl = function (options) {
+
+    var settings = {
+        features: null,
+        type: "",
+        title: "",
+        multiple: null
+    };
+
+    this.settings = $.extend(settings, options);
+    this.controls = [];
+
+    var drawBar = $("<div>").addClass('ol-draw-tools ol-unselectable ol-control');
+
+    ol.control.Control.call(this, {
+        element: drawBar.get(0),
+        target: options.target
+    });
+};
+
+ol.inherits(DrawToolsControl, ol.control.Control);
+
+
+DrawToolsControl.prototype.setMap = function (map) {
+    ol.control.Control.prototype.setMap.call(this, map);
+    this.initControl();
+};
+
+DrawToolsControl.prototype.initControl = function () {
+
+    this.addLayer();
+
+    this.addDrawControl();
+    this.addEditControl();
+    this.addTranslateControl();
+    this.addRemoveControl();
+
 };
 
 
 
-DrawControl.prototype.createDrawLayer = function () {
+DrawToolsControl.prototype.addLayer = function () {
 
     this.settings.features.forEach(function (feature) {
         feature.setStyle(this.getFeatureStyleByGeometryType(feature.getGeometry().getType()));
     }, this);
 
-
-    this.layer = new ol.layer.Vector({
+    var layer = new ol.layer.Vector({
         source: new ol.source.Vector({
             features: this.settings.features
         })
     });
 
-    this.getMap().addLayer(this.layer);
+    this.getMap().addLayer(layer);
 
-};
-
-DrawControl.prototype.getDrawLayer = function () {
-    return this.layer;
-};
-
-
-DrawControl.prototype.addDrawInteraction = function () {
-    var featuresCollection = new ol.Collection();
-
-    var drawParams = {
-        type: this.settings.type,
-        style: this.getFeatureStyleByGeometryType(this.settings.type),
-        features: featuresCollection
+    this.getLayer = function () {
+        return layer;
     };
 
+};
 
-    if (this.settings.type === 'Square') {
-        drawParams.type = "Circle";
-        drawParams.geometryFunction = ol.interaction.Draw.createRegularPolygon(4);
-    }
-    if (this.settings.type === 'Rectangle') {
-        drawParams.type = "Circle";
-        drawParams.geometryFunction = ol.interaction.Draw.createBox();
-    }
 
-    this.drawInteraction = new ol.interaction.Draw(drawParams);
+DrawToolsControl.prototype.addDrawControl = function () {
+    var drawControl = new DrawControl({
+        featuresCollection: this.getLayer().getSource().getFeaturesCollection(),
+        type: this.settings.type,
+        target: this.element,
+        style: this.getFeatureStyleByGeometryType(this.settings.type),
+        multiple: this.settings.multiple
+    });
 
-    this.drawInteraction.on('drawend', function (e) {
 
-        e.feature.set('type', this.settings.type);
-        e.feature.setStyle(this.getFeatureStyleByGeometryType(this.settings.type));
-
-        this.settings.features.push(e.feature);
-
-        this.getMap().dispatchEvent($.extend(e, {
-            type: "draw:created",
-            layer: this.getDrawLayer()
-        }));
-
+    drawControl.on('draw:active', function () {
+        this.deactivateControls(drawControl);
     }.bind(this));
 
-
-    this.getMap().addInteraction(this.drawInteraction);
-
-
-    this.setDrawInteractionActive = function (active) {
-        this.drawInteraction.setActive(active);
-
-        if (active) {
-            drawButton.addClass("active");
-            this.dispatchEvent('draw:active');
-        } else {
-            drawButton.removeClass("active");
-            this.dispatchEvent('draw:inactive');
-        }
-
-    }.bind(this);
-
-
-    // creation du bouton activant l'interaction
-    var drawButton = $("<button>").attr('title', 'Draw a ' + this.settings.type.toLowerCase())
-            .addClass('ol-draw-' + this.settings.type.toLowerCase())
-            .on("touchstart click", function (e)
-            {
-                if (e && e.preventDefault)
-                    e.preventDefault();
-
-                this.setDrawInteractionActive(!this.drawInteraction.getActive());
-
-            }.bind(this))
-            .appendTo(this.drawBar);
-
-    this.setDrawInteractionActive(false);
-
+    this.getMap().addControl(drawControl);
+    this.controls.push(drawControl);
 };
 
-DrawControl.prototype.getDrawInteraction = function () {
-    return this.drawInteraction;
-};
-
-
-/**
- * Prepare des ol.Collections de features afin d'appliquer chaque groupe 
- * de features à une interaction de modification
- * 
- * @returns {undefined}
- */
-DrawControl.prototype.prepareFeatureGroup = function () {
-
-    this.featuresBasic = new ol.Collection();
-    this.featuresBox = new ol.Collection();
-    this.featuresSquare = new ol.Collection();
-
-    var addFeatureOnRightCollection = function (feature) {
-        switch (feature.get('type')) {
-            case "Rectangle":
-                this.featuresBox.push(feature);
-                break;
-            case "Square":
-                this.featuresSquare.push(feature);
-                break;
-
-            default:
-                this.featuresBasic.push(feature);
-                break;
-        }
-    }.bind(this);
-
-    var removeFeatureOnRightCollection = function (feature) {
-        switch (feature.get('type')) {
-            case "Rectangle":
-                this.featuresBox.remove(feature);
-                break;
-            case "Square":
-                this.featuresSquare.remove(feature);
-                break;
-
-            default:
-                this.featuresBasic.remove(feature);
-                break;
-        }
-    }.bind(this);
-
-    this.settings.features.forEach(addFeatureOnRightCollection.bind(this));
-
-    this.settings.features.on('add', function (e) {
-        addFeatureOnRightCollection(e.element);
-    });
-    this.settings.features.on('remove', function (e) {
-        removeFeatureOnRightCollection(e.element);
-    });
-
-};
-
-DrawControl.prototype.addModifyInteraction = function () {
-
-
-    this.prepareFeatureGroup();
-
-    this.modifyInteractionBox = new ModifyBoxInteraction({
-        features: this.featuresBox,
-        type: this.settings.type
-    });
-
-    this.modifyInteractionSquare = new ol.interaction.Modify({
-        features: this.featuresSquare,
-        insertVertexCondition: function () {
-            return false;
-        }
-    });
-
-    this.modifyInteractionBasic = new ol.interaction.Modify({
-        features: this.featuresBasic
+DrawToolsControl.prototype.addEditControl = function () {
+    var editControl = new EditControl({
+        featuresCollection: this.getLayer().getSource().getFeaturesCollection(),
+        target: this.element,
+        style: this.getFeatureStyleByGeometryType(this.settings.type)
     });
 
 
-    this.translateInteractionSquare = new ol.interaction.Translate({
-        features: this.featuresSquare,
-        hitTolerance:10
-    });
-    this.translateInteractionBasic = new ol.interaction.Translate({
-        features: this.featuresBasic,
-        hitTolerance:10
-    });
-
-    this.modifyInteractions = [
-        this.modifyInteractionBasic,
-        this.modifyInteractionBox,
-        this.modifyInteractionSquare
-    ];
-
-
-
-
-
-    var modifyend = function (e) {
-        this.getMap().dispatchEvent($.extend(e, {type: "draw:edited"}));
-    }.bind(this);
-
-    for (var i in this.modifyInteractions) {
-        this.modifyInteractions[i].on('modifyend', modifyend);
-        this.getMap().addInteraction(this.modifyInteractions[i]);
-    }
-
-    this.getMap().addInteraction(this.translateInteractionSquare);
-    this.getMap().addInteraction(this.translateInteractionBasic);
-
-    this.setModifyInteractionsActive = function (active) {
-
-        for (var j in this.modifyInteractions) {
-            this.modifyInteractions[j].setActive(active);
-        }
-        this.translateInteractionBasic.setActive(active);
-        this.translateInteractionSquare.setActive(active);
-
-
-        if (active) {
-            modifyButton.addClass("active");
-            this.dispatchEvent('edit:active');
-        } else {
-            modifyButton.removeClass("active");
-            this.dispatchEvent('edit:inactive');
-        }
-        this.modifyInteractionsActive = active;
-    }.bind(this);
-
-
-    var modifyButton = $("<button>").attr('title', 'Modify a ' + this.settings.type.toLowerCase())
-            .addClass('ol-edit')
-            .on("touchstart click", function (e)
-            {
-                if (e && e.preventDefault)
-                    e.preventDefault();
-
-                this.setModifyInteractionsActive(!this.modifyInteractionsActive);
-
-            }.bind(this))
-            .appendTo(this.drawBar);
-
-    this.setModifyInteractionsActive(false);
-
-};
-
-
-DrawControl.prototype.getModifyInteraction = function () {
-    return this.modifyInteraction;
-};
-
-
-
-
-DrawControl.prototype.addDeleteInteraction = function () {
-
-    this.deleteInteraction = new DeleteInteraction({
-        features: this.settings.features
-    });
-
-    this.deleteInteraction.on('deleteend', function (e) {
-        this.getMap().dispatchEvent($.extend(e, {type: "draw:deleted"}));
+    editControl.on('edit:active', function () {
+        this.deactivateControls(editControl);
     }.bind(this));
 
+    this.getMap().addControl(editControl);
+    this.controls.push(editControl);
+};
 
-    this.getMap().addInteraction(this.deleteInteraction);
+DrawToolsControl.prototype.addTranslateControl = function () {
+    var translateControl = new TranslateControl({
+        featuresCollection: this.getLayer().getSource().getFeaturesCollection(),
+        target: this.element
+    });
 
-    this.setDeleteInteractionActive = function (active) {
-        this.deleteInteraction.setActive(active);
+    translateControl.on('translate:active', function () {
+        this.deactivateControls(translateControl);
+    }.bind(this));
 
-        if (active) {
-            deleteButton.addClass("active");
-            this.dispatchEvent('remove:active');
-        } else {
-            deleteButton.removeClass("active");
-            this.dispatchEvent('remove:inactive');
+    this.getMap().addControl(translateControl);
+    this.controls.push(translateControl);
+};
+
+DrawToolsControl.prototype.addRemoveControl = function () {
+    var removeControl = new RemoveControl({
+        featuresCollection: this.getLayer().getSource().getFeaturesCollection(),
+        target: this.element
+    });
+
+    removeControl.on('remove:active', function () {
+        this.deactivateControls(removeControl);
+    }.bind(this));
+
+    this.getMap().addControl(removeControl);
+    this.controls.push(removeControl);
+
+};
+
+DrawToolsControl.prototype.deactivateControls = function (keepThisOne) {
+    this.controls.forEach(function (control) {
+        if (control !== keepThisOne) {
+            control.setActive(false);
         }
-    }.bind(this);
-
-
-    // creation du bouton activant l'interaction
-    var deleteButton = $("<button>").attr('title', 'Delete a feature')
-            .addClass('ol-delete')
-            .on("touchstart click", function (e)
-            {
-                if (e && e.preventDefault)
-                    e.preventDefault();
-
-                this.setDeleteInteractionActive(!this.deleteInteraction.getActive());
-
-            }.bind(this))
-            .appendTo(this.drawBar);
-
-    this.setDeleteInteractionActive(false);
-
+    });
 };
 
-DrawControl.prototype.getDeleteInteraction = function () {
-    return this.deleteInteraction;
-};
 
-DrawControl.prototype.configureInteractionSwitching = function () {
-    this.on('draw:active', function () {
-        this.setModifyInteractionsActive(false);
-        this.setDeleteInteractionActive(false);
-    }.bind(this));
-    this.on('edit:active', function () {
-        this.setDrawInteractionActive(false);
-        this.setDeleteInteractionActive(false);
-    }.bind(this));
-    this.on('remove:active', function () {
-        this.setDrawInteractionActive(false);
-        this.setModifyInteractionsActive(false);
-    }.bind(this));
-
-};
-
-DrawControl.prototype.getFeatureStyleByGeometryType = function (geometryType) {
+DrawToolsControl.prototype.getFeatureStyleByGeometryType = function (geometryType) {
 
     switch (geometryType) {
         case "Point":
@@ -1181,10 +1084,396 @@ DrawControl.prototype.getFeatureStyleByGeometryType = function (geometryType) {
 };
 
 
-module.exports = DrawControl;
+module.exports = DrawToolsControl;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../interactions/DeleteInteraction":9,"../interactions/ModifyBoxInteraction":10}],8:[function(require,module,exports){
+},{"./DrawControl":7,"./EditControl":9,"./RemoveControl":10,"./TranslateControl":11}],9:[function(require,module,exports){
+(function (global){
+var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
+var ModifyBoxInteraction = require('../interactions/ModifyBoxInteraction');
+
+
+/**
+ * Contrôle de modification de feature
+ *
+ * @constructor
+ * @extends {ol.control.Control}
+ * 
+ * @param {object} options
+ * 
+ */
+var EditControl = function (options) {
+
+    this.style = options.style;
+    this.featuresCollection = options.featuresCollection;
+
+    var element = $("<div>").addClass('ol-edit ol-unselectable ol-control');
+
+    $("<button>").attr('title', 'Edit a feature')
+            .on("touchstart click", function (e)
+            {
+                if (e && e.preventDefault)
+                    e.preventDefault();
+
+                this.setActive(!this.active);
+
+            }.bind(this))
+            .appendTo(element);
+
+
+    ol.control.Control.call(this, {
+        element: element.get(0),
+        target: options.target
+    });
+};
+
+ol.inherits(EditControl, ol.control.Control);
+
+
+EditControl.prototype.setMap = function (map) {
+    ol.control.Control.prototype.setMap.call(this, map);
+    this.initControl();
+};
+
+EditControl.prototype.initControl = function () {
+    this.addInteractions();
+    this.active = false;
+    this.setActive(this.active);
+};
+
+EditControl.prototype.getActive = function () {
+    return this.active;
+};
+
+EditControl.prototype.setActive = function (active) {
+
+    this.getInteractions().forEach(function (interaction) {
+        interaction.setActive(active);
+    });
+
+
+    if (active && !this.getActive()) {
+        this.dispatchEvent('edit:active');
+        $(this.element).addClass('active');
+        this.active = true;
+    }
+
+    if (!active && this.getActive()) {
+        this.dispatchEvent('edit:inactive');
+        $(this.element).removeClass('active');
+        this.active = false;
+    }
+};
+
+
+EditControl.prototype.addInteractions = function () {
+
+    this.reorganiseFeaturesCollectionByType();
+
+    var modifyInteractionBasic = new ol.interaction.Modify({
+        features: this.getFeaturesCollectionBasic()
+    });
+
+    var modifyInteractionBox = new ModifyBoxInteraction({
+        features: this.getFeaturesCollectionBox()
+    });
+
+    var modifyInteractionSquare = new ol.interaction.Modify({
+        features: this.getFeaturesCollectionSquare(),
+        insertVertexCondition: function () {
+            return false;
+        }
+    });
+
+    this.getInteractions = function () {
+        return [
+            modifyInteractionBasic,
+            modifyInteractionBox,
+            modifyInteractionSquare
+        ];
+    };
+
+
+    var modifyEnd = function (e) {
+        this.getMap().dispatchEvent($.extend(e, {type: "draw:edited"}));
+    }.bind(this);
+
+
+    this.getInteractions().forEach(function (interaction) {
+        interaction.on('modifyend', modifyEnd);
+        this.getMap().addInteraction(interaction);
+    }.bind(this));
+
+};
+
+
+
+/**
+ * Prepare des ol.Collections de features afin d'appliquer chaque groupe 
+ * de features à une interaction de modification
+ * 
+ * @returns {undefined}
+ */
+EditControl.prototype.reorganiseFeaturesCollectionByType = function () {
+
+    var featuresCollectionBasic = new ol.Collection();
+    this.getFeaturesCollectionBasic = function () {
+        return featuresCollectionBasic;
+    };
+
+    var featuresCollectionBox = new ol.Collection();
+    this.getFeaturesCollectionBox = function () {
+        return featuresCollectionBox;
+    };
+
+    var featuresCollectionSquare = new ol.Collection();
+    this.getFeaturesCollectionSquare = function () {
+        return featuresCollectionSquare;
+    };
+
+    var addFeatureOnMatchedCollection = function (feature) {
+        switch (feature.get('type')) {
+            case "Rectangle":
+                featuresCollectionBox.push(feature);
+                break;
+            case "Square":
+                featuresCollectionSquare.push(feature);
+                break;
+            default:
+                featuresCollectionBasic.push(feature);
+                break;
+        }
+    };
+
+    var removeFeatureOnMatchedCollection = function (feature) {
+        switch (feature.get('type')) {
+            case "Rectangle":
+                featuresCollectionBox.remove(feature);
+                break;
+            case "Square":
+                featuresCollectionSquare.remove(feature);
+                break;
+
+            default:
+                featuresCollectionBasic.remove(feature);
+                break;
+        }
+    };
+
+    this.featuresCollection.forEach(addFeatureOnMatchedCollection);
+
+    this.featuresCollection.on('add', function (e) {
+        addFeatureOnMatchedCollection(e.element);
+    });
+
+    this.featuresCollection.on('remove', function (e) {
+        removeFeatureOnMatchedCollection(e.element);
+    });
+
+};
+
+
+module.exports = EditControl;
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"../interactions/ModifyBoxInteraction":13}],10:[function(require,module,exports){
+(function (global){
+var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
+var RemoveInteraction = require('../interactions/RemoveInteraction');
+
+
+/**
+ * Contrôle de création d'une feature de type
+ *
+ * @constructor
+ * @extends {ol.control.Control}
+ * 
+ * @param {object} options
+ * @param {String} options.type le type d'élément dessiné ('Text', 'Point', 'LineString' ou 'Polygon')
+ *
+ */
+var RemoveControl = function (options) {
+
+    this.featuresCollection = options.featuresCollection;
+
+    var element = $("<div>").addClass('ol-delete ol-unselectable ol-control');
+
+    $("<button>").attr('title', 'Remove a feature')
+            .on("touchstart click", function (e)
+            {
+                if (e && e.preventDefault)
+                    e.preventDefault();
+
+                this.setActive(!this.active);
+
+            }.bind(this))
+            .appendTo(element);
+
+
+    ol.control.Control.call(this, {
+        element: element.get(0),
+        target: options.target
+    });
+};
+
+ol.inherits(RemoveControl, ol.control.Control);
+
+
+RemoveControl.prototype.setMap = function (map) {
+    ol.control.Control.prototype.setMap.call(this, map);
+    this.initControl();
+};
+
+RemoveControl.prototype.initControl = function () {
+    this.addInteraction();
+    this.active = false;
+    this.setActive(this.active);
+};
+
+
+RemoveControl.prototype.getActive = function () {
+    return this.active;
+};
+
+
+RemoveControl.prototype.setActive = function (active) {
+
+    this.getInteraction().setActive(active);
+
+    if (active && !this.getActive()) {
+        this.dispatchEvent('remove:active');
+        $(this.element).addClass('active');
+        this.active = true;
+    }
+
+    if (!active && this.getActive()) {
+        this.dispatchEvent('remove:inactive');
+        $(this.element).removeClass('active');
+        this.active = false;
+    }
+};
+
+
+RemoveControl.prototype.addInteraction = function () {
+
+    var removeInteraction = new RemoveInteraction({
+        features: this.featuresCollection
+    });
+
+    this.getInteraction = function () {
+        return removeInteraction;
+    };
+
+    removeInteraction.on('deleteend', function (e) {
+        this.getMap().dispatchEvent($.extend(e, {type: "draw:deleted"}));
+    }.bind(this));
+
+    this.getMap().addInteraction(removeInteraction);
+
+};
+
+module.exports = RemoveControl;
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"../interactions/RemoveInteraction":14}],11:[function(require,module,exports){
+(function (global){
+var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
+
+
+/**
+ * Contrôle de création d'une feature de type
+ *
+ * @constructor
+ * @extends {ol.control.Control}
+ * 
+ * @param {object} options
+ *
+ */
+var TranslateControl = function (options) {
+
+    this.featuresCollection = options.featuresCollection;
+
+    var element = $("<div>").addClass('ol-translate ol-unselectable ol-control');
+
+    $("<button>").attr('title', 'Remove a feature')
+            .on("touchstart click", function (e)
+            {
+                if (e && e.preventDefault)
+                    e.preventDefault();
+
+                this.setActive(!this.active);
+
+            }.bind(this))
+            .appendTo(element);
+
+
+    ol.control.Control.call(this, {
+        element: element.get(0),
+        target: options.target
+    });
+};
+
+ol.inherits(TranslateControl, ol.control.Control);
+
+
+TranslateControl.prototype.setMap = function (map) {
+    ol.control.Control.prototype.setMap.call(this, map);
+    this.initControl();
+};
+
+TranslateControl.prototype.initControl = function () {
+    this.addInteraction();
+    this.active = false;
+    this.setActive(this.active);
+};
+
+
+TranslateControl.prototype.getActive = function () {
+    return this.active;
+};
+
+
+TranslateControl.prototype.setActive = function (active) {
+
+    this.getInteraction().setActive(active);
+
+    if (active && !this.getActive()) {
+        this.dispatchEvent('translate:active');
+        $(this.element).addClass('active');
+        this.active = true;
+    }
+
+    if (!active && this.getActive()) {
+        this.dispatchEvent('translate:inactive');
+        $(this.element).removeClass('active');
+        this.active = false;
+    }
+};
+
+
+TranslateControl.prototype.addInteraction = function () {
+
+    var translateInteraction = new ol.interaction.Translate({
+        features: this.featuresCollection,
+        hitTolerance: 10
+    });
+
+    this.getInteraction = function () {
+        return translateInteraction;
+    };
+
+    translateInteraction.on('translateend', function (e) {
+        this.getMap().dispatchEvent($.extend(e, {type: "draw:edited"}));
+    }.bind(this));
+
+    this.getMap().addInteraction(translateInteraction);
+
+};
+
+module.exports = TranslateControl;
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],12:[function(require,module,exports){
 
 /**
  * Default GeometryEditor parameters
@@ -1214,175 +1503,7 @@ var defaultParams = {
 
 module.exports = defaultParams ;
 
-},{}],9:[function(require,module,exports){
-(function (global){
-var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
-
-/**
- * @constructor
- * @extends {ol.interaction.Pointer}
- */
-var DeleteInteraction = function (opt_options) {
-
-    opt_options = $.extend({
-        features: null,
-    }, opt_options);
-
-    ol.interaction.Pointer.call(this, {
-        handleDownEvent: DeleteInteraction.prototype.handleDownEvent,
-        handleDragEvent: DeleteInteraction.prototype.handleDragEvent,
-        handleMoveEvent: DeleteInteraction.prototype.handleMoveEvent,
-        handleUpEvent: DeleteInteraction.prototype.handleUpEvent
-    });
-
-    this.features = opt_options.features;
-
-
-    /**
-     * @type {string|undefined}
-     * @private
-     */
-    this.pointerCursor_ = 'pointer';
-
-    /**
-     * @type {ol.Feature}
-     * @private
-     */
-    this.feature_ = null;
-
-    /**
-     * @type {string|undefined}
-     * @private
-     */
-    this.previousCursor_ = undefined;
-
-};
-ol.inherits(DeleteInteraction, ol.interaction.Pointer);
-
-
-/**
- * @param {ol.MapBrowserEvent} evt Map browser event.
- * @return {boolean} `true` to start the drag sequence.
- */
-DeleteInteraction.prototype.handleDownEvent = function (evt) {
-    var map = evt.map;
-
-    var feature = map.forEachFeatureAtPixel(evt.pixel,
-            function (feature) {
-                for (var i in this.features.getArray()) {
-                    if (this.features.getArray()[i] === feature) {
-                        return feature;
-                    }
-                }
-            }.bind(this));
-
-    this.feature_ = feature;
-    return !!feature;
-};
-
-
-/**
- * @param {ol.MapBrowserEvent} evt Map browser event.
- */
-DeleteInteraction.prototype.handleDragEvent = function (evt) {
-    var map = evt.map;
-    var feature = map.forEachFeatureAtPixel(evt.pixel,
-            function (feature) {
-                for (var i in this.features.getArray()) {
-                    if (this.features.getArray()[i] === feature) {
-                        return feature;
-                    }
-                }
-            }.bind(this));
-    var element = evt.map.getTargetElement();
-
-    if (feature) {
-        if (element.style.cursor != this.pointerCursor_) {
-            this.previousCursor_ = element.style.cursor;
-            element.style.cursor = this.pointerCursor_;
-        }
-        // gerer curseur ici
-    } else if (this.previousCursor_ !== undefined) {
-        element.style.cursor = this.previousCursor_;
-        this.previousCursor_ = undefined;
-    }
-};
-
-
-/**
- * @param {ol.MapBrowserEvent} evt Event.
- */
-DeleteInteraction.prototype.handleMoveEvent = function (evt) {
-    var map = evt.map;
-    var feature = map.forEachFeatureAtPixel(evt.pixel,
-            function (feature) {
-                for (var i in this.features.getArray()) {
-                    if (this.features.getArray()[i] === feature) {
-                        return feature;
-                    }
-                }
-            }.bind(this));
-    var element = evt.map.getTargetElement();
-
-    if (feature) {
-        if (element.style.cursor != this.pointerCursor_) {
-            this.previousCursor_ = element.style.cursor;
-            element.style.cursor = this.pointerCursor_;
-        }
-        // gerer curseur ici
-    } else if (this.previousCursor_ !== undefined) {
-        element.style.cursor = this.previousCursor_;
-        this.previousCursor_ = undefined;
-    }
-
-
-};
-
-
-/**
- * @return {boolean} `false` to stop the drag sequence.
- */
-DeleteInteraction.prototype.handleUpEvent = function (evt) {
-
-    var map = evt.map;
-
-    var deletedFeature = map.forEachFeatureAtPixel(evt.pixel,
-            function (feature) {
-                for (var i in this.features.getArray()) {
-                    if (this.features.getArray()[i] === feature && this.feature_ === feature) {
-                        this.features.remove(feature);
-                    }
-                }
-            }.bind(this));
-
-    var feature = map.forEachFeatureAtPixel(evt.pixel,
-            function (feature) {
-                for (var i in this.features.getArray()) {
-                    if (this.features.getArray()[i] === feature) {
-                        return feature;
-                    }
-                }
-            }.bind(this));
-
-    var element = evt.map.getTargetElement();
-
-    if (feature) {
-        element.style.cursor = this.pointerCursor_;
-
-        // gerer curseur ici
-    } else if (element.style.cursor !== undefined) {
-        element.style.cursor = undefined;
-    }
-
-    this.dispatchEvent({type: "deleteend"});
-    return false;
-};
-
-
-
-module.exports = DeleteInteraction;
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],10:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 (function (global){
 var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
 
@@ -1393,8 +1514,7 @@ var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "unde
 var ModifyBoxInteraction = function (opt_options) {
 
     opt_options = $.extend({
-        features: null,
-        type: "Rectangle"
+        features: null
     }, opt_options);
 
     ol.interaction.Pointer.call(this, {
@@ -1405,8 +1525,6 @@ var ModifyBoxInteraction = function (opt_options) {
     });
 
     this.features = opt_options.features;
-    this.type = opt_options.type;
-
 
     /**
      * @type {ol.Pixel}
@@ -1766,7 +1884,175 @@ ModifyBoxInteraction.prototype.getModifyPointsOfFeature_ = function (feature) {
 
 module.exports = ModifyBoxInteraction;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],11:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
+(function (global){
+var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
+
+/**
+ * @constructor
+ * @extends {ol.interaction.Pointer}
+ */
+var RemoveInteraction = function (opt_options) {
+
+    opt_options = $.extend({
+        features: null
+    }, opt_options);
+
+    ol.interaction.Pointer.call(this, {
+        handleDownEvent: RemoveInteraction.prototype.handleDownEvent,
+        handleDragEvent: RemoveInteraction.prototype.handleDragEvent,
+        handleMoveEvent: RemoveInteraction.prototype.handleMoveEvent,
+        handleUpEvent: RemoveInteraction.prototype.handleUpEvent
+    });
+
+    this.features = opt_options.features;
+
+
+    /**
+     * @type {string|undefined}
+     * @private
+     */
+    this.pointerCursor_ = 'pointer';
+
+    /**
+     * @type {ol.Feature}
+     * @private
+     */
+    this.feature_ = null;
+
+    /**
+     * @type {string|undefined}
+     * @private
+     */
+    this.previousCursor_ = undefined;
+
+};
+ol.inherits(RemoveInteraction, ol.interaction.Pointer);
+
+
+/**
+ * @param {ol.MapBrowserEvent} evt Map browser event.
+ * @return {boolean} `true` to start the drag sequence.
+ */
+RemoveInteraction.prototype.handleDownEvent = function (evt) {
+    var map = evt.map;
+
+    var feature = map.forEachFeatureAtPixel(evt.pixel,
+            function (feature) {
+                for (var i in this.features.getArray()) {
+                    if (this.features.getArray()[i] === feature) {
+                        return feature;
+                    }
+                }
+            }.bind(this));
+
+    this.feature_ = feature;
+    return !!feature;
+};
+
+
+/**
+ * @param {ol.MapBrowserEvent} evt Map browser event.
+ */
+RemoveInteraction.prototype.handleDragEvent = function (evt) {
+    var map = evt.map;
+    var feature = map.forEachFeatureAtPixel(evt.pixel,
+            function (feature) {
+                for (var i in this.features.getArray()) {
+                    if (this.features.getArray()[i] === feature) {
+                        return feature;
+                    }
+                }
+            }.bind(this));
+    var element = evt.map.getTargetElement();
+
+    if (feature) {
+        if (element.style.cursor != this.pointerCursor_) {
+            this.previousCursor_ = element.style.cursor;
+            element.style.cursor = this.pointerCursor_;
+        }
+        // gerer curseur ici
+    } else if (this.previousCursor_ !== undefined) {
+        element.style.cursor = this.previousCursor_;
+        this.previousCursor_ = undefined;
+    }
+};
+
+
+/**
+ * @param {ol.MapBrowserEvent} evt Event.
+ */
+RemoveInteraction.prototype.handleMoveEvent = function (evt) {
+    var map = evt.map;
+    var feature = map.forEachFeatureAtPixel(evt.pixel,
+            function (feature) {
+                for (var i in this.features.getArray()) {
+                    if (this.features.getArray()[i] === feature) {
+                        return feature;
+                    }
+                }
+            }.bind(this));
+    var element = evt.map.getTargetElement();
+
+    if (feature) {
+        if (element.style.cursor != this.pointerCursor_) {
+            this.previousCursor_ = element.style.cursor;
+            element.style.cursor = this.pointerCursor_;
+        }
+        // gerer curseur ici
+    } else if (this.previousCursor_ !== undefined) {
+        element.style.cursor = this.previousCursor_;
+        this.previousCursor_ = undefined;
+    }
+
+
+};
+
+
+/**
+ * @return {boolean} `false` to stop the drag sequence.
+ */
+RemoveInteraction.prototype.handleUpEvent = function (evt) {
+
+    var map = evt.map;
+
+    var deletedFeature = map.forEachFeatureAtPixel(evt.pixel,
+            function (feature) {
+                for (var i in this.features.getArray()) {
+                    if (this.features.getArray()[i] === feature && this.feature_ === feature) {
+                        this.features.remove(feature);
+                    }
+                }
+            }.bind(this));
+
+    var feature = map.forEachFeatureAtPixel(evt.pixel,
+            function (feature) {
+                for (var i in this.features.getArray()) {
+                    if (this.features.getArray()[i] === feature) {
+                        return feature;
+                    }
+                }
+            }.bind(this));
+
+    var element = evt.map.getTargetElement();
+
+    if (feature) {
+        element.style.cursor = this.pointerCursor_;
+
+        // gerer curseur ici
+    } else if (element.style.cursor !== undefined) {
+        element.style.cursor = undefined;
+    }
+
+    this.dispatchEvent({type: "deleteend"});
+    return false;
+};
+
+
+
+module.exports = RemoveInteraction;
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],15:[function(require,module,exports){
 
 var geometriesToCollection = require('./geometriesToCollection.js') ;
 
@@ -1792,7 +2078,7 @@ var featureCollectionToGeometry = function(featureCollection){
 
 module.exports = featureCollectionToGeometry ;
 
-},{"./geometriesToCollection.js":12}],12:[function(require,module,exports){
+},{"./geometriesToCollection.js":16}],16:[function(require,module,exports){
 
 /**
  * Converts an array of geometries to a collection (MultiPoint, MultiLineString,
@@ -1830,7 +2116,7 @@ var geometriesToCollection = function(geometries){
 
 module.exports = geometriesToCollection ;
 
-},{}],13:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 
 /**
  * Converts a multi-geometry to an array of geometries
@@ -1894,7 +2180,7 @@ var geometryToSimpleGeometries = function(geometry){
 
 module.exports = geometryToSimpleGeometries ;
 
-},{}],14:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 
 /**
  * Generates uuidv4
@@ -1912,7 +2198,7 @@ var guid = function() {
 
 module.exports = guid ;
 
-},{}],15:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 
 /**
  * Indicates if the given type corresponds to a mutli geometry
@@ -1924,7 +2210,7 @@ var isSingleGeometryType = function(geometryType) {
 
 module.exports = isSingleGeometryType ;
 
-},{}],16:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 (function (global){
 // TODO check browserify usage (http://dontkry.com/posts/code/browserify-and-the-universal-module-definition.html)
 
@@ -1949,4 +2235,4 @@ jQuery.fn.geometryEditor = function( options ){
 global.ge = ge ;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./ge/GeometryEditor":5,"./ge/defaultParams":8}]},{},[16]);
+},{"./ge/GeometryEditor":5,"./ge/defaultParams":12}]},{},[20]);

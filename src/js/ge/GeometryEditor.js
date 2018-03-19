@@ -177,13 +177,10 @@ GeometryEditor.prototype.initDrawControls = function () {
         features: this.featuresCollection
     };
 
-    this.viewer.addDrawControl(drawOptions);
+    this.viewer.addDrawToolsControl(drawOptions);
 
     var events = {
         onDrawCreated: function (e) {
-
-            this.viewer.drawCreatedHandler(this.featuresCollection, e);
-
             if (this.settings.centerOnResults && this.viewer.getFeaturesCount(this.featuresCollection) > 0) {
                 this.viewer.fitViewToFeaturesCollection(this.featuresCollection);
             }
@@ -200,7 +197,7 @@ GeometryEditor.prototype.initDrawControls = function () {
         }.bind(this)
     };
 
-    this.viewer.addDrawEvents(events);
+    this.viewer.addDrawToolsEvents(events);
 };
 
 

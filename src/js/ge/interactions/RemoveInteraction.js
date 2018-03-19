@@ -4,17 +4,17 @@ var ol = require('openlayers');
  * @constructor
  * @extends {ol.interaction.Pointer}
  */
-var DeleteInteraction = function (opt_options) {
+var RemoveInteraction = function (opt_options) {
 
     opt_options = $.extend({
-        features: null,
+        features: null
     }, opt_options);
 
     ol.interaction.Pointer.call(this, {
-        handleDownEvent: DeleteInteraction.prototype.handleDownEvent,
-        handleDragEvent: DeleteInteraction.prototype.handleDragEvent,
-        handleMoveEvent: DeleteInteraction.prototype.handleMoveEvent,
-        handleUpEvent: DeleteInteraction.prototype.handleUpEvent
+        handleDownEvent: RemoveInteraction.prototype.handleDownEvent,
+        handleDragEvent: RemoveInteraction.prototype.handleDragEvent,
+        handleMoveEvent: RemoveInteraction.prototype.handleMoveEvent,
+        handleUpEvent: RemoveInteraction.prototype.handleUpEvent
     });
 
     this.features = opt_options.features;
@@ -39,14 +39,14 @@ var DeleteInteraction = function (opt_options) {
     this.previousCursor_ = undefined;
 
 };
-ol.inherits(DeleteInteraction, ol.interaction.Pointer);
+ol.inherits(RemoveInteraction, ol.interaction.Pointer);
 
 
 /**
  * @param {ol.MapBrowserEvent} evt Map browser event.
  * @return {boolean} `true` to start the drag sequence.
  */
-DeleteInteraction.prototype.handleDownEvent = function (evt) {
+RemoveInteraction.prototype.handleDownEvent = function (evt) {
     var map = evt.map;
 
     var feature = map.forEachFeatureAtPixel(evt.pixel,
@@ -66,7 +66,7 @@ DeleteInteraction.prototype.handleDownEvent = function (evt) {
 /**
  * @param {ol.MapBrowserEvent} evt Map browser event.
  */
-DeleteInteraction.prototype.handleDragEvent = function (evt) {
+RemoveInteraction.prototype.handleDragEvent = function (evt) {
     var map = evt.map;
     var feature = map.forEachFeatureAtPixel(evt.pixel,
             function (feature) {
@@ -94,7 +94,7 @@ DeleteInteraction.prototype.handleDragEvent = function (evt) {
 /**
  * @param {ol.MapBrowserEvent} evt Event.
  */
-DeleteInteraction.prototype.handleMoveEvent = function (evt) {
+RemoveInteraction.prototype.handleMoveEvent = function (evt) {
     var map = evt.map;
     var feature = map.forEachFeatureAtPixel(evt.pixel,
             function (feature) {
@@ -124,7 +124,7 @@ DeleteInteraction.prototype.handleMoveEvent = function (evt) {
 /**
  * @return {boolean} `false` to stop the drag sequence.
  */
-DeleteInteraction.prototype.handleUpEvent = function (evt) {
+RemoveInteraction.prototype.handleUpEvent = function (evt) {
 
     var map = evt.map;
 
@@ -162,4 +162,4 @@ DeleteInteraction.prototype.handleUpEvent = function (evt) {
 
 
 
-module.exports = DeleteInteraction;
+module.exports = RemoveInteraction;
