@@ -95,21 +95,21 @@ DrawControl.prototype.addInteraction = function () {
 
 
     drawInteraction.on('drawend', function (e) {
-        
-        if(!this.multiple){
+
+        if (!this.multiple) {
             this.featuresCollection.clear();
         }
-        
+
         e.feature.set('type', this.type);
         e.feature.setStyle(this.style);
     }.bind(this));
 
     this.featuresCollection.on('add', function (e) {
-        
+
         this.getMap().dispatchEvent($.extend(e, {
             type: "draw:created"
         }));
-        
+
     }.bind(this));
 
     this.getInteraction = function () {

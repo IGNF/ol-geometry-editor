@@ -1,5 +1,6 @@
 var ol = require('openlayers');
 var ModifyBoxInteraction = require('../interactions/ModifyBoxInteraction');
+var ModifySquareInteraction = require('../interactions/ModifySquareInteraction');
 
 
 /**
@@ -87,11 +88,8 @@ EditControl.prototype.addInteractions = function () {
         features: this.getFeaturesCollectionBox()
     });
 
-    var modifyInteractionSquare = new ol.interaction.Modify({
-        features: this.getFeaturesCollectionSquare(),
-        insertVertexCondition: function () {
-            return false;
-        }
+    var modifyInteractionSquare = new ModifySquareInteraction({
+        features: this.getFeaturesCollectionSquare()
     });
 
     this.getInteractions = function () {

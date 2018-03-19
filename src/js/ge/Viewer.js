@@ -145,6 +145,15 @@ Viewer.prototype.setGeometries = function (featuresCollection, geometries) {
             case "Polygon":
                 geom = new ol.geom.Polygon(geometries[i].coordinates);
                 break;
+            case "MultiPoint":
+                geom = new ol.geom.MultiPoint(geometries[i].coordinates);
+                break;
+            case "MultiLineString":
+                geom = new ol.geom.MultiLineString(geometries[i].coordinates);
+                break;
+            case "MultiPolygon":
+                geom = new ol.geom.MultiPolygon(geometries[i].coordinates);
+                break;
         }
 
 

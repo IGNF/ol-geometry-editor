@@ -27,7 +27,8 @@
     background-image: url('images/spritesheet.png');
 }
 
-.ol-draw-tools .ol-control.ol-draw-point button {
+.ol-draw-tools .ol-control.ol-draw-point button ,
+.ol-draw-tools .ol-control.ol-draw-multipoint button {
     display: block;
     background-position: -125px -4px;
     background-repeat: no-repeat;
@@ -39,20 +40,24 @@
     background-repeat: no-repeat;
 }
 
-.ol-draw-tools .ol-control.ol-draw-linestring button {
+.ol-draw-tools .ol-control.ol-draw-linestring button,
+.ol-draw-tools .ol-control.ol-draw-multilinestring button {
     display: block;
     background-position: -4px -4px;
     background-repeat: no-repeat;
 }
 
 .ol-draw-tools .ol-control.ol-draw-square button,
-.ol-draw-tools .ol-control.ol-draw-rectangle button {
+.ol-draw-tools .ol-control.ol-draw-multisquare button,
+.ol-draw-tools .ol-control.ol-draw-rectangle button,
+.ol-draw-tools .ol-control.ol-draw-multirectangle button {
     display: block;
     background-position: -64px -4px;
     background-repeat: no-repeat;
 }
 
-.ol-draw-tools .ol-control.ol-draw-polygon button {
+.ol-draw-tools .ol-control.ol-draw-polygon button,
+.ol-draw-tools .ol-control.ol-draw-multipolygon button {
     display: block;
     background-position: -33px -4px;
     background-repeat: no-repeat;

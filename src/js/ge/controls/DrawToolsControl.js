@@ -48,7 +48,7 @@ DrawToolsControl.prototype.initControl = function () {
 
     this.addLayer();
 
-    this.addDrawControl();
+    this.addDrawControls();
     this.addEditControl();
     this.addTranslateControl();
     this.addRemoveControl();
@@ -78,13 +78,28 @@ DrawToolsControl.prototype.addLayer = function () {
 };
 
 
-DrawToolsControl.prototype.addDrawControl = function () {
+DrawToolsControl.prototype.addDrawControls = function () {
+    if (this.settings.type !== "Geometry") {
+        this.addDrawControl();
+    } else {
+        this.addDrawControl({type: "MultiPoint"});
+        this.addDrawControl({type: "MultiLineString"});
+        this.addDrawControl({type: "MultiPolygon"});
+        this.addDrawControl({type: "Rectangle", multiple: true});
+//        this.addDrawControl({type: "Square", multiple: true}); // TODO modify interaction for square
+    }
+
+};
+
+DrawToolsControl.prototype.addDrawControl = function (options) {
+    options = options || {};
+
     var drawControl = new DrawControl({
         featuresCollection: this.getLayer().getSource().getFeaturesCollection(),
-        type: this.settings.type,
+        type: options.type || this.settings.type,
         target: this.element,
         style: this.getFeatureStyleByGeometryType(this.settings.type),
-        multiple: this.settings.multiple
+        multiple: options.multiple || this.settings.multiple
     });
 
 
