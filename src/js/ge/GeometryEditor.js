@@ -18,20 +18,19 @@ var GeometryEditor = function (dataElement, options) {
     $.extend(true, this.settings, defaultParams, options); // deep copy
 
     this.viewer = new Viewer({
-        techno: this.settings.techno,
         geometryType: this.settings.geometryType
     });
 
     // init map
     var map = this.initMap();
-    
-    this.getMap = function(){
+
+    this.getMap = function () {
         return map;
-    };    
+    };
 
     // init features
     this.initDrawLayer();
-    
+
     // draw controls
     if (this.settings.editable) {
         this.initDrawControls();
@@ -93,7 +92,7 @@ GeometryEditor.prototype.setRawData = function (value) {
     if (currentData === value) {
         return;
     }
-    
+
     if (this.isDataElementAnInput()) {
         this.dataElement.val(value);
     } else {
@@ -132,6 +131,9 @@ GeometryEditor.prototype.setGeometry = function (geometry) {
  */
 GeometryEditor.prototype.initDrawLayer = function () {
     this.featuresCollection = this.viewer.createFeaturesCollection();
+    this.layer = this.viewer.addLayer({
+        featuresCollection: this.featuresCollection
+    });
     this.updateDrawLayer();
     this.dataElement.on('change', this.updateDrawLayer.bind(this));
 };
@@ -150,7 +152,7 @@ GeometryEditor.prototype.updateDrawLayer = function () {
             this.viewer.removeFeatures(this.featuresCollection);
             return;
         }
-    }else{
+    } else {
         this.viewer.removeFeatures(this.featuresCollection);
     }
 };
@@ -174,7 +176,7 @@ GeometryEditor.prototype.initDrawControls = function () {
 
     var drawOptions = {
         geometryType: this.getGeometryType(),
-        features: this.featuresCollection
+        featuresCollection: this.featuresCollection
     };
 
     this.viewer.addDrawToolsControl(drawOptions);
@@ -208,7 +210,7 @@ GeometryEditor.prototype.initDrawControls = function () {
  */
 GeometryEditor.prototype.serializeGeometry = function () {
     var geometry = this.viewer.getGeometryByFeaturesCollection(this.featuresCollection);
-    
+
     var geometryGeoJson = "";
     if (geometry) {
         if (this.getGeometryType() === 'Rectangle') {
@@ -216,8 +218,8 @@ GeometryEditor.prototype.serializeGeometry = function () {
         } else {
             geometryGeoJson = JSON.stringify(geometry);
         }
-    } 
-    
+    }
+
     this.settings.onResult(geometryGeoJson);
     this.setRawData(geometryGeoJson);
 };

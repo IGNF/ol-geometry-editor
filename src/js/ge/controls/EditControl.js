@@ -81,7 +81,8 @@ EditControl.prototype.addInteractions = function () {
     this.reorganiseFeaturesCollectionByType();
 
     var modifyInteractionBasic = new ol.interaction.Modify({
-        features: this.getFeaturesCollectionBasic()
+        features: this.getFeaturesCollectionBasic(),
+        style: this.style
     });
 
     var modifyInteractionBox = new ModifyBoxInteraction({

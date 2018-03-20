@@ -4,6 +4,9 @@ var DrawControl = require('./DrawControl');
 var EditControl = require('./EditControl');
 var TranslateControl = require('./TranslateControl');
 var RemoveControl = require('./RemoveControl');
+var defaultStyleDrawFunction = require('../util/defaultStyleDrawFunction');
+//var defaultStyleEditFunction = require('./util/defaultStyleEditFunction');
+
 
 
 /**
@@ -18,14 +21,11 @@ var RemoveControl = require('./RemoveControl');
  */
 var DrawToolsControl = function (options) {
 
-    var settings = {
-        features: null,
-        type: "",
-        title: "",
-        multiple: null
-    };
+    this.featuresCollection = options.featuresCollection || new ol.Collection();
+    this.type = options.type || "Geometry";
+    this.multiple = options.multiple || false;
+    this.style = options.style;
 
-    this.settings = $.extend(settings, options);
     this.controls = [];
 
     var drawBar = $("<div>").addClass('ol-draw-tools ol-unselectable ol-control');
@@ -46,8 +46,6 @@ DrawToolsControl.prototype.setMap = function (map) {
 
 DrawToolsControl.prototype.initControl = function () {
 
-    this.addLayer();
-
     this.addDrawControls();
     this.addEditControl();
     this.addTranslateControl();
@@ -56,37 +54,16 @@ DrawToolsControl.prototype.initControl = function () {
 };
 
 
-
-DrawToolsControl.prototype.addLayer = function () {
-
-    this.settings.features.forEach(function (feature) {
-        feature.setStyle(this.getFeatureStyleByGeometryType(feature.getGeometry().getType()));
-    }, this);
-
-    var layer = new ol.layer.Vector({
-        source: new ol.source.Vector({
-            features: this.settings.features
-        })
-    });
-
-    this.getMap().addLayer(layer);
-
-    this.getLayer = function () {
-        return layer;
-    };
-
-};
-
-
 DrawToolsControl.prototype.addDrawControls = function () {
-    if (this.settings.type !== "Geometry") {
-        this.addDrawControl();
-    } else {
-        this.addDrawControl({type: "MultiPoint"});
-        this.addDrawControl({type: "MultiLineString"});
-        this.addDrawControl({type: "MultiPolygon"});
-        this.addDrawControl({type: "Rectangle", multiple: true});
+    if (this.type === "Geometry") {
+
+        this.addDrawControl({type: "MultiPoint", multiple: true});
+        this.addDrawControl({type: "MultiLineString", multiple: true});
+        this.addDrawControl({type: "MultiPolygon", multiple: true});
+//        this.addDrawControl({type: "Rectangle", multiple: true}); // nope
 //        this.addDrawControl({type: "Square", multiple: true}); // TODO modify interaction for square
+    } else {
+        this.addDrawControl({type: this.type, multiple: this.multiple});
     }
 
 };
@@ -95,13 +72,14 @@ DrawToolsControl.prototype.addDrawControl = function (options) {
     options = options || {};
 
     var drawControl = new DrawControl({
-        featuresCollection: this.getLayer().getSource().getFeaturesCollection(),
-        type: options.type || this.settings.type,
+        featuresCollection: this.featuresCollection,
+        type: options.type,
         target: this.element,
-        style: this.getFeatureStyleByGeometryType(this.settings.type),
-        multiple: options.multiple || this.settings.multiple
+        style: function(feature, resolution){
+            return defaultStyleDrawFunction(feature,resolution, options.type);
+        },
+        multiple: options.multiple
     });
-
 
     drawControl.on('draw:active', function () {
         this.deactivateControls(drawControl);
@@ -113,11 +91,24 @@ DrawToolsControl.prototype.addDrawControl = function (options) {
 
 DrawToolsControl.prototype.addEditControl = function () {
     var editControl = new EditControl({
-        featuresCollection: this.getLayer().getSource().getFeaturesCollection(),
+        featuresCollection: this.featuresCollection,
         target: this.element,
-        style: this.getFeatureStyleByGeometryType(this.settings.type)
+        style: function(feature, resolution){
+            
+            var pixel = this.getMap().getPixelFromCoordinate(feature.getGeometry().getCoordinates());
+            var features = this.getMap().getFeaturesAtPixel(pixel);
+            var type;
+            
+            for (var i in features){
+                if(features[i] !== feature){
+                   type = features[i].get("type");
+                   continue;
+                }
+            }
+            
+            return defaultStyleDrawFunction(feature,resolution, type);
+        }.bind(this)
     });
-
 
     editControl.on('edit:active', function () {
         this.deactivateControls(editControl);
@@ -129,7 +120,7 @@ DrawToolsControl.prototype.addEditControl = function () {
 
 DrawToolsControl.prototype.addTranslateControl = function () {
     var translateControl = new TranslateControl({
-        featuresCollection: this.getLayer().getSource().getFeaturesCollection(),
+        featuresCollection: this.featuresCollection,
         target: this.element
     });
 
@@ -143,7 +134,7 @@ DrawToolsControl.prototype.addTranslateControl = function () {
 
 DrawToolsControl.prototype.addRemoveControl = function () {
     var removeControl = new RemoveControl({
-        featuresCollection: this.getLayer().getSource().getFeaturesCollection(),
+        featuresCollection: this.featuresCollection,
         target: this.element
     });
 
@@ -162,38 +153,6 @@ DrawToolsControl.prototype.deactivateControls = function (keepThisOne) {
             control.setActive(false);
         }
     });
-};
-
-
-DrawToolsControl.prototype.getFeatureStyleByGeometryType = function (geometryType) {
-
-    switch (geometryType) {
-        case "Point":
-            var markerStyle = new ol.style.Style({
-                image: new ol.style.Icon({
-                    anchor: [0.5, 41],
-                    anchorXUnits: 'fraction',
-                    anchorYUnits: 'pixels',
-                    opacity: 1,
-                    src: '../dist/images/marker-icon.png'
-                })
-            });
-            var shadowMarker = new ol.style.Style({
-                image: new ol.style.Icon({
-                    anchor: [14, 41],
-                    anchorXUnits: 'pixels',
-                    anchorYUnits: 'pixels',
-                    opacity: 1,
-                    src: '../dist/images/marker-shadow.png'
-                })
-            });
-
-            return [shadowMarker, markerStyle];
-
-        default:
-            break;
-    }
-
 };
 
 

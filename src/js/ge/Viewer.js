@@ -5,6 +5,7 @@ var DrawToolsControl = require('./controls/DrawToolsControl');
 var guid = require('./util/guid');
 var featureCollectionToGeometry = require('./util/featureCollectionToGeometry.js');
 var isSingleGeometryType = require('./util/isSingleGeometryType.js');
+var defaultStyleLayerFunction = require('./util/defaultStyleLayerFunction');
 
 
 
@@ -156,12 +157,17 @@ Viewer.prototype.setGeometries = function (featuresCollection, geometries) {
                 break;
         }
 
-
         var feature = new ol.Feature({
             geometry: geom.transform(this.settings.dataProjection, this.settings.mapProjection)
         });
-
-        feature.set('type', this.settings.geometryType);
+        
+        var type = this.settings.geometryType;
+        
+        if(type === "Geometry"){
+            type = geometries[i].type;
+        }
+        
+        feature.set('type', type);
         featuresCollection.push(feature);
     }
 };
@@ -181,6 +187,22 @@ Viewer.prototype.fitViewToFeaturesCollection = function (featuresCollection) {
         duration: 100
     });
 };
+
+
+
+Viewer.prototype.addLayer = function (options) {
+    var layer = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            features: options.featuresCollection
+        }),
+        style: defaultStyleLayerFunction
+    });
+
+    this.getMap().addLayer(layer);
+
+    return layer;
+};
+
 
 Viewer.prototype.createFeaturesCollection = function () {
     return new ol.Collection();
@@ -206,9 +228,8 @@ Viewer.prototype.getGeometryType = function () {
 
 Viewer.prototype.addDrawToolsControl = function (drawOptions) {
 
-
     var drawControlOptions = {
-        features: drawOptions.features,
+        featuresCollection: drawOptions.featuresCollection,
         type: drawOptions.geometryType,
         multiple: !isSingleGeometryType(drawOptions.geometryType)
     };

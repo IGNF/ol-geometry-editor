@@ -1391,20 +1391,19 @@ var GeometryEditor = function (dataElement, options) {
     $.extend(true, this.settings, defaultParams, options); // deep copy
 
     this.viewer = new Viewer({
-        techno: this.settings.techno,
         geometryType: this.settings.geometryType
     });
 
     // init map
     var map = this.initMap();
-    
-    this.getMap = function(){
+
+    this.getMap = function () {
         return map;
-    };    
+    };
 
     // init features
     this.initDrawLayer();
-    
+
     // draw controls
     if (this.settings.editable) {
         this.initDrawControls();
@@ -1466,7 +1465,7 @@ GeometryEditor.prototype.setRawData = function (value) {
     if (currentData === value) {
         return;
     }
-    
+
     if (this.isDataElementAnInput()) {
         this.dataElement.val(value);
     } else {
@@ -1505,6 +1504,9 @@ GeometryEditor.prototype.setGeometry = function (geometry) {
  */
 GeometryEditor.prototype.initDrawLayer = function () {
     this.featuresCollection = this.viewer.createFeaturesCollection();
+    this.layer = this.viewer.addLayer({
+        featuresCollection: this.featuresCollection
+    });
     this.updateDrawLayer();
     this.dataElement.on('change', this.updateDrawLayer.bind(this));
 };
@@ -1523,7 +1525,7 @@ GeometryEditor.prototype.updateDrawLayer = function () {
             this.viewer.removeFeatures(this.featuresCollection);
             return;
         }
-    }else{
+    } else {
         this.viewer.removeFeatures(this.featuresCollection);
     }
 };
@@ -1547,7 +1549,7 @@ GeometryEditor.prototype.initDrawControls = function () {
 
     var drawOptions = {
         geometryType: this.getGeometryType(),
-        features: this.featuresCollection
+        featuresCollection: this.featuresCollection
     };
 
     this.viewer.addDrawToolsControl(drawOptions);
@@ -1581,7 +1583,7 @@ GeometryEditor.prototype.initDrawControls = function () {
  */
 GeometryEditor.prototype.serializeGeometry = function () {
     var geometry = this.viewer.getGeometryByFeaturesCollection(this.featuresCollection);
-    
+
     var geometryGeoJson = "";
     if (geometry) {
         if (this.getGeometryType() === 'Rectangle') {
@@ -1589,8 +1591,8 @@ GeometryEditor.prototype.serializeGeometry = function () {
         } else {
             geometryGeoJson = JSON.stringify(geometry);
         }
-    } 
-    
+    }
+
     this.settings.onResult(geometryGeoJson);
     this.setRawData(geometryGeoJson);
 };
@@ -1598,7 +1600,7 @@ GeometryEditor.prototype.serializeGeometry = function () {
 
 module.exports = GeometryEditor;
 
-},{"./Viewer":6,"./defaultParams.js":12,"./util/geometryToSimpleGeometries":18,"turf-bbox-polygon":1,"turf-extent":2}],6:[function(require,module,exports){
+},{"./Viewer":6,"./defaultParams.js":12,"./util/geometryToSimpleGeometries":20,"turf-bbox-polygon":1,"turf-extent":2}],6:[function(require,module,exports){
 (function (global){
 var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
 
@@ -1607,6 +1609,7 @@ var DrawToolsControl = require('./controls/DrawToolsControl');
 var guid = require('./util/guid');
 var featureCollectionToGeometry = require('./util/featureCollectionToGeometry.js');
 var isSingleGeometryType = require('./util/isSingleGeometryType.js');
+var defaultStyleLayerFunction = require('./util/defaultStyleLayerFunction');
 
 
 
@@ -1758,12 +1761,17 @@ Viewer.prototype.setGeometries = function (featuresCollection, geometries) {
                 break;
         }
 
-
         var feature = new ol.Feature({
             geometry: geom.transform(this.settings.dataProjection, this.settings.mapProjection)
         });
-
-        feature.set('type', this.settings.geometryType);
+        
+        var type = this.settings.geometryType;
+        
+        if(type === "Geometry"){
+            type = geometries[i].type;
+        }
+        
+        feature.set('type', type);
         featuresCollection.push(feature);
     }
 };
@@ -1783,6 +1791,22 @@ Viewer.prototype.fitViewToFeaturesCollection = function (featuresCollection) {
         duration: 100
     });
 };
+
+
+
+Viewer.prototype.addLayer = function (options) {
+    var layer = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            features: options.featuresCollection
+        }),
+        style: defaultStyleLayerFunction
+    });
+
+    this.getMap().addLayer(layer);
+
+    return layer;
+};
+
 
 Viewer.prototype.createFeaturesCollection = function () {
     return new ol.Collection();
@@ -1808,9 +1832,8 @@ Viewer.prototype.getGeometryType = function () {
 
 Viewer.prototype.addDrawToolsControl = function (drawOptions) {
 
-
     var drawControlOptions = {
-        features: drawOptions.features,
+        featuresCollection: drawOptions.featuresCollection,
         type: drawOptions.geometryType,
         multiple: !isSingleGeometryType(drawOptions.geometryType)
     };
@@ -1853,7 +1876,7 @@ Viewer.prototype.getFeaturesCount = function (featuresCollection) {
 module.exports = Viewer;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./controls/DrawToolsControl":8,"./util/featureCollectionToGeometry.js":16,"./util/guid":19,"./util/isSingleGeometryType.js":20}],7:[function(require,module,exports){
+},{"./controls/DrawToolsControl":8,"./util/defaultStyleLayerFunction":17,"./util/featureCollectionToGeometry.js":18,"./util/guid":21,"./util/isSingleGeometryType.js":22}],7:[function(require,module,exports){
 (function (global){
 var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
 
@@ -1958,7 +1981,7 @@ DrawControl.prototype.addInteraction = function () {
         }
 
         e.feature.set('type', this.type);
-        e.feature.setStyle(this.style);
+//        e.feature.setStyle(this.style);
     }.bind(this));
 
     this.featuresCollection.on('add', function (e) {
@@ -1988,6 +2011,9 @@ var DrawControl = require('./DrawControl');
 var EditControl = require('./EditControl');
 var TranslateControl = require('./TranslateControl');
 var RemoveControl = require('./RemoveControl');
+var defaultStyleDrawFunction = require('../util/defaultStyleDrawFunction');
+//var defaultStyleEditFunction = require('./util/defaultStyleEditFunction');
+
 
 
 /**
@@ -2002,14 +2028,11 @@ var RemoveControl = require('./RemoveControl');
  */
 var DrawToolsControl = function (options) {
 
-    var settings = {
-        features: null,
-        type: "",
-        title: "",
-        multiple: null
-    };
+    this.featuresCollection = options.featuresCollection || new ol.Collection();
+    this.type = options.type || "Geometry";
+    this.multiple = options.multiple || false;
+    this.style = options.style;
 
-    this.settings = $.extend(settings, options);
     this.controls = [];
 
     var drawBar = $("<div>").addClass('ol-draw-tools ol-unselectable ol-control');
@@ -2030,8 +2053,6 @@ DrawToolsControl.prototype.setMap = function (map) {
 
 DrawToolsControl.prototype.initControl = function () {
 
-    this.addLayer();
-
     this.addDrawControls();
     this.addEditControl();
     this.addTranslateControl();
@@ -2040,37 +2061,16 @@ DrawToolsControl.prototype.initControl = function () {
 };
 
 
-
-DrawToolsControl.prototype.addLayer = function () {
-
-    this.settings.features.forEach(function (feature) {
-        feature.setStyle(this.getFeatureStyleByGeometryType(feature.getGeometry().getType()));
-    }, this);
-
-    var layer = new ol.layer.Vector({
-        source: new ol.source.Vector({
-            features: this.settings.features
-        })
-    });
-
-    this.getMap().addLayer(layer);
-
-    this.getLayer = function () {
-        return layer;
-    };
-
-};
-
-
 DrawToolsControl.prototype.addDrawControls = function () {
-    if (this.settings.type !== "Geometry") {
-        this.addDrawControl();
-    } else {
-        this.addDrawControl({type: "MultiPoint"});
-        this.addDrawControl({type: "MultiLineString"});
-        this.addDrawControl({type: "MultiPolygon"});
-        this.addDrawControl({type: "Rectangle", multiple: true});
+    if (this.type === "Geometry") {
+
+        this.addDrawControl({type: "MultiPoint", multiple: true});
+        this.addDrawControl({type: "MultiLineString", multiple: true});
+        this.addDrawControl({type: "MultiPolygon", multiple: true});
+//        this.addDrawControl({type: "Rectangle", multiple: true}); // nope
 //        this.addDrawControl({type: "Square", multiple: true}); // TODO modify interaction for square
+    } else {
+        this.addDrawControl({type: this.type, multiple: this.multiple});
     }
 
 };
@@ -2079,13 +2079,14 @@ DrawToolsControl.prototype.addDrawControl = function (options) {
     options = options || {};
 
     var drawControl = new DrawControl({
-        featuresCollection: this.getLayer().getSource().getFeaturesCollection(),
-        type: options.type || this.settings.type,
+        featuresCollection: this.featuresCollection,
+        type: options.type,
         target: this.element,
-        style: this.getFeatureStyleByGeometryType(this.settings.type),
-        multiple: options.multiple || this.settings.multiple
+        style: function(feature, resolution){
+            return defaultStyleDrawFunction(feature,resolution, options.type);
+        },
+        multiple: options.multiple
     });
-
 
     drawControl.on('draw:active', function () {
         this.deactivateControls(drawControl);
@@ -2097,11 +2098,24 @@ DrawToolsControl.prototype.addDrawControl = function (options) {
 
 DrawToolsControl.prototype.addEditControl = function () {
     var editControl = new EditControl({
-        featuresCollection: this.getLayer().getSource().getFeaturesCollection(),
+        featuresCollection: this.featuresCollection,
         target: this.element,
-        style: this.getFeatureStyleByGeometryType(this.settings.type)
+        style: function(feature, resolution){
+            
+            var pixel = this.getMap().getPixelFromCoordinate(feature.getGeometry().getCoordinates());
+            var features = this.getMap().getFeaturesAtPixel(pixel);
+            var type;
+            
+            for (var i in features){
+                if(features[i] !== feature){
+                   type = features[i].get("type");
+                   continue;
+                }
+            }
+            
+            return defaultStyleDrawFunction(feature,resolution, type);
+        }.bind(this)
     });
-
 
     editControl.on('edit:active', function () {
         this.deactivateControls(editControl);
@@ -2113,7 +2127,7 @@ DrawToolsControl.prototype.addEditControl = function () {
 
 DrawToolsControl.prototype.addTranslateControl = function () {
     var translateControl = new TranslateControl({
-        featuresCollection: this.getLayer().getSource().getFeaturesCollection(),
+        featuresCollection: this.featuresCollection,
         target: this.element
     });
 
@@ -2127,7 +2141,7 @@ DrawToolsControl.prototype.addTranslateControl = function () {
 
 DrawToolsControl.prototype.addRemoveControl = function () {
     var removeControl = new RemoveControl({
-        featuresCollection: this.getLayer().getSource().getFeaturesCollection(),
+        featuresCollection: this.featuresCollection,
         target: this.element
     });
 
@@ -2149,42 +2163,10 @@ DrawToolsControl.prototype.deactivateControls = function (keepThisOne) {
 };
 
 
-DrawToolsControl.prototype.getFeatureStyleByGeometryType = function (geometryType) {
-
-    switch (geometryType) {
-        case "Point":
-            var markerStyle = new ol.style.Style({
-                image: new ol.style.Icon({
-                    anchor: [0.5, 41],
-                    anchorXUnits: 'fraction',
-                    anchorYUnits: 'pixels',
-                    opacity: 1,
-                    src: '../dist/images/marker-icon.png'
-                })
-            });
-            var shadowMarker = new ol.style.Style({
-                image: new ol.style.Icon({
-                    anchor: [14, 41],
-                    anchorXUnits: 'pixels',
-                    anchorYUnits: 'pixels',
-                    opacity: 1,
-                    src: '../dist/images/marker-shadow.png'
-                })
-            });
-
-            return [shadowMarker, markerStyle];
-
-        default:
-            break;
-    }
-
-};
-
-
 module.exports = DrawToolsControl;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./DrawControl":7,"./EditControl":9,"./RemoveControl":10,"./TranslateControl":11}],9:[function(require,module,exports){
+},{"../util/defaultStyleDrawFunction":16,"./DrawControl":7,"./EditControl":9,"./RemoveControl":10,"./TranslateControl":11}],9:[function(require,module,exports){
 (function (global){
 var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
 var ModifyBoxInteraction = require('../interactions/ModifyBoxInteraction');
@@ -2269,7 +2251,8 @@ EditControl.prototype.addInteractions = function () {
     this.reorganiseFeaturesCollectionByType();
 
     var modifyInteractionBasic = new ol.interaction.Modify({
-        features: this.getFeaturesCollectionBasic()
+        features: this.getFeaturesCollectionBasic(),
+        style: this.style
     });
 
     var modifyInteractionBox = new ModifyBoxInteraction({
@@ -3529,6 +3512,145 @@ RemoveInteraction.prototype.handleUpEvent = function (evt) {
 module.exports = RemoveInteraction;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],16:[function(require,module,exports){
+(function (global){
+
+var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
+
+
+
+var getDefaultStyle = function () {
+
+
+    var fill = new ol.style.Fill({
+        color: 'rgba(0,0,255,0.4)'
+    });
+
+    var stroke = new ol.style.Stroke({
+        color: '#3399CC',
+        width: 1.25
+    });
+
+    var image = new ol.style.Circle({
+        fill: fill,
+        stroke: stroke,
+        radius: 5
+    });
+
+    return [
+        new ol.style.Style({
+            image: image,
+            fill: fill,
+            stroke: stroke
+        })
+    ];
+};
+
+
+var defaultStyleDrawFunction = function (feature, resolution, type) {
+
+    switch (type) {
+        case "Point":
+        case "MultiPoint":
+            var markerStyle = new ol.style.Style({
+                image: new ol.style.Icon({
+                    anchor: [0.5, 41],
+                    anchorXUnits: 'fraction',
+                    anchorYUnits: 'pixels',
+                    opacity: 1,
+                    src: '../dist/images/marker-icon.png'
+                })
+            });
+            var shadowMarker = new ol.style.Style({
+                image: new ol.style.Icon({
+                    anchor: [14, 41],
+                    anchorXUnits: 'pixels',
+                    anchorYUnits: 'pixels',
+                    opacity: 1,
+                    src: '../dist/images/marker-shadow.png'
+                })
+            });
+            return [shadowMarker, markerStyle];
+    }
+
+    return getDefaultStyle();
+
+};
+
+module.exports = defaultStyleDrawFunction;
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],17:[function(require,module,exports){
+(function (global){
+
+var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
+
+
+
+var getDefaultStyle = function () {
+
+
+    var fill = new ol.style.Fill({
+        color: 'rgba(255,255,255,0.4)'
+    });
+
+    var stroke = new ol.style.Stroke({
+        color: '#3399CC',
+        width: 1.25
+    });
+
+    var image = new ol.style.Circle({
+        fill: fill,
+        stroke: stroke,
+        radius: 5
+    });
+
+    return [
+        new ol.style.Style({
+            image: image,
+            fill: fill,
+            stroke: stroke
+        })
+    ];
+};
+
+var defaultStyleLayerFunction = function (feature, resolution) {
+
+    type = feature.getGeometry().getType();
+
+    switch (type) {
+        case "Point":
+        case "MultiPoint":
+            var markerStyle = new ol.style.Style({
+                image: new ol.style.Icon({
+                    anchor: [0.5, 41],
+                    anchorXUnits: 'fraction',
+                    anchorYUnits: 'pixels',
+                    opacity: 1,
+                    src: '../dist/images/marker-icon.png'
+                })
+            });
+            var shadowMarker = new ol.style.Style({
+                image: new ol.style.Icon({
+                    anchor: [14, 41],
+                    anchorXUnits: 'pixels',
+                    anchorYUnits: 'pixels',
+                    opacity: 1,
+                    src: '../dist/images/marker-shadow.png'
+                })
+            });
+            return [shadowMarker, markerStyle];
+    }
+
+    return getDefaultStyle();
+
+};
+
+module.exports = defaultStyleLayerFunction;
+
+
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],18:[function(require,module,exports){
 
 var geometriesToCollection = require('./geometriesToCollection.js') ;
 
@@ -3554,7 +3676,7 @@ var featureCollectionToGeometry = function(featureCollection){
 
 module.exports = featureCollectionToGeometry ;
 
-},{"./geometriesToCollection.js":17}],17:[function(require,module,exports){
+},{"./geometriesToCollection.js":19}],19:[function(require,module,exports){
 
 /**
  * Converts an array of geometries to a collection (MultiPoint, MultiLineString,
@@ -3592,7 +3714,7 @@ var geometriesToCollection = function(geometries){
 
 module.exports = geometriesToCollection ;
 
-},{}],18:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 
 /**
  * Converts a multi-geometry to an array of geometries
@@ -3656,7 +3778,7 @@ var geometryToSimpleGeometries = function(geometry){
 
 module.exports = geometryToSimpleGeometries ;
 
-},{}],19:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 
 /**
  * Generates uuidv4
@@ -3674,7 +3796,7 @@ var guid = function() {
 
 module.exports = guid ;
 
-},{}],20:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 
 /**
  * Indicates if the given type corresponds to a mutli geometry
@@ -3686,7 +3808,7 @@ var isSingleGeometryType = function(geometryType) {
 
 module.exports = isSingleGeometryType ;
 
-},{}],21:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 (function (global){
 // TODO check browserify usage (http://dontkry.com/posts/code/browserify-and-the-universal-module-definition.html)
 
@@ -3711,4 +3833,4 @@ jQuery.fn.geometryEditor = function( options ){
 global.ge = ge ;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./ge/GeometryEditor":5,"./ge/defaultParams":12}]},{},[21]);
+},{"./ge/GeometryEditor":5,"./ge/defaultParams":12}]},{},[23]);

@@ -6,15 +6,16 @@
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 
         <link rel="stylesheet" type="text/css" href="../node_modules/openlayers/dist/ol.css" />
+        <link rel="stylesheet" type="text/css" href="../dist/ol-geometry-editor.css" />
         <script type="text/javascript" src="../node_modules/openlayers/dist/ol.js"></script>
 
         <script type="text/javascript" src="../dist/ol-geometry-editor.js"></script>
         <script type="text/javascript" src="customize-geoportal.js"></script>
-        
+
         <script type="text/javascript">
             $(document).ready(function () {
                 $('.geometry').geometryEditor({
-                    'type': 'Point',
+                    'geometryType': 'Geometry',
                     'editable': true,
                     'hide': false
                 });
@@ -25,15 +26,14 @@
     <body>
 
         <form action="#" method="get">
-            <label>Nom : </label>
-            <input type="text" value="Votre nom" />
-            <br />
-            <label>Lieu de l'accident : </label>
-            <textarea class="geometry" name="the_geom">
+
+            <label>Entrez une Géométrie GéoJson</label>
+            <br>
+            <br>
+            <textarea class="geometry" name="the_geom" style="width: 400px;">
 			{"type":"Point","coordinates":[2.33,48.85]}
             </textarea>
 
-            <input type="submit" />
         </form>
 
     </body>

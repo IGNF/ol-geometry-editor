@@ -101,7 +101,7 @@ DrawControl.prototype.addInteraction = function () {
         }
 
         e.feature.set('type', this.type);
-        e.feature.setStyle(this.style);
+//        e.feature.setStyle(this.style);
     }.bind(this));
 
     this.featuresCollection.on('add', function (e) {
