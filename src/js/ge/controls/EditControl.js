@@ -14,7 +14,7 @@ var ModifySquareInteraction = require('../interactions/ModifySquareInteraction')
  */
 var EditControl = function (options) {
 
-    this.style = options.style;
+//    this.style = options.style;
     this.featuresCollection = options.featuresCollection;
 
     var element = $("<div>").addClass('ol-edit ol-unselectable ol-control');
@@ -82,7 +82,7 @@ EditControl.prototype.addInteractions = function () {
 
     var modifyInteractionBasic = new ol.interaction.Modify({
         features: this.getFeaturesCollectionBasic(),
-        style: this.style
+//        style: this.style
     });
 
     var modifyInteractionBox = new ModifyBoxInteraction({

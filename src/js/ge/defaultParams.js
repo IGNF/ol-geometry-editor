@@ -5,7 +5,7 @@
 var defaultParams = {
     tileLayers: [
        {
-           url: "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+           url: "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
            attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
        }
     ],

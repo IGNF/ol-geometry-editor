@@ -5,7 +5,6 @@ var EditControl = require('./EditControl');
 var TranslateControl = require('./TranslateControl');
 var RemoveControl = require('./RemoveControl');
 var defaultStyleDrawFunction = require('../util/defaultStyleDrawFunction');
-//var defaultStyleEditFunction = require('./util/defaultStyleEditFunction');
 
 
 
@@ -92,22 +91,24 @@ DrawToolsControl.prototype.addDrawControl = function (options) {
 DrawToolsControl.prototype.addEditControl = function () {
     var editControl = new EditControl({
         featuresCollection: this.featuresCollection,
-        target: this.element,
-        style: function(feature, resolution){
-            
-            var pixel = this.getMap().getPixelFromCoordinate(feature.getGeometry().getCoordinates());
-            var features = this.getMap().getFeaturesAtPixel(pixel);
-            var type;
-            
-            for (var i in features){
-                if(features[i] !== feature){
-                   type = features[i].get("type");
-                   continue;
-                }
-            }
-            
-            return defaultStyleDrawFunction(feature,resolution, type);
-        }.bind(this)
+        target: this.element
+//        style: function(feature, resolution){
+//            
+//            var pixel = this.getMap().getPixelFromCoordinate(feature.getGeometry().getCoordinates());
+//            var features = this.getMap().getFeaturesAtPixel(pixel,{
+//                pixelTolerance: 20
+//            });
+//            var type;
+//            
+//            for (var i in features){
+//                if(features[i] !== feature){
+//                   type = features[i].get("type");
+//                   continue;
+//                }
+//            }
+//            
+//            return defaultStyleDrawFunction(feature,resolution, type);
+//        }.bind(this)
     });
 
     editControl.on('edit:active', function () {

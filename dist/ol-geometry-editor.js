@@ -939,7 +939,6 @@ var EditControl = require('./EditControl');
 var TranslateControl = require('./TranslateControl');
 var RemoveControl = require('./RemoveControl');
 var defaultStyleDrawFunction = require('../util/defaultStyleDrawFunction');
-//var defaultStyleEditFunction = require('./util/defaultStyleEditFunction');
 
 
 
@@ -1026,22 +1025,24 @@ DrawToolsControl.prototype.addDrawControl = function (options) {
 DrawToolsControl.prototype.addEditControl = function () {
     var editControl = new EditControl({
         featuresCollection: this.featuresCollection,
-        target: this.element,
-        style: function(feature, resolution){
-            
-            var pixel = this.getMap().getPixelFromCoordinate(feature.getGeometry().getCoordinates());
-            var features = this.getMap().getFeaturesAtPixel(pixel);
-            var type;
-            
-            for (var i in features){
-                if(features[i] !== feature){
-                   type = features[i].get("type");
-                   continue;
-                }
-            }
-            
-            return defaultStyleDrawFunction(feature,resolution, type);
-        }.bind(this)
+        target: this.element
+//        style: function(feature, resolution){
+//            
+//            var pixel = this.getMap().getPixelFromCoordinate(feature.getGeometry().getCoordinates());
+//            var features = this.getMap().getFeaturesAtPixel(pixel,{
+//                pixelTolerance: 20
+//            });
+//            var type;
+//            
+//            for (var i in features){
+//                if(features[i] !== feature){
+//                   type = features[i].get("type");
+//                   continue;
+//                }
+//            }
+//            
+//            return defaultStyleDrawFunction(feature,resolution, type);
+//        }.bind(this)
     });
 
     editControl.on('edit:active', function () {
@@ -1111,7 +1112,7 @@ var ModifySquareInteraction = require('../interactions/ModifySquareInteraction')
  */
 var EditControl = function (options) {
 
-    this.style = options.style;
+//    this.style = options.style;
     this.featuresCollection = options.featuresCollection;
 
     var element = $("<div>").addClass('ol-edit ol-unselectable ol-control');
@@ -1179,7 +1180,7 @@ EditControl.prototype.addInteractions = function () {
 
     var modifyInteractionBasic = new ol.interaction.Modify({
         features: this.getFeaturesCollectionBasic(),
-        style: this.style
+//        style: this.style
     });
 
     var modifyInteractionBox = new ModifyBoxInteraction({
@@ -1486,7 +1487,7 @@ module.exports = TranslateControl;
 var defaultParams = {
     tileLayers: [
        {
-           url: "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+           url: "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
            attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
        }
     ],
@@ -2449,7 +2450,7 @@ var getDefaultStyle = function () {
 
 
     var fill = new ol.style.Fill({
-        color: 'rgba(0,0,255,0.4)'
+        color: 'rgba(255,255,255,0.4)'
     });
 
     var stroke = new ol.style.Stroke({
