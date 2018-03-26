@@ -13,7 +13,7 @@ var Viewer = require('./Viewer');
  */
 var GeometryEditor = function (dataElement, options) {
 
-    this.dataElement = dataElement;
+    this.dataElement = $(dataElement);
     this.settings = {};
     $.extend(true, this.settings, defaultParams, options); // deep copy
 

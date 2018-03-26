@@ -27,6 +27,11 @@ module.exports = function (grunt) {
                 files: {
                     'dist/ol-geometry-editor.js': ['src/js/index.js']
                 }
+            },
+            options: {
+                browserifyOptions: {
+                    standalone: 'ge'
+                }
             }
         },
 

@@ -12,10 +12,9 @@ var ge = {
  */
 jQuery.fn.geometryEditor = function( options ){
     return this.each(function() {
-        var elem = $(this) ;
-        var editor = new ge.GeometryEditor(elem,options);
-        elem.data('editor',editor);
+        var editor = new ge.GeometryEditor(this,options);
+        $(this).data('editor',editor);
     });
 } ;
 
-global.ge = ge ;
+module.exports = ge;
