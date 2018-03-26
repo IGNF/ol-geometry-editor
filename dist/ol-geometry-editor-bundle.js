@@ -2470,8 +2470,6 @@ var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "unde
  */
 var TranslateControl = function (options) {
 
-    this.featuresCollection = options.featuresCollection;
-
     var element = $("<div>").addClass('ol-translate ol-unselectable ol-control');
 
     $("<button>").attr('title', 'Remove a feature')
@@ -2501,7 +2499,7 @@ TranslateControl.prototype.setMap = function (map) {
 };
 
 TranslateControl.prototype.initControl = function () {
-    this.addInteraction();
+    this.addTranslateInteraction();
     this.active = false;
     this.setActive(this.active);
 };
@@ -2530,24 +2528,22 @@ TranslateControl.prototype.setActive = function (active) {
 };
 
 
-TranslateControl.prototype.addInteraction = function () {
-
+TranslateControl.prototype.addTranslateInteraction = function () {
     var translateInteraction = new ol.interaction.Translate({
-        features: this.featuresCollection,
         hitTolerance: 10
     });
-
-    this.getInteraction = function () {
-        return translateInteraction;
-    };
 
     translateInteraction.on('translateend', function (e) {
         this.getMap().dispatchEvent($.extend(e, {type: "draw:edited"}));
     }.bind(this));
 
     this.getMap().addInteraction(translateInteraction);
-
+    
+    this.getInteraction = function(){
+        return translateInteraction;
+    };
 };
+
 
 module.exports = TranslateControl;
 
