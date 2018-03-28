@@ -12,9 +12,11 @@ var ol = require('openlayers');
  */
 var TranslateControl = function (options) {
 
+    this.title = options.title || 'Move a geometry';
+
     var element = $("<div>").addClass('ol-translate ol-unselectable ol-control');
 
-    $("<button>").attr('title', 'Remove a feature')
+    $("<button>").attr('title', this.title)
             .on("touchstart click", function (e)
             {
                 if (e && e.preventDefault)
@@ -80,8 +82,8 @@ TranslateControl.prototype.addTranslateInteraction = function () {
     }.bind(this));
 
     this.getMap().addInteraction(translateInteraction);
-    
-    this.getInteraction = function(){
+
+    this.getInteraction = function () {
         return translateInteraction;
     };
 };

@@ -1,3 +1,5 @@
+var defaultTranslations = require('../translations/translation.fr.json');
+
 var ol = require('openlayers');
 
 var DrawControl = require('./DrawControl');
@@ -19,6 +21,7 @@ var defaultStyleDrawFunction = require('../util/defaultStyleDrawFunction');
  * 
  */
 var DrawToolsControl = function (options) {
+    this.translations = $.extend(defaultTranslations, options.translations || {});
 
     this.featuresCollection = options.featuresCollection || new ol.Collection();
     this.type = options.type || "Geometry";
@@ -55,14 +58,11 @@ DrawToolsControl.prototype.initControl = function () {
 
 DrawToolsControl.prototype.addDrawControls = function () {
     if (this.type === "Geometry") {
-
-        this.addDrawControl({type: "MultiPoint", multiple: true});
-        this.addDrawControl({type: "MultiLineString", multiple: true});
-        this.addDrawControl({type: "MultiPolygon", multiple: true});
-//        this.addDrawControl({type: "Rectangle", multiple: true}); // nope
-//        this.addDrawControl({type: "Square", multiple: true}); // TODO modify interaction for square
+        this.addDrawControl({type: "MultiPoint", multiple: true, title: this.translations.draw.multipoint});
+        this.addDrawControl({type: "MultiLineString", multiple: true, title: this.translations.draw.multilinestring});
+        this.addDrawControl({type: "MultiPolygon", multiple: true, title: this.translations.draw.multipolygon});
     } else {
-        this.addDrawControl({type: this.type, multiple: this.multiple});
+        this.addDrawControl({type: this.type, multiple: this.multiple, title: this.translations.draw[this.type.toLowerCase()]});
     }
 
 };
@@ -77,7 +77,8 @@ DrawToolsControl.prototype.addDrawControl = function (options) {
         style: function(feature, resolution){
             return defaultStyleDrawFunction(feature,resolution, options.type);
         },
-        multiple: options.multiple
+        multiple: options.multiple,
+        title: options.title
     });
 
     drawControl.on('draw:active', function () {
@@ -91,24 +92,8 @@ DrawToolsControl.prototype.addDrawControl = function (options) {
 DrawToolsControl.prototype.addEditControl = function () {
     var editControl = new EditControl({
         featuresCollection: this.featuresCollection,
-        target: this.element
-//        style: function(feature, resolution){
-//            
-//            var pixel = this.getMap().getPixelFromCoordinate(feature.getGeometry().getCoordinates());
-//            var features = this.getMap().getFeaturesAtPixel(pixel,{
-//                pixelTolerance: 20
-//            });
-//            var type;
-//            
-//            for (var i in features){
-//                if(features[i] !== feature){
-//                   type = features[i].get("type");
-//                   continue;
-//                }
-//            }
-//            
-//            return defaultStyleDrawFunction(feature,resolution, type);
-//        }.bind(this)
+        target: this.element,
+        title: this.translations.edit[this.type.toLowerCase()]
     });
 
     editControl.on('edit:active', function () {
@@ -122,7 +107,8 @@ DrawToolsControl.prototype.addEditControl = function () {
 DrawToolsControl.prototype.addTranslateControl = function () {
     var translateControl = new TranslateControl({
         featuresCollection: this.featuresCollection,
-        target: this.element
+        target: this.element,
+        title: this.translations.translate[this.type.toLowerCase()]
     });
 
     translateControl.on('translate:active', function () {
@@ -136,7 +122,8 @@ DrawToolsControl.prototype.addTranslateControl = function () {
 DrawToolsControl.prototype.addRemoveControl = function () {
     var removeControl = new RemoveControl({
         featuresCollection: this.featuresCollection,
-        target: this.element
+        target: this.element,
+        title: this.translations.remove[this.type.toLowerCase()]
     });
 
     removeControl.on('remove:active', function () {

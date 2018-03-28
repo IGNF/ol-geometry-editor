@@ -1389,6 +1389,7 @@ var GeometryEditor = function (dataElement, options) {
     this.dataElement = $(dataElement);
     this.settings = {};
     $.extend(true, this.settings, defaultParams, options); // deep copy
+    console.log(this.settings);
 
     this.viewer = new Viewer({
         geometryType: this.settings.geometryType
@@ -1547,7 +1548,8 @@ GeometryEditor.prototype.initDrawControls = function () {
 
     var drawOptions = {
         geometryType: this.getGeometryType(),
-        featuresCollection: this.featuresCollection
+        featuresCollection: this.featuresCollection,
+        translations: this.settings.translations
     };
 
     this.viewer.addDrawToolsControl(drawOptions);
@@ -1598,7 +1600,7 @@ GeometryEditor.prototype.serializeGeometry = function () {
 
 module.exports = GeometryEditor;
 
-},{"./Viewer":6,"./defaultParams.js":12,"./util/geometryToSimpleGeometries":20,"turf-bbox-polygon":1,"turf-extent":2}],6:[function(require,module,exports){
+},{"./Viewer":6,"./defaultParams.js":12,"./util/geometryToSimpleGeometries":21,"turf-bbox-polygon":1,"turf-extent":2}],6:[function(require,module,exports){
 (function (global){
 var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
 
@@ -1837,7 +1839,8 @@ Viewer.prototype.addDrawToolsControl = function (drawOptions) {
     var drawControlOptions = {
         featuresCollection: drawOptions.featuresCollection,
         type: drawOptions.geometryType,
-        multiple: !isSingleGeometryType(drawOptions.geometryType)
+        multiple: !isSingleGeometryType(drawOptions.geometryType),
+        translations: drawOptions.translations
     };
 
     var drawToolsControl = new DrawToolsControl(drawControlOptions);
@@ -1892,7 +1895,7 @@ Viewer.prototype.getFeaturesCount = function (featuresCollection) {
 module.exports = Viewer;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./controls/DrawToolsControl":8,"./util/defaultStyleLayerFunction":17,"./util/featureCollectionToGeometry.js":18,"./util/guid":21,"./util/isSingleGeometryType.js":22}],7:[function(require,module,exports){
+},{"./controls/DrawToolsControl":8,"./util/defaultStyleLayerFunction":18,"./util/featureCollectionToGeometry.js":19,"./util/guid":22,"./util/isSingleGeometryType.js":23}],7:[function(require,module,exports){
 (function (global){
 var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
 
@@ -1911,10 +1914,11 @@ var DrawControl = function (options) {
     this.type = options.type || "Point";
     this.style = options.style;
     this.multiple = options.multiple;
+    this.title = options.title || 'Draw a ' + this.type.toLowerCase();
 
     var element = $("<div>").addClass('ol-draw-' + this.type.toLowerCase() + ' ol-unselectable ol-control');
 
-    $("<button>").attr('title', 'Draw a ' + this.type.toLowerCase())
+    $("<button>").attr('title', this.title)
             .on("touchstart click", function (e)
             {
                 if (e && e.preventDefault)
@@ -2021,6 +2025,8 @@ module.exports = DrawControl;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],8:[function(require,module,exports){
 (function (global){
+var defaultTranslations = require('../translations/translation.fr.json');
+
 var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
 
 var DrawControl = require('./DrawControl');
@@ -2042,6 +2048,7 @@ var defaultStyleDrawFunction = require('../util/defaultStyleDrawFunction');
  * 
  */
 var DrawToolsControl = function (options) {
+    this.translations = $.extend(defaultTranslations, options.translations || {});
 
     this.featuresCollection = options.featuresCollection || new ol.Collection();
     this.type = options.type || "Geometry";
@@ -2078,14 +2085,11 @@ DrawToolsControl.prototype.initControl = function () {
 
 DrawToolsControl.prototype.addDrawControls = function () {
     if (this.type === "Geometry") {
-
-        this.addDrawControl({type: "MultiPoint", multiple: true});
-        this.addDrawControl({type: "MultiLineString", multiple: true});
-        this.addDrawControl({type: "MultiPolygon", multiple: true});
-//        this.addDrawControl({type: "Rectangle", multiple: true}); // nope
-//        this.addDrawControl({type: "Square", multiple: true}); // TODO modify interaction for square
+        this.addDrawControl({type: "MultiPoint", multiple: true, title: this.translations.draw.multipoint});
+        this.addDrawControl({type: "MultiLineString", multiple: true, title: this.translations.draw.multilinestring});
+        this.addDrawControl({type: "MultiPolygon", multiple: true, title: this.translations.draw.multipolygon});
     } else {
-        this.addDrawControl({type: this.type, multiple: this.multiple});
+        this.addDrawControl({type: this.type, multiple: this.multiple, title: this.translations.draw[this.type.toLowerCase()]});
     }
 
 };
@@ -2100,7 +2104,8 @@ DrawToolsControl.prototype.addDrawControl = function (options) {
         style: function(feature, resolution){
             return defaultStyleDrawFunction(feature,resolution, options.type);
         },
-        multiple: options.multiple
+        multiple: options.multiple,
+        title: options.title
     });
 
     drawControl.on('draw:active', function () {
@@ -2114,24 +2119,8 @@ DrawToolsControl.prototype.addDrawControl = function (options) {
 DrawToolsControl.prototype.addEditControl = function () {
     var editControl = new EditControl({
         featuresCollection: this.featuresCollection,
-        target: this.element
-//        style: function(feature, resolution){
-//            
-//            var pixel = this.getMap().getPixelFromCoordinate(feature.getGeometry().getCoordinates());
-//            var features = this.getMap().getFeaturesAtPixel(pixel,{
-//                pixelTolerance: 20
-//            });
-//            var type;
-//            
-//            for (var i in features){
-//                if(features[i] !== feature){
-//                   type = features[i].get("type");
-//                   continue;
-//                }
-//            }
-//            
-//            return defaultStyleDrawFunction(feature,resolution, type);
-//        }.bind(this)
+        target: this.element,
+        title: this.translations.edit[this.type.toLowerCase()]
     });
 
     editControl.on('edit:active', function () {
@@ -2145,7 +2134,8 @@ DrawToolsControl.prototype.addEditControl = function () {
 DrawToolsControl.prototype.addTranslateControl = function () {
     var translateControl = new TranslateControl({
         featuresCollection: this.featuresCollection,
-        target: this.element
+        target: this.element,
+        title: this.translations.translate[this.type.toLowerCase()]
     });
 
     translateControl.on('translate:active', function () {
@@ -2159,7 +2149,8 @@ DrawToolsControl.prototype.addTranslateControl = function () {
 DrawToolsControl.prototype.addRemoveControl = function () {
     var removeControl = new RemoveControl({
         featuresCollection: this.featuresCollection,
-        target: this.element
+        target: this.element,
+        title: this.translations.remove[this.type.toLowerCase()]
     });
 
     removeControl.on('remove:active', function () {
@@ -2183,7 +2174,7 @@ DrawToolsControl.prototype.deactivateControls = function (keepThisOne) {
 module.exports = DrawToolsControl;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../util/defaultStyleDrawFunction":16,"./DrawControl":7,"./EditControl":9,"./RemoveControl":10,"./TranslateControl":11}],9:[function(require,module,exports){
+},{"../translations/translation.fr.json":16,"../util/defaultStyleDrawFunction":17,"./DrawControl":7,"./EditControl":9,"./RemoveControl":10,"./TranslateControl":11}],9:[function(require,module,exports){
 (function (global){
 var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
 var ModifyBoxInteraction = require('../interactions/ModifyBoxInteraction');
@@ -2203,10 +2194,11 @@ var EditControl = function (options) {
 
 //    this.style = options.style;
     this.featuresCollection = options.featuresCollection;
+    this.title = options.title || 'Edit a feature';
 
     var element = $("<div>").addClass('ol-edit ol-unselectable ol-control');
 
-    $("<button>").attr('title', 'Edit a feature')
+    $("<button>").attr('title', this.title)
             .on("touchstart click", function (e)
             {
                 if (e && e.preventDefault)
@@ -2390,10 +2382,11 @@ var RemoveInteraction = require('../interactions/RemoveInteraction');
 var RemoveControl = function (options) {
 
     this.featuresCollection = options.featuresCollection;
+    this.title = options.title || 'Remove a geometry';
 
     var element = $("<div>").addClass('ol-delete ol-unselectable ol-control');
 
-    $("<button>").attr('title', 'Remove a feature')
+    $("<button>").attr('title', this.title)
             .on("touchstart click", function (e)
             {
                 if (e && e.preventDefault)
@@ -2486,9 +2479,11 @@ var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "unde
  */
 var TranslateControl = function (options) {
 
+    this.title = options.title || 'Move a geometry';
+
     var element = $("<div>").addClass('ol-translate ol-unselectable ol-control');
 
-    $("<button>").attr('title', 'Remove a feature')
+    $("<button>").attr('title', this.title)
             .on("touchstart click", function (e)
             {
                 if (e && e.preventDefault)
@@ -2554,8 +2549,8 @@ TranslateControl.prototype.addTranslateInteraction = function () {
     }.bind(this));
 
     this.getMap().addInteraction(translateInteraction);
-    
-    this.getInteraction = function(){
+
+    this.getInteraction = function () {
         return translateInteraction;
     };
 };
@@ -3549,6 +3544,49 @@ RemoveInteraction.prototype.handleUpEvent = function (evt) {
 module.exports = RemoveInteraction;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],16:[function(require,module,exports){
+module.exports={
+    "draw": {
+        "point": "Ajouter un point",
+        "multipoint": "Ajouter un ou plusieurs points",
+        "linestring": "Dessiner un chemin",
+        "multilinestring": "Ajouter un ou plusieurs chemins",
+        "polygon": "Dessiner un polygone",
+        "multipolygon": "Dessiner un ou plusieurs polygones",
+        "rectangle": "Dessiner une emprise"
+    },
+    "edit": {
+        "point": "Modifier un point",
+        "multipoint": "Modifier un point",
+        "linestring": "Modifier un chemin",
+        "multilinestring": "Modifier un chemin",
+        "polygon": "Modifier un polygone",
+        "multipolygon": "Modifier un polygone",
+        "rectangle": "Modifier une emprise",
+        "geometry": "Modifier une géométrie"
+    },
+    "translate": {
+        "point": "Déplacer un point",
+        "multipoint": "Déplacer un point",
+        "linestring": "Déplacer un chemin",
+        "multilinestring": "Déplacer un chemin",
+        "polygon": "Déplacer un polygone",
+        "multipolygon": "Déplacer un polygone",
+        "rectangle": "Déplacer une emprise",
+        "geometry": "Déplacer une géométrie"
+    },
+    "remove": {
+        "point": "Supprimer un point",
+        "multipoint": "Supprimer un point",
+        "linestring": "Supprimer un chemin",
+        "multilinestring": "Supprimer un chemin",
+        "polygon": "Supprimer un polygone",
+        "multipolygon": "Supprimer un polygone",
+        "rectangle": "Supprimer une emprise",
+        "geometry": "Supprimer une géométrie"
+    }
+}
+
+},{}],17:[function(require,module,exports){
 (function (global){
 
 var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
@@ -3616,7 +3654,7 @@ var defaultStyleDrawFunction = function (feature, resolution, type) {
 module.exports = defaultStyleDrawFunction;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 (function (global){
 
 var ol = (typeof window !== "undefined" ? window['ol'] : typeof global !== "undefined" ? global['ol'] : null);
@@ -3687,7 +3725,7 @@ module.exports = defaultStyleLayerFunction;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 
 var geometriesToCollection = require('./geometriesToCollection.js') ;
 
@@ -3713,7 +3751,7 @@ var featureCollectionToGeometry = function(featureCollection){
 
 module.exports = featureCollectionToGeometry ;
 
-},{"./geometriesToCollection.js":19}],19:[function(require,module,exports){
+},{"./geometriesToCollection.js":20}],20:[function(require,module,exports){
 
 /**
  * Converts an array of geometries to a collection (MultiPoint, MultiLineString,
@@ -3751,7 +3789,7 @@ var geometriesToCollection = function(geometries){
 
 module.exports = geometriesToCollection ;
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 
 /**
  * Converts a multi-geometry to an array of geometries
@@ -3815,7 +3853,7 @@ var geometryToSimpleGeometries = function(geometry){
 
 module.exports = geometryToSimpleGeometries ;
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 
 /**
  * Generates uuidv4
@@ -3833,7 +3871,7 @@ var guid = function() {
 
 module.exports = guid ;
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 
 /**
  * Indicates if the given type corresponds to a mutli geometry
@@ -3845,7 +3883,7 @@ var isSingleGeometryType = function(geometryType) {
 
 module.exports = isSingleGeometryType ;
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 (function (global){
 // TODO check browserify usage (http://dontkry.com/posts/code/browserify-and-the-universal-module-definition.html)
 
@@ -3869,5 +3907,5 @@ jQuery.fn.geometryEditor = function( options ){
 module.exports = ge;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./ge/GeometryEditor":5,"./ge/defaultParams":12}]},{},[23])(23)
+},{"./ge/GeometryEditor":5,"./ge/defaultParams":12}]},{},[24])(24)
 });

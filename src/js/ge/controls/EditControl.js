@@ -16,10 +16,11 @@ var EditControl = function (options) {
 
 //    this.style = options.style;
     this.featuresCollection = options.featuresCollection;
+    this.title = options.title || 'Edit a feature';
 
     var element = $("<div>").addClass('ol-edit ol-unselectable ol-control');
 
-    $("<button>").attr('title', 'Edit a feature')
+    $("<button>").attr('title', this.title)
             .on("touchstart click", function (e)
             {
                 if (e && e.preventDefault)

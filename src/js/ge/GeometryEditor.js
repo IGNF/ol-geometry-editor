@@ -174,7 +174,8 @@ GeometryEditor.prototype.initDrawControls = function () {
 
     var drawOptions = {
         geometryType: this.getGeometryType(),
-        featuresCollection: this.featuresCollection
+        featuresCollection: this.featuresCollection,
+        translations: this.settings.translations
     };
 
     this.viewer.addDrawToolsControl(drawOptions);

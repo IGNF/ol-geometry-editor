@@ -15,10 +15,11 @@ var RemoveInteraction = require('../interactions/RemoveInteraction');
 var RemoveControl = function (options) {
 
     this.featuresCollection = options.featuresCollection;
+    this.title = options.title || 'Remove a geometry';
 
     var element = $("<div>").addClass('ol-delete ol-unselectable ol-control');
 
-    $("<button>").attr('title', 'Remove a feature')
+    $("<button>").attr('title', this.title)
             .on("touchstart click", function (e)
             {
                 if (e && e.preventDefault)

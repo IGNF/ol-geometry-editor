@@ -235,7 +235,8 @@ Viewer.prototype.addDrawToolsControl = function (drawOptions) {
     var drawControlOptions = {
         featuresCollection: drawOptions.featuresCollection,
         type: drawOptions.geometryType,
-        multiple: !isSingleGeometryType(drawOptions.geometryType)
+        multiple: !isSingleGeometryType(drawOptions.geometryType),
+        translations: drawOptions.translations
     };
 
     var drawToolsControl = new DrawToolsControl(drawControlOptions);

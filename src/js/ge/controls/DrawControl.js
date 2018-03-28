@@ -15,10 +15,11 @@ var DrawControl = function (options) {
     this.type = options.type || "Point";
     this.style = options.style;
     this.multiple = options.multiple;
+    this.title = options.title || 'Draw a ' + this.type.toLowerCase();
 
     var element = $("<div>").addClass('ol-draw-' + this.type.toLowerCase() + ' ol-unselectable ol-control');
 
-    $("<button>").attr('title', 'Draw a ' + this.type.toLowerCase())
+    $("<button>").attr('title', this.title)
             .on("touchstart click", function (e)
             {
                 if (e && e.preventDefault)
