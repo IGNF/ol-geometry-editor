@@ -1,0 +1,41 @@
+{
+    "draw": {
+        "point": "Ajouter un point",
+        "multipoint": "Ajouter un ou plusieurs points",
+        "linestring": "Dessiner un chemin",
+        "multilinestring": "Ajouter un ou plusieurs chemins",
+        "polygon": "Dessiner un polygone",
+        "multipolygon": "Dessiner un ou plusieurs polygones",
+        "rectangle": "Dessiner une emprise"
+    },
+    "edit": {
+        "point": "Modifier un point",
+        "multipoint": "Modifier un point",
+        "linestring": "Modifier un chemin",
+        "multilinestring": "Modifier un chemin",
+        "polygon": "Modifier un polygone",
+        "multipolygon": "Modifier un polygone",
+        "rectangle": "Modifier une emprise",
+        "geometry": "Modifier une géométrie"
+    },
+    "translate": {
+        "point": "Déplacer un point",
+        "multipoint": "Déplacer un point",
+        "linestring": "Déplacer un chemin",
+        "multilinestring": "Déplacer un chemin",
+        "polygon": "Déplacer un polygone",
+        "multipolygon": "Déplacer un polygone",
+        "rectangle": "Déplacer une emprise",
+        "geometry": "Déplacer une géométrie"
+    },
+    "remove": {
+        "point": "Supprimer un point",
+        "multipoint": "Supprimer un point",
+        "linestring": "Supprimer un chemin",
+        "multilinestring": "Supprimer un chemin",
+        "polygon": "Supprimer un polygone",
+        "multipolygon": "Supprimer un polygone",
+        "rectangle": "Supprimer une emprise",
+        "geometry": "Supprimer une géométrie"
+    }
+}
