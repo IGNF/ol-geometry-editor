@@ -1,6 +1,6 @@
 {
   "name": "ol-geometry-editor",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Outil de lecture de géométries à partir d'une carte et d'outils de dessin généré sous openlayers.",
   "main": "src/index.js",
   "directories": {
