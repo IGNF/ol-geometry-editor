@@ -1558,7 +1558,30 @@ var ModifyBoxInteraction = function (opt_options) {
     this.previousCursor_ = undefined;
 
 
+    var white = [255, 255, 255, 1];
+    var blue = [0, 153, 255, 1];
+    var width = 3;
 
+    var fill = new ol.style.Fill({
+        color: blue
+    });
+
+    var stroke = new ol.style.Stroke({
+        color: white,
+        width: width / 2
+    });
+
+    var image = new ol.style.Circle({
+        fill: fill,
+        stroke: stroke,
+        radius: width * 2
+    });
+
+    var style = new ol.style.Style({
+        image: image,
+        fill: fill,
+        stroke: stroke
+    });
     /**
      * Draw overlay where sketch features are drawn.
      * @type {ol.layer.Vector}
@@ -1569,10 +1592,11 @@ var ModifyBoxInteraction = function (opt_options) {
             useSpatialIndex: false,
             wrapX: !!opt_options.wrapX
         }),
-        style: opt_options.style,
+        style: opt_options.style || style,
         updateWhileAnimating: true,
         updateWhileInteracting: true
     });
+
 
     this.overlayPoints_ = [];
 
@@ -1797,7 +1821,7 @@ ModifyBoxInteraction.prototype.setFeatureByModifyPoints_ = function (feature) {
 };
 
 ModifyBoxInteraction.prototype.updateLinkedModifyPointForBBox = function (modifyPointChanged, modifyPointsToUpdate) {
-    
+
     var indice;
     for (var i in modifyPointsToUpdate) {
         if (modifyPointChanged === modifyPointsToUpdate[i]) {
