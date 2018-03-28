@@ -1389,7 +1389,6 @@ var GeometryEditor = function (dataElement, options) {
     this.dataElement = $(dataElement);
     this.settings = {};
     $.extend(true, this.settings, defaultParams, options); // deep copy
-    console.log(this.settings);
 
     this.viewer = new Viewer({
         geometryType: this.settings.geometryType
