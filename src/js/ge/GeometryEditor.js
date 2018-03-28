@@ -131,9 +131,7 @@ GeometryEditor.prototype.setGeometry = function (geometry) {
  */
 GeometryEditor.prototype.initDrawLayer = function () {
     this.featuresCollection = this.viewer.createFeaturesCollection();
-    this.layer = this.viewer.addLayer({
-        featuresCollection: this.featuresCollection
-    });
+    this.layer = this.viewer.addLayer(this.featuresCollection);
     this.updateDrawLayer();
     this.dataElement.on('change', this.updateDrawLayer.bind(this));
 };

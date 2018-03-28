@@ -431,9 +431,7 @@ GeometryEditor.prototype.setGeometry = function (geometry) {
  */
 GeometryEditor.prototype.initDrawLayer = function () {
     this.featuresCollection = this.viewer.createFeaturesCollection();
-    this.layer = this.viewer.addLayer({
-        featuresCollection: this.featuresCollection
-    });
+    this.layer = this.viewer.addLayer(this.featuresCollection);
     this.updateDrawLayer();
     this.dataElement.on('change', this.updateDrawLayer.bind(this));
 };
@@ -542,11 +540,9 @@ var defaultStyleLayerFunction = require('./util/defaultStyleLayerFunction');
 
 
 /**
- * Geometry editor backend 
- * Class doing link between GeometryEditor and
+ * Geometry editor viewer
  *
  * @param {Object} options
- * @param {Object} options.geometryType
  */
 var Viewer = function (options) {
 
@@ -591,7 +587,7 @@ Viewer.prototype.initMap = function (options) {
 
 };
 
-Viewer.prototype.getMap = function (options) {
+Viewer.prototype.getMap = function () {
     return this.map;
 };
 
@@ -634,15 +630,10 @@ Viewer.prototype.createMap = function (target, options) {
  * @param {Object[]} layers - array of layer configurations 
  * @param {string} layers[].url - url
  * @param {string} layers[].attribution - attribution
- * @param {Object} options - Options. Default : maxZoom = 18 
  * 
- * @return L.Map
  */
-Viewer.prototype.addLayersToMap = function (layers, options) {
+Viewer.prototype.addLayersToMap = function (layers) {
 
-    options = options || {};
-
-    // init layers
     for (var i in layers) {
 
         this.getMap().addLayer(new ol.layer.Tile({
@@ -660,7 +651,7 @@ Viewer.prototype.addLayersToMap = function (layers, options) {
 /**
  * Ajoute des features dans une feature collection à partir d'un tableau de géométries GeoJson
  * 
- * @param {ol.featureCollection} featuresCollection
+ * @param {ol.Collection} featuresCollection
  * @param {array} geometries - simple geometries
  */
 Viewer.prototype.setGeometries = function (featuresCollection, geometries) {
@@ -701,11 +692,12 @@ Viewer.prototype.setGeometries = function (featuresCollection, geometries) {
         feature.set('type', type);
         featuresCollection.push(feature);
     }
+    this.getMap().dispatchEvent('set:geometries');
 };
 
 /**
  * Recentre la vue de la carte sur la collection de features
- * @param {ol.featureCollection} featuresCollection
+ * @param {ol.Collection} featuresCollection
  */
 Viewer.prototype.fitViewToFeaturesCollection = function (featuresCollection) {
     var geometries = [];
@@ -720,11 +712,15 @@ Viewer.prototype.fitViewToFeaturesCollection = function (featuresCollection) {
 };
 
 
-
-Viewer.prototype.addLayer = function (options) {
+/**
+ * 
+ * @param {ol.Collection} featuresCollection
+ * @returns {ol.layer.Vector}
+ */
+Viewer.prototype.addLayer = function (featuresCollection) {
     var layer = new ol.layer.Vector({
         source: new ol.source.Vector({
-            features: options.featuresCollection
+            features: featuresCollection
         }),
         style: defaultStyleLayerFunction
     });
@@ -734,16 +730,17 @@ Viewer.prototype.addLayer = function (options) {
     return layer;
 };
 
-
+/**
+ * 
+ * @returns {ol.Collection}
+ */
 Viewer.prototype.createFeaturesCollection = function () {
     return new ol.Collection();
 };
 
 /**
  * @description Supprime les features de la collection de feature
- * @param {ol.FeaturesCollection} featuresCollection - Collection de features
- * 
- * @returns {undefined}
+ * @param {ol.Collection} featuresCollection - Collection de features
  */
 Viewer.prototype.removeFeatures = function (featuresCollection) {
     featuresCollection.clear();
@@ -757,6 +754,11 @@ Viewer.prototype.getGeometryType = function () {
     return this.settings.geometryType;
 };
 
+/**
+ * @description Ajoute les controles de dessin
+ * 
+ * @param {object} drawOptions - (featuresCollection, geometryType)
+ */
 Viewer.prototype.addDrawToolsControl = function (drawOptions) {
 
     var drawControlOptions = {
@@ -765,14 +767,19 @@ Viewer.prototype.addDrawToolsControl = function (drawOptions) {
         multiple: !isSingleGeometryType(drawOptions.geometryType)
     };
 
-    var drawControl = new DrawToolsControl(drawControlOptions);
-    this.addControl(drawControl);
+    var drawToolsControl = new DrawToolsControl(drawControlOptions);
+    
+    this.getMap().on('set:geometries',function(){
+        drawToolsControl.deactivateControls();
+    });
+    
+    this.addControl(drawToolsControl);
 };
 
 
 /**
  * addDrawEvents
- * @param {Object} events
+ * @param {Object} events ({fn} onDrawCreated, {fn} onDrawModified, {fn} onDrawDeleted)
  */
 Viewer.prototype.addDrawToolsEvents = function (events) {
     this.getMap().on('draw:created', events.onDrawCreated);
@@ -780,7 +787,11 @@ Viewer.prototype.addDrawToolsEvents = function (events) {
     this.getMap().on('draw:deleted', events.onDrawDeleted);
 };
 
-
+/**
+ * 
+ * @param {ol.Collection} featuresCollection
+ * @returns {ol.Geometry} 
+ */
 Viewer.prototype.getGeometryByFeaturesCollection = function (featuresCollection) {
 
     var featuresGeoJson = (new ol.format.GeoJSON()).writeFeatures(
@@ -794,6 +805,11 @@ Viewer.prototype.getGeometryByFeaturesCollection = function (featuresCollection)
 
 };
 
+/**
+ * 
+ * @param {ol.Collection} featuresCollection
+ * @returns {number}
+ */
 Viewer.prototype.getFeaturesCount = function (featuresCollection) {
     return featuresCollection.getLength();
 };
