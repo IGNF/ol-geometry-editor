@@ -23,7 +23,6 @@
   },
   "devDependencies": {
     "grunt-cli": "^1.2.0",
-    "bootstrap": "^3.3.6",
     "browserify": "~13.0.0",
     "browserify-shim": "^3.8.12",
     "deamdify": "~0.2.0",
