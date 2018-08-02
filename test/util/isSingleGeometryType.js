@@ -1,6 +1,6 @@
 var expect = require('expect');
 
-var isSingleGeometryType = require('../../src/ge/util/isSingleGeometryType.js');
+var isSingleGeometryType = require('../../src/js/ge/util/isSingleGeometryType.js');
 
 describe('test isSingleGeometryType', function () {
 
