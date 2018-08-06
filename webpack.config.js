@@ -22,8 +22,7 @@ module.exports = [
                     exclude: /node_modules/,
                     use: ExtractTextWebpackPlugin.extract({
                         fallback: 'style-loader',
-                        use: ['css-loader']
-
+                        use: {loader: 'css-loader', options: {minimize: true}}
                     })
                 },
                 {
@@ -36,7 +35,7 @@ module.exports = [
             ]
         },
         plugins: [
-            new ExtractTextWebpackPlugin("ol-geometry-editor.css"),
+            new ExtractTextWebpackPlugin("ol-geometry-editor.min.css"),
             new CopyWebpackPlugin([{from: 'src/images', to: 'images'}])
         ]
     },
@@ -58,8 +57,7 @@ module.exports = [
                     exclude: /node_modules/,
                     use: ExtractTextWebpackPlugin.extract({
                         fallback: 'style-loader',
-                        use: ['css-loader']
-
+                        use: {loader: 'css-loader', options: {minimize: true}}
                     })
                 },
                 {
@@ -72,7 +70,7 @@ module.exports = [
             ]
         },
         plugins: [
-            new ExtractTextWebpackPlugin("ol-geometry-editor.css"),
+            new ExtractTextWebpackPlugin("ol-geometry-editor.min.css"),
         ]
     }
 ];
