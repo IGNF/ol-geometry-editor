@@ -7,7 +7,8 @@
     "example": "example"
   },
   "scripts": {
-    "test": "node_modules/.bin/mocha test/*"
+    "test": "node_modules/.bin/mocha test/*",
+    "watch": "webpack --watch"
   },
   "repository": {
     "type": "git",
@@ -16,40 +17,25 @@
   "author": "Mickaël Borne <mickael.borne@ign.fr>, Alexis Hordé <alexis.horde@ign.fr>",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "jquery": "^3.3.1",
-    "openlayers": "^4.6.4",
     "turf-bbox-polygon": "^1.0.2",
     "turf-extent": "^1.0.4"
   },
   "devDependencies": {
-    "grunt-cli": "^1.2.0",
-    "browserify": "~13.0.0",
-    "browserify-shim": "^3.8.12",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "copy-webpack-plugin": "^4.5.2",
+    "css-loader": "^1.0.0",
     "deamdify": "~0.2.0",
     "debowerify": "^1.5.0",
     "decomponentify": "~0.1.0",
     "deglobalify": "~0.2.0",
     "expect": "^1.15.2",
-    "grunt": "^1.0.3",
-    "grunt-browserify": "^5.3.0",
-    "grunt-contrib-concat": "^0.5.1",
-    "grunt-contrib-copy": "~0.8.2",
-    "grunt-contrib-jshint": "^0.12.0",
-    "grunt-contrib-uglify": "~0.11.1",
-    "grunt-contrib-watch": "^1.1.0",
-    "mocha": "^5.2.0"
-  },
-  "browserify": {
-    "transform": [
-      "browserify-shim",
-      "debowerify",
-      "decomponentify",
-      "deamdify",
-      "deglobalify"
-    ]
-  },
-  "browserify-shim": {
-    "jquery": "global:jQuery",
-    "openlayers": "global:ol"
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "mocha": "^5.2.0",
+    "style-loader": "^0.21.0",
+    "url-loader": "^1.0.1",
+    "webpack": "^4.16.5",
+    "webpack-dev-server": "^3.1.5"
   }
 }

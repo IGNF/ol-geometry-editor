@@ -1,4 +1,3 @@
-var ol = require('openlayers');
 var RemoveInteraction = require('../interactions/RemoveInteraction');
 
 

@@ -1,5 +1,3 @@
-var ol = require('openlayers');
-
 
 /**
  * Contrôle de création d'une feature de type

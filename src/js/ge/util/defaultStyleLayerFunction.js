@@ -1,8 +1,4 @@
 
-var ol = require('openlayers');
-
-
-
 var getDefaultStyle = function () {
 
 

@@ -1,22 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        <!--css dependancies-->
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-        <link href="style.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.4/ol-debug.css" rel="stylesheet">
+        
 
+        <!--js dependancies-->
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.4/ol-debug.js"></script>
 
-        <link rel="stylesheet" type="text/css" href="../dist/ol-geometry-editor-bundle.css" />
-        <script type="text/javascript" src="../dist/ol-geometry-editor-bundle.js"></script>
+
+        <!-- ol-geomettry-editor css -->
+        <link rel="stylesheet" type="text/css" href="../dist/ol-geometry-editor.css" />
+
+        <!-- ol-geomettry-editor js -->
+        <script type="text/javascript" src="../dist/jquery-geometry-editor.min.js"></script>
+
+        <!--example css & js-->
+        <link href="style.css" rel="stylesheet">
+
         <script type="text/javascript" src="customize-geoportal.js"></script>
+
         <script type="text/javascript">
-            
+
             $(document).ready(function () {
+
+
 
                 /****************** Point *********************/
                 $('#position-openlayers-point').geometryEditor({
@@ -27,7 +42,7 @@
                     onResult: function (result) {
                         $("#result-openlayers-point").html(result);
                     },
-                    translations: {"draw": {"point":" Ajouter un superbe point"}}
+                    translations: {"draw": {"point": " Ajouter un superbe point"}}
                 });
 
                 /****************** /Point *********************/
@@ -69,7 +84,7 @@
                     }
                 });
                 /****************** /Rectangle *********************/
-             
+
             });
 
         </script>
@@ -80,7 +95,7 @@
         <h1>Create a Geometry by draw</h1>
 
         <!--Point-->
-     
+
         <!--openlayers-->
         <div id="openlayers-point" class="col-lg-3 col-md-6">
 
@@ -98,7 +113,7 @@
         </div>
 
         <!--LineString-->
-      
+
         <!--openlayers-->
         <div id="openlayers-line" class="col-lg-3 col-md-6">
 
@@ -116,7 +131,7 @@
         </div>
 
         <!--Polygone-->
-  
+
         <!--openlayers-->
         <div id="openlayers-polygon" class="col-lg-3 col-md-6">
 
@@ -134,7 +149,7 @@
         </div>
 
         <!--Rectangle-->
-   
+
         <!--openlayers-->
         <div id="openlayers-rectangle" class="col-lg-3 col-md-6">
 

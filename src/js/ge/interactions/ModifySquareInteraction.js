@@ -1,4 +1,3 @@
-var ol = require('openlayers');
 
 /**
  * @constructor
@@ -9,13 +8,6 @@ var ModifySquareInteraction = function (opt_options) {
     opt_options = $.extend({
         features: null
     }, opt_options);
-
-    ol.interaction.Pointer.call(this, {
-        handleDownEvent: ModifySquareInteraction.prototype.handleDownEvent,
-        handleDragEvent: ModifySquareInteraction.prototype.handleDragEvent,
-        handleMoveEvent: ModifySquareInteraction.prototype.handleMoveEvent,
-        handleUpEvent: ModifySquareInteraction.prototype.handleUpEvent
-    });
 
     this.features = opt_options.features;
 
@@ -66,6 +58,14 @@ var ModifySquareInteraction = function (opt_options) {
     });
 
     this.overlayPoints_ = [];
+
+    ol.interaction.Pointer.call(this, {
+        handleDownEvent: ModifySquareInteraction.prototype.handleDownEvent,
+        handleDragEvent: ModifySquareInteraction.prototype.handleDragEvent,
+        handleMoveEvent: ModifySquareInteraction.prototype.handleMoveEvent,
+        handleUpEvent: ModifySquareInteraction.prototype.handleUpEvent
+    });
+
 
 };
 
@@ -200,7 +200,10 @@ ModifySquareInteraction.prototype.setActive = function (active) {
 
 //activer les points de modification
 ModifySquareInteraction.prototype.enableModificationPoints = function (featuresCollection) {
-    this.getMap().addLayer(this.overlay_);
+    if (this.getMap() !== null) {
+        this.getMap().addLayer(this.overlay_);
+    }
+
     this.overlayPoints_ = [];
 
     featuresCollection.forEach(function (feature) {
@@ -224,7 +227,9 @@ ModifySquareInteraction.prototype.removeModificationPoints_ = function (features
     }
 
     this.overlay_.getSource().clear();
-    this.getMap().removeLayer(this.overlay_);
+    if (this.getMap() !== null) {
+        this.getMap().removeLayer(this.overlay_);
+    }
     this.overlayPoints_ = [];
 
 
@@ -288,7 +293,7 @@ ModifySquareInteraction.prototype.setFeatureByModifyPoints_ = function (feature)
 };
 
 ModifySquareInteraction.prototype.updateLinkedModifyPointForBBox = function (modifyPointChanged, modifyPointsToUpdate) {
-    
+
     var indice;
     for (var i in modifyPointsToUpdate) {
         if (modifyPointChanged === modifyPointsToUpdate[i]) {
