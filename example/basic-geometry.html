@@ -1,0 +1,51 @@
+<html>
+
+    <head>
+        <meta charset="utf-8" />
+        <title>Exemple basique geometry</title>
+
+        <!--css dependancies-->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.4/ol-debug.css" rel="stylesheet">
+
+        <!--js dependancies-->
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.4/ol-debug.js"></script>
+
+        <!-- ol-geomettry-editor css -->
+        <link rel="stylesheet" type="text/css" href="../dist/ol-geometry-editor.min.css" />
+
+        <!-- jquery-geomettry-editor js -->
+        <script type="text/javascript" src="../dist/ol-geometry-editor.min.js"></script>
+
+        <!--example css & js-->
+        <link href="style.css" rel="stylesheet">
+        <script type="text/javascript" src="customize-geoportal.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('.geometry').geometryEditor({
+                    'geometryType': 'Geometry',
+                    'editable': true,
+                    'hide': false
+                });
+            });
+        </script>
+    </head>
+
+    <body>
+
+        <form action="#" method="get">
+
+            <label>Entrez une Géométrie GéoJson</label>
+            <br>
+            <br>
+            <textarea class="geometry" name="the_geom" style="width: 400px;">
+			{"type":"Point","coordinates":[2.33,48.85]}
+            </textarea>
+
+        </form>
+
+    </body>
+
+</html>

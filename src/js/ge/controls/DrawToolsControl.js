@@ -1,6 +1,5 @@
 var defaultTranslations = require('../translations/translation.fr.json');
 
-var ol = require('openlayers');
 
 var DrawControl = require('./DrawControl');
 var EditControl = require('./EditControl');

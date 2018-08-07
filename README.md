@@ -1,23 +1,63 @@
+# ol-geometry-editor
 
-# Description
- Outil de lecture de géométries à partir d'une carte et d'outils de dessin généré sous openlayers.
+## Description
 
-- marquage d'une position : géométrie de type "Point" en GeoJson
-- traçage de lignes continues : géométrie de type "LineString" en GeoJson
-- traçage de polygones : géométrie de type "Polygon" en GeoJson
-- traçage d'une boîte de délimitation : bounding Box sous la forme [lon,lat,lon,lat]
+Provides a geometry editor for html inputs and to simplify geometry integration in HTML forms.
+
+Add an html input (can containt geometry data)
+
+```html
+<textarea class="geometry" name="the_geom" style="width: 400px;">
+{"type":"Point","coordinates":[2.33,48.85]}
+</textarea>
+```
+
+Then use geometryEditor 
+
+like this as jquery plugin
+```javascript
+$('.geometry').geometryEditor({
+    'geometryType': 'Point',
+    'editable': true
+});
+```
+
+or like this as javascript plugin
+```javascript
+var editor =    new ge.GeometryEditor($('.geometry').get(0), {
+                    geometryType: 'Point',
+                    'editable': true
+                });
+```
 
 
-TODO : 
-MultiPoint
-MultiLineString
-MultiPolygon
+What you got, related to geometryType option passed :
+
+![geometry editor](doc/images/geometry-types.png)
 
 
-# Installation
-npm install ssh://git@gitlab.dockerforge.ign.fr:10022/sai/ol-geometry-editor.git && grunt
 
-# Utilisation 
-Regarder depuis les exemples.
+## Features
 
+* `ge.GeometryEditor` : class providing a geometry editor
+* `$.geometryEditor` : optional jquery plugin
 
+## Options
+
+* `geometryType`    : Restrict geometry type (Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, Rectangle, Geometry)
+* `hide`            : true to hide form input
+* `editable`        : false to only read data (no edition geometry control)
+* `tileLayers`      : array of tileLayers to choose different map background
+* `width`           : width of map 
+* `height`          : height of map
+* `lon`             : longitude central point of map view at init
+* `lat`             : latitude central point of map view at init
+* `zoom`            : level of zoom of map view at init
+* `maxZoom`         : level maximum of zoom of map view
+* `centerOnResults` : true to auto center the view on geometry edited
+* `onResult`        : function to launch when geometry is edited
+
+## Dependancies
+
+ * openlayers 4.6.4 minimum / 4.6.5 maximum
+ * jquery 1.12.0 minimum

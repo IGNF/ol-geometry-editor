@@ -1,4 +1,3 @@
-var ol = require('openlayers');
 var ModifyBoxInteraction = require('../interactions/ModifyBoxInteraction');
 var ModifySquareInteraction = require('../interactions/ModifySquareInteraction');
 

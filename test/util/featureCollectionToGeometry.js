@@ -1,6 +1,6 @@
 var expect = require('expect');
 
-var featureCollectionToGeometry = require('../../src/ge/util/featureCollectionToGeometry.js');
+var featureCollectionToGeometry = require('../../src/js/ge/util/featureCollectionToGeometry.js');
 
 describe('test featureCollectionToGeometry', function () {
 

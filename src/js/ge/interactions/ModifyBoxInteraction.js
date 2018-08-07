@@ -1,4 +1,3 @@
-var ol = require('openlayers');
 
 /**
  * @constructor
@@ -10,12 +9,6 @@ var ModifyBoxInteraction = function (opt_options) {
         features: null
     }, opt_options);
 
-    ol.interaction.Pointer.call(this, {
-        handleDownEvent: ModifyBoxInteraction.prototype.handleDownEvent,
-        handleDragEvent: ModifyBoxInteraction.prototype.handleDragEvent,
-        handleMoveEvent: ModifyBoxInteraction.prototype.handleMoveEvent,
-        handleUpEvent: ModifyBoxInteraction.prototype.handleUpEvent
-    });
 
     this.features = opt_options.features;
 
@@ -90,6 +83,13 @@ var ModifyBoxInteraction = function (opt_options) {
 
 
     this.overlayPoints_ = [];
+
+    ol.interaction.Pointer.call(this, {
+        handleDownEvent: ModifyBoxInteraction.prototype.handleDownEvent,
+        handleDragEvent: ModifyBoxInteraction.prototype.handleDragEvent,
+        handleMoveEvent: ModifyBoxInteraction.prototype.handleMoveEvent,
+        handleUpEvent: ModifyBoxInteraction.prototype.handleUpEvent
+    });
 
 };
 
@@ -224,7 +224,9 @@ ModifyBoxInteraction.prototype.setActive = function (active) {
 
 //activer les points de modification
 ModifyBoxInteraction.prototype.enableModificationPoints = function (featuresCollection) {
-    this.getMap().addLayer(this.overlay_);
+    if (this.getMap() !== null) {
+        this.getMap().addLayer(this.overlay_);
+    }
     this.overlayPoints_ = [];
 
     featuresCollection.forEach(function (feature) {
@@ -248,7 +250,9 @@ ModifyBoxInteraction.prototype.removeModificationPoints_ = function (featuresCol
     }
 
     this.overlay_.getSource().clear();
-    this.getMap().removeLayer(this.overlay_);
+    if (this.getMap() !== null) {
+        this.getMap().removeLayer(this.overlay_);
+    }
     this.overlayPoints_ = [];
 
 

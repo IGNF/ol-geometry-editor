@@ -1,7 +1,9 @@
+//import markerShadowUrl from '../../../images/marker-shadow.png';
+//import markerIconUrl from '../../../images/marker-icon.png';
 
-var ol = require('openlayers');
 
-
+var markerShadowUrl = require('../../../images/marker-shadow.png');
+var markerIconUrl = require('../../../images/marker-icon.png');
 
 var getDefaultStyle = function () {
 
@@ -43,7 +45,8 @@ var defaultStyleLayerFunction = function (feature, resolution) {
                     anchorXUnits: 'fraction',
                     anchorYUnits: 'pixels',
                     opacity: 1,
-                    src: '../dist/images/marker-icon.png'
+                    src: markerIconUrl
+//                    src: "../../../images/marker-icon.png"
                 })
             });
             var shadowMarker = new ol.style.Style({
@@ -52,7 +55,8 @@ var defaultStyleLayerFunction = function (feature, resolution) {
                     anchorXUnits: 'pixels',
                     anchorYUnits: 'pixels',
                     opacity: 1,
-                    src: '../dist/images/marker-shadow.png'
+                    src: markerShadowUrl
+//                    src: "../../../images/marker-shadow.png"
                 })
             });
             return [shadowMarker, markerStyle];

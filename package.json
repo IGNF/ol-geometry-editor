@@ -1,56 +1,35 @@
 {
   "name": "ol-geometry-editor",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Outil de lecture de géométries à partir d'une carte et d'outils de dessin généré sous openlayers.",
   "main": "src/index.js",
   "directories": {
     "example": "example"
   },
   "scripts": {
-    "test": "node_modules/.bin/mocha test/*"
+    "test": "node_modules/.bin/mocha test/*",
+    "watch": "webpack --watch"
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@gitlab.dockerforge.ign.fr:10022/sai/ol-geometry-editor.git"
+    "url": "http://gitlab.dockerforge.ign.fr/sai/ol-geometry-editor.git"
   },
   "author": "Mickaël Borne <mickael.borne@ign.fr>, Alexis Hordé <alexis.horde@ign.fr>",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "grunt-cli": "^0.1.13",
-    "jquery": "^2.2.0",
-    "openlayers" : "^4.6.4",
     "turf-bbox-polygon": "^1.0.2",
     "turf-extent": "^1.0.4"
   },
   "devDependencies": {
-    "bootstrap": "^3.3.6",
-    "browserify": "~13.0.0",
-    "browserify-shim": "^3.8.12",
-    "deamdify": "~0.2.0",
-    "debowerify": "~1.3.1",
-    "decomponentify": "~0.1.0",
-    "deglobalify": "~0.2.0",
-    "grunt": "^0.4.5",
-    "grunt-browserify": "~4.0.1",
-    "grunt-contrib-concat": "^0.5.1",
-    "grunt-contrib-copy": "~0.8.2",
-    "grunt-contrib-jshint": "^0.12.0",
-    "grunt-contrib-uglify": "~0.11.1",
-    "grunt-contrib-watch": "~0.6.1",
-    "mocha": "^2.4.5",
-    "expect": "^1.15.2"
-  },
-  "browserify": {
-    "transform": [
-      "browserify-shim",
-      "debowerify",
-      "decomponentify",
-      "deamdify",
-      "deglobalify"
-    ]
-  },
-  "browserify-shim": {
-    "jquery": "global:jQuery",
-    "openlayers": "global:ol"
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "copy-webpack-plugin": "^4.5.2",
+    "css-loader": "^1.0.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "mocha": "^5.2.0",
+    "style-loader": "^0.21.0",
+    "url-loader": "^1.0.1",
+    "webpack": "^4.16.5"
   }
 }

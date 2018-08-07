@@ -22,11 +22,7 @@ var GeometryEditor = function (dataElement, options) {
     });
 
     // init map
-    var map = this.initMap();
-
-    this.getMap = function () {
-        return map;
-    };
+    this.map = this.initMap();
 
     // init features
     this.initDrawLayer();
@@ -61,6 +57,14 @@ GeometryEditor.prototype.initMap = function () {
         maxZoom: this.settings.maxZoom,
         minZoom: this.settings.minZoom
     });
+};
+
+/**
+ * Indicates if data element is an input field (<input>, <textarea>, etc.)
+ * @private
+ */
+GeometryEditor.prototype.getMap = function () {
+    return this.map;
 };
 
 /**

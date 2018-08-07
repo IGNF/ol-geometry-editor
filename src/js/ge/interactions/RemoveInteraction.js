@@ -1,4 +1,3 @@
-var ol = require('openlayers');
 
 /**
  * @constructor
