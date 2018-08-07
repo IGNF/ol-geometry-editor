@@ -1,3 +1,5 @@
+var markerShadowUrl = require('../../../images/marker-shadow.png');
+var markerIconUrl = require('../../../images/marker-icon.png');
 
 var getDefaultStyle = function () {
 
@@ -38,7 +40,7 @@ var defaultStyleDrawFunction = function (feature, resolution, type) {
                     anchorXUnits: 'fraction',
                     anchorYUnits: 'pixels',
                     opacity: 1,
-                    src: '../dist/images/marker-icon.png'
+                      src: markerIconUrl
                 })
             });
             var shadowMarker = new ol.style.Style({
@@ -47,7 +49,7 @@ var defaultStyleDrawFunction = function (feature, resolution, type) {
                     anchorXUnits: 'pixels',
                     anchorYUnits: 'pixels',
                     opacity: 1,
-                    src: '../dist/images/marker-shadow.png'
+                      src: markerShadowUrl
                 })
             });
             return [shadowMarker, markerStyle];

@@ -1,7 +1,6 @@
 const webpack = require("webpack");
 const path = require("path");
 const ExtractTextWebpackPlugin = require("extract-text-webpack-plugin");
-var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = [
     {
@@ -36,7 +35,6 @@ module.exports = [
         },
         plugins: [
             new ExtractTextWebpackPlugin("ol-geometry-editor.min.css"),
-            new CopyWebpackPlugin([{from: 'src/images', to: 'images'}])
         ]
     }
 ];
