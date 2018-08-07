@@ -2,10 +2,38 @@
 
 ## Description
 
-Outil de lecture de géométries à partir d'une carte et d'outils de dessin généré sous openlayers.
+Provides a geometry editor for html inputs to simplify geometry integration in HTML forms.
 
-* marquage d'une position : géométrie de type "Point" en GeoJson
-* traçage de lignes continues : géométrie de type "LineString" en GeoJson
-* traçage de polygones : géométrie de type "Polygon" en GeoJson
-* traçage d'une boîte de délimitation : bounding Box sous la forme [lon,lat,lon,lat]
+```html
+<textarea class="geometry" name="the_geom" style="width: 400px;">
+{"type":"Point","coordinates":[2.33,48.85]}
+</textarea>
+```
+
++
+
+```javascript
+$('.geometry').geometryEditor({
+    'geometryType': 'Point',
+    'editable': true
+});
+```
+
+=>
+
+image
+
+
+## Features
+
+* `ge.GeometryEditor` : class providing a geometry editor
+* `$.geometryEditor` : optional jquery plugin
+
+## Options
+
+* `geometryType` : Restrict geometry type
+* ...
+
+
+
 
