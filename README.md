@@ -4,14 +4,17 @@
 
 Provides a geometry editor for html inputs and to simplify geometry integration in HTML forms.
 
+Add an html input (can containt geometry data)
+
 ```html
 <textarea class="geometry" name="the_geom" style="width: 400px;">
 {"type":"Point","coordinates":[2.33,48.85]}
 </textarea>
 ```
 
-+
+Then use geometryEditor 
 
+like this as jquery plugin
 ```javascript
 $('.geometry').geometryEditor({
     'geometryType': 'Point',
@@ -19,6 +22,16 @@ $('.geometry').geometryEditor({
 });
 ```
 
+or like this as javascript plugin
+```javascript
+var editor =    new ge.GeometryEditor($('.geometry').get(0), {
+                    geometryType: 'Point',
+                    'editable': true
+                });
+```
+
+
+What you got, related to geometryType option passed :
 
 ![geometry editor](doc/images/geometry-types.png)
 
@@ -44,3 +57,7 @@ $('.geometry').geometryEditor({
 * `centerOnResults` : true to auto center the view on geometry edited
 * `onResult`        : function to launch when geometry is edited
 
+## Dependancies
+
+ * openlayers 4.6.4 minimum / 4.6.5 maximum
+ * jquery 1.12.0 minimum
