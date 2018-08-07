@@ -20,7 +20,7 @@ $('.geometry').geometryEditor({
 ```
 
 
-![geometry editor](doc/geometry-types.png)
+![geometry editor](doc/images/geometry-types.png)
 
 
 
