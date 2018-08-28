@@ -2,9 +2,15 @@
 
 ## Description
 
-Provides a geometry editor for html inputs and to simplify geometry integration in HTML forms.
+> Ce composant fournit un moyen simple d'intégrer une composante géométrique dans les formulaires HTML. 
+> Nul besoin de révolutionner votre architecture, d'intégrer des `Feature` et `FeatureCollection` : 
+> Une géométrie est un champ comme un autre qui peut être formaté en texte et éditer à l'aide d'une carte.
 
-Add an html input (can containt geometry data)
+This components provides an easy way to integrate geometry edition in HTML forms.
+
+## How to enable a geometry editor?
+
+Given "the_geom" input in a form :
 
 ```html
 <textarea class="geometry" name="the_geom" style="width: 400px;">
@@ -12,52 +18,65 @@ Add an html input (can containt geometry data)
 </textarea>
 ```
 
-Then use geometryEditor 
+Either use jQuery plugin :
 
-like this as jquery plugin
 ```javascript
 $('.geometry').geometryEditor({
-    'geometryType': 'Point',
-    'editable': true
+    geometryType: 'Point',
+    editable: true
 });
 ```
 
-or like this as javascript plugin
+Or the `GeometryEditor` class :
+
 ```javascript
-var editor =    new ge.GeometryEditor($('.geometry').get(0), {
-                    geometryType: 'Point',
-                    'editable': true
-                });
+var editor = new ge.GeometryEditor($('.geometry').get(0), {
+    geometryType: 'Point',
+    editable: true
+});
 ```
 
-
-What you got, related to geometryType option passed :
-
-![geometry editor](doc/images/geometry-types.png)
+=> GeoJSON geometry will be hidden and a map will be provided as edition widget
 
 
 
-## Features
+## Main components
 
 * `ge.GeometryEditor` : class providing a geometry editor
-* `$.geometryEditor` : optional jquery plugin
+* `$.geometryEditor` : jQuery plugin (optional, defined if `jquery.js` is included before `ol-geometry-editor.js`)
+
 
 ## Options
 
-* `geometryType`    : Restrict geometry type (Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, Rectangle, Geometry)
-* `hide`            : true to hide form input
-* `editable`        : false to only read data (no edition geometry control)
-* `tileLayers`      : array of tileLayers to choose different map background
-* `width`           : width of map 
-* `height`          : height of map
-* `lon`             : longitude central point of map view at init
-* `lat`             : latitude central point of map view at init
-* `zoom`            : level of zoom of map view at init
-* `maxZoom`         : level maximum of zoom of map view
-* `centerOnResults` : true to auto center the view on geometry edited
-* `onResult`        : function to launch when geometry is edited
+| Option          | Description                                             | Default                |
+|-----------------|---------------------------------------------------------|------------------------|
+| geometryType    | Restrict geometry type                                  | Geometry               |
+| hide            | true to hide form input                                 | true                   |
+| editable        | Allows to enable a viewer mode without geometry edition | true                   |
+| tileLayers      | Allows to change background map                         | tile.openstreetmap.org |
+| width           | Map width                                               | 100%                   |
+| height          | Map height                                              | 500                    |
+| lon             | Longitude for initial view                              | 2.0                    |
+| lat             | Latitude for initial view                               | 45.0                   |
+| zoom            | Zoom for initial view                                   | 4                      |
+| maxZoom         | Maximum zoom level                                      | 20                     |
+| centerOnResults | Zoom to geometry after each edition                     | true                   |
+| onResult        | Callback function for geometry edition                  | null                   |
 
-## Dependancies
+## Supported geometry types
 
- * openlayers 4.6.4 minimum / 4.6.5 maximum
- * jquery 1.12.0 minimum
+* Point
+* LineString
+* Polygon
+* MultiPoint
+* MultiLineString
+* MultiPolygon
+* Rectangle
+* Geometry (no restriction, GeometryCollection if required)
+
+![Supported geometry types](doc/geometry-types.png)
+
+## Dependencies
+
+ * openlayers >= 4.6.4
+ * jQuery >= 1.12.0

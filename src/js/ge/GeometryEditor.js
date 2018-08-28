@@ -72,7 +72,7 @@ GeometryEditor.prototype.getMap = function () {
  * @private
  */
 GeometryEditor.prototype.isDataElementAnInput = function () {
-    return typeof this.dataElement.val !== 'undefined';
+    return typeof this.dataElement.attr('value') !== 'undefined';
 };
 
 /**

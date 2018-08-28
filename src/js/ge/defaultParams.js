@@ -19,7 +19,7 @@ var defaultParams = {
     lon: 2.0,
     lat: 45.0,
     zoom: 4,
-    maxZoom: 18,
+    maxZoom: 19,
     geometryType: 'Geometry',
     centerOnResults: true,
     onResult: function(){}

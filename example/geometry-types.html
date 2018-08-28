@@ -5,13 +5,13 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Tous les types</title>
+        <title>Supported geometry types</title>
          
-        <!--css dependancies-->
+        <!--css -->
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.4/ol-debug.css" rel="stylesheet">
 
-        <!--js dependancies-->
+        <!--js -->
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.4/ol-debug.js"></script>
@@ -30,7 +30,8 @@
             $(document).ready(function () {
                 $('#point').geometryEditor({
                     geometryType: 'Point',
-                    height: 300
+                    height: 300,
+                    maxZoom: 18
                 });
                 $('#linestring').geometryEditor({
                     geometryType: 'LineString',
@@ -56,8 +57,7 @@
 
                 $('#rectangle').geometryEditor({
                     geometryType: 'Rectangle',
-                    height: 300,
-                    hide: false
+                    height: 300
                 });
 
                 $('#geometry').geometryEditor({
@@ -75,16 +75,16 @@
                 <div class="col-sm-4">
                     <h2>Point</h2>
 
-                    <span id="point" class="geometry">
+                    <div id="point" class="geometry">
                         {"type":"Point","coordinates":[2.424059808254242,48.844580316300906]}
-                    </span>
+                    </div>
                 </div>
 
                 <div class="col-sm-4">
                     <h2>LineString</h2>
 
                     <span id="linestring" class="geometry">
-                        {"type":"LineString","coordinates":[[2.406005859375,48.87338678327761],[2.779541015625,48.248088874525514],[3.922119140625,47.64466657284537],[4.976806640625,47.04916590489654],[6.009521484375,47.228521621233796],[6.60552978515625,47.05667443815281]]}
+                            {"type":"LineString","coordinates":[[2.379196286419756,48.85665404926806],[2.379775643566972,48.8575575912777],[2.3801404239929975,48.857684650564835],[2.380473017910844,48.85759994440923],[2.3811274769104784,48.85664699028189]]}
                     </span>
                 </div>
 
@@ -102,7 +102,7 @@
                     <h2>MultiPoint</h2>
 
                     <span id="multipoint" class="geometry">
-                        {"type":"MultiPoint","coordinates":[[2.424059808254242,48.844580316300906],[2.472782135009765,48.84949007255205],[2.4823951721191406,48.872302780090024]]}
+                            {"type":"GeometryCollection","geometries":[{"type":"Point","coordinates":[2.4240598082542424,48.84458031630089]},{"type":"Point","coordinates":[6.130371093749999,43.51668853502909]},{"type":"Point","coordinates":[5.69091796875,47.010225655683485]},{"type":"MultiPoint","coordinates":[[-1.38427734375,43.229195113965034]]}]}
                     </span>
                 </div>
 
@@ -118,7 +118,7 @@
                     <h2>MultiPolygon</h2>
 
                     <span id="multipolygon" class="geometry">
-                        {"type":"MultiPolygon","coordinates":[[[[2.350797951221466,48.85334892310108],[2.350679934024811,48.8532077338677],[2.351146638393402,48.85304536575706],[2.3512324690818787,48.85320067439557],[2.350797951221466,48.85334892310108]]],[[[2.350824773311615,48.853355982552294],[2.3509374260902405,48.85353952793456],[2.350996434688568,48.85355364678225],[2.3511090874671936,48.853479522787474],[2.3512324690818787,48.85322538254365],[2.351227104663849,48.85319361492245],[2.350824773311615,48.853355982552294]]]]}
+                            {"type":"MultiPolygon","coordinates":[[[[2.350797951221466,48.853348923101066],[2.350679934024811,48.85320773386766],[2.351146638393402,48.853045365757026],[2.3512284457683563,48.85321267547607],[2.350797951221466,48.853348923101066]]],[[[2.3507979512214665,48.853347687675466],[2.35094279050827,48.853558588356464],[2.350996434688568,48.853553646782245],[2.351133227348327,48.853482699510806],[2.3512431979179382,48.853286799865884],[2.3512324690818787,48.853225382543656],[2.3512271046638484,48.85321444034372],[2.3507979512214665,48.853347687675466]]]]}
                     </span>
                 </div>
             </div>
@@ -129,7 +129,7 @@
                     <h2>Rectangle (bounding box)</h2>
 
                     <span id="rectangle" class="geometry">
-                        [2.0,40.0,7.0,50.0]
+                        [-5.5,41.2,10.4,51.6]
                     </span>
                 </div>
 
@@ -137,7 +137,7 @@
                     <h2>GeometryCollection</h2>
 
                     <span id="geometry" class="geometry">
-                        {"type":"GeometryCollection","geometries":[{"type":"Polygon","coordinates":[[[36.5185546875,4.092220009695959],[40.2978515625,1.0194779877865527],[45.74707031249999,4.267533636729139],[53.4814453125,8.633162217505648],[50.7568359375,13.034529203403467],[48.7353515625,13.20572184080919],[41.9677734375,13.71857434958457],[36.5185546875,4.092220009695959]]]},{"type":"Point","coordinates":[39.5068359375,-1.5291147865363532]},{"type":"LineString","coordinates":[[47.50488281249999,1.5466876521512973],[47.4169921875,-4.16234908830769],[55.7666015625,-5.301014227618511],[58.3154296875,-0.035155711352275194]]},{"type":"Polygon","coordinates":[[[36.1669921875,-5.476018597004294],[36.1669921875,-3.7239373247422463],[37.6611328125,-3.7239373247422463],[37.6611328125,-5.476018597004294],[36.1669921875,-5.476018597004294]]]},{"type":"Point","coordinates":[43.5498046875,-4.863289802428317]}]}
+                            {"type":"GeometryCollection","geometries":[{"type":"MultiPoint","coordinates":[[2.968574166516191,48.38543506596059]]},{"type":"MultiPolygon","coordinates":[[[[2.9694324734009565,48.38572719810722],[2.969614863613969,48.385670196844416],[2.969174981335527,48.385007552479664],[2.969003319958574,48.385050303989374],[2.9694324734009565,48.38572719810722]]]]},{"type":"MultiLineString","coordinates":[[[2.9690882564682393,48.38537093916736],[2.9694369436401753,48.385891076382165],[2.970617115606728,48.38558113224349]]]}]}
                     </span>
                 </div>
             </div>

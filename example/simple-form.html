@@ -2,13 +2,13 @@
 
     <head>
         <meta charset="utf-8" />
-        <title>Exemple basique geometry</title>
+        <title>A form with a geometry</title>
 
-        <!--css dependancies-->
+        <!--css -->
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.4/ol-debug.css" rel="stylesheet">
 
-        <!--js dependancies-->
+        <!--js -->
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.4/ol-debug.js"></script>
@@ -25,7 +25,7 @@
         <script type="text/javascript">
             $(document).ready(function () {
                 $('.geometry').geometryEditor({
-                    'geometryType': 'Geometry',
+                    'geometryType': 'Point',
                     'editable': true,
                     'hide': false
                 });
@@ -35,16 +35,25 @@
 
     <body>
 
-        <form action="#" method="get">
+        <div class="container">
+            <h1>Place</h1>
 
-            <label>Entrez une Géométrie GéoJson</label>
-            <br>
-            <br>
-            <textarea class="geometry" name="the_geom" style="width: 400px;">
-			{"type":"Point","coordinates":[2.33,48.85]}
-            </textarea>
+            <form action="#" method="get">
+                <div class="form-group">
+                    <label for="name">name</label>
+                    <input id="name" class="form-control" type="text" placeholder="The place name" />
+                </div>
+                <div class="form-group">
+                    <label for="the_geom">the_geom</label>
+                    <input type="text" id="the_geom" class="geometry form-control" name="the_geom" value='{"type":"Point","coordinates":[2.33,48.85]}' />
+                </div>
+            </form>
 
-        </form>
+            <p class="alert alert-info">
+                Note that you can submit your form as usual, no need to introduce GeoJSON Feature or FeatureCollection.
+            </p>
+
+        </div>
 
     </body>
 

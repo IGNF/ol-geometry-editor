@@ -2,7 +2,7 @@
 /*
  * WARNING : Demo API KEY. See http://api.ign.fr/conditions-generales
  */
-var GEOPORTAL_API_KEY="509qg1v5djkkfjk9f2bhkiyl" ;
+var GEOPORTAL_API_KEY="pratique" ;
 
 /**
  *
@@ -18,10 +18,10 @@ function getGeoportalURL( layerName ){
 	return url ;
 }
 
-if ( confirm("Display IGN maps?") ){
+if ( confirm("Display IGN data?") ){
 	ge.defaultParams.tileLayers = [
 		{
-			url: getGeoportalURL("GEOGRAPHICALGRIDSYSTEMS.PLANIGN"),
+			url: getGeoportalURL("ORTHOIMAGERY.ORTHOPHOTOS"),
 			attribution: '<a href="http://api.ign.fr/conditions-generales">IGN</a>'
 		}
 	];
