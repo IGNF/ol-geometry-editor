@@ -43,7 +43,7 @@ var editor = new ge.GeometryEditor($('.geometry').get(0), {
 ## Main components
 
 * `ge.GeometryEditor` : class providing a geometry editor
-* `$.geometryEditor` : jQuery plugin (optional, defined if `jquery.js` is included before `ol-geometry-editor.js`)
+* `$.geometryEditor` : jQuery plugin
 
 
 ## Options
@@ -78,5 +78,6 @@ var editor = new ge.GeometryEditor($('.geometry').get(0), {
 
 ## Dependencies
 
- * openlayers >= 4.6.4
- * jQuery >= 1.12.0
+* jQuery >= 1.12.0
+* openlayers >= 4.6.4
+
