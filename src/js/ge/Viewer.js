@@ -89,7 +89,9 @@ Viewer.prototype.createMap = function (target, options) {
             maxZoom: options.maxZoom,
             projection: this.settings.mapProjection
         }),
-        controls: [new ol.control.Zoom(), new ol.control.Attribution()]
+        controls: [new ol.control.Zoom(), new ol.control.Attribution({
+            collapsible: false
+        })]
     });
 
 };

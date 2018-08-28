@@ -6,7 +6,7 @@ var defaultParams = {
     tileLayers: [
        {
            url: "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-           attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+           attribution: '©<a href="http://openstreetmap.org">OpenStreetMap contributors</a>'
        }
     ],
     /*
