@@ -10,7 +10,7 @@
     "test": "node_modules/.bin/mocha test/*",
     "watch": "webpack --watch",
     "build": "webpack --mode=production",
-    "build-dev": "webpack --mode=development"    
+    "build-dev": "webpack --mode=development"
   },
   "repository": {
     "type": "git",
@@ -28,6 +28,7 @@
     "babel-preset-env": "^1.7.0",
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^1.0.0",
+    "expect": "^23.5.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "mocha": "^5.2.0",
     "style-loader": "^0.21.0",
