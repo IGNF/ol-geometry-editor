@@ -212,7 +212,7 @@ GeometryEditor.prototype.initDrawControls = function () {
  * @private
  */
 GeometryEditor.prototype.serializeGeometry = function () {
-    var geometry = this.viewer.getGeometryByFeaturesCollection(this.featuresCollection);
+    var geometry = this.viewer.getGeometryByFeaturesCollection(this.featuresCollection, this.settings.precision);
 
     var geometryGeoJson = "";
     if (geometry) {

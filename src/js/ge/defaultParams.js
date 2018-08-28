@@ -22,6 +22,7 @@ var defaultParams = {
     maxZoom: 19,
     geometryType: 'Geometry',
     centerOnResults: true,
+    precision: 7,
     onResult: function(){}
 } ;
 

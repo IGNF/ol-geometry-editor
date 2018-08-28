@@ -152,13 +152,13 @@ Viewer.prototype.setGeometries = function (featuresCollection, geometries) {
         var feature = new ol.Feature({
             geometry: geom.transform(this.settings.dataProjection, this.settings.mapProjection)
         });
-        
+
         var type = this.settings.geometryType;
-        
+
         if(type === "Geometry"){
             type = geometries[i].type;
         }
-        
+
         feature.set('type', type);
         featuresCollection.push(feature);
     }
@@ -239,11 +239,11 @@ Viewer.prototype.addDrawToolsControl = function (drawOptions) {
     };
 
     var drawToolsControl = new DrawToolsControl(drawControlOptions);
-    
+
     this.getMap().on('set:geometries',function(){
         drawToolsControl.deactivateControls();
     });
-    
+
     this.addControl(drawToolsControl);
 };
 
@@ -263,13 +263,14 @@ Viewer.prototype.addDrawToolsEvents = function (events) {
  * @param {ol.Collection} featuresCollection
  * @returns {ol.Geometry} 
  */
-Viewer.prototype.getGeometryByFeaturesCollection = function (featuresCollection) {
+Viewer.prototype.getGeometryByFeaturesCollection = function (featuresCollection, precision) {
 
     var featuresGeoJson = (new ol.format.GeoJSON()).writeFeatures(
             featuresCollection.getArray(),
             {
                 featureProjection: this.settings.mapProjection,
-                dataProjection: this.settings.dataProjection
+                dataProjection: this.settings.dataProjection,
+                decimals: precision
             });
 
     return featureCollectionToGeometry(JSON.parse(featuresGeoJson));
