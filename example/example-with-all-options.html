@@ -20,7 +20,7 @@
     <script type="text/javascript" src="../dist/ol-geometry-editor.min.js"></script>
 
     <!--example css & js-->
-    <link href="style.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" />
 
     <script type="text/javascript">
 
@@ -55,6 +55,7 @@
             });
         });
 
+
     </script>
 </head>
 
@@ -74,6 +75,32 @@
     </div>
     <br>
     <div class="container">
+
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-primary dropdown-toggle right help-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                ?
+            </button>
+         <pre class="dropdown-menu help-content">
+| Option          | Description                                             | Default                |
+|-----------------|---------------------------------------------------------|------------------------|
+| geometryType    | Restrict geometry type                                  | Geometry               |
+| hide            | true to hide form input                                 | true                   |
+| editable        | Allows to enable a viewer mode without geometry edition | true                   |
+| tileLayers      | Allows to change background map                         | tile.openstreetmap.org |
+| width           | Map width                                               | 100%                   |
+| height          | Map height                                              | 500                    |
+| lon             | Longitude for initial view                              | 2.0                    |
+| lat             | Latitude for initial view                               | 45.0                   |
+| zoom            | Zoom for initial view                                   | 4                      |
+| maxZoom         | Maximum zoom level                                      | 20                     |
+| centerOnResults | Zoom to geometry after each edition                     | true                   |
+| onResult        | Callback function for geometry edition                  | null                   |
+| precision       | Maximum number of decimal places for coordinates when   | 7                      |
+|                 | read from geometry drawing                              |                        |
+|----------------------------------------------------------------------------------------------------|
+            </pre>
+        </div>
+
         <pre class="col-xs-12">
             $(document).ready(function () {
                 $('.geometry').geometryEditor({

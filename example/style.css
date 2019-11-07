@@ -8,3 +8,11 @@ html, body {
 .well{
     overflow-y: auto;
 }
+
+button.btn.help-button{
+    top: 35px;
+    z-index: 10;
+}
+pre.help-content{
+    margin-top: 35px;
+}
