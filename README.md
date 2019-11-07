@@ -2,18 +2,57 @@
 
 ## Description
 
-> Ce composant fournit un moyen simple d'intégrer une composante géométrique dans les formulaires HTML. 
-> Nul besoin de révolutionner votre architecture, d'intégrer des `Feature` et `FeatureCollection` : 
+> Ce composant fournit un moyen simple d'intégrer une composante géométrique dans les formulaires HTML.
+> Nul besoin de révolutionner votre architecture, d'intégrer des `Feature` et `FeatureCollection` :
 > Une géométrie est un champ comme un autre qui peut être formaté en texte et éditer à l'aide d'une carte.
 
 This components provides an easy way to integrate geometry edition in HTML forms.
 
-## How to enable a geometry editor?
+
+## How to add this in your project ?
+
+To add this in your project, you will need those two dependancies : jQuery ( version >= 1.12.0 ) and openlayers (version >= 4.6.4 and version < 5.0.0 ).
+
+### with npm
+
+1. Get the lastest version of ol-geometry-editor
+npm install git+https://github.com/IGNF/ol-geometry-editor.git --save
+
+
+2. Simply use the content of the dist repertory in node_modules/ol-geometry-editor like this (you have to put them after jQuery and openlayers styles and scripts) :
+```html
+    <!-- [... openlayers style ...] -->
+    <!-- ol-geomettry-editor css : -->
+    <link rel="stylesheet" type="text/css" href="./node_modules/ol-geometry-editor/dist/ol-geometry-editor.min.css" />
+    <!-- [... your styles ...] -->
+
+    <!-- [... jQuery and openlayers scripts ...] -->
+    <!-- ol-geomettry-editor js : -->
+    <script type="text/javascript" src="./node_modules/ol-geometry-editor/dist/ol-geometry-editor.min.js"></script>
+    <!-- [... your scripts ...] -->
+```
+A better way is to copy those files in your public directory instead of use them directly (tools like Grunt can do the job).
+
+### by your own hand (not recommanded)
+Just copy the dist repertory in your project then call them (you have to put them after jQuery and openlayers styles and scripts) :
+```html
+    <!-- [... openlayers style ...] -->
+    <!-- ol-geomettry-editor css : -->
+    <link rel="stylesheet" type="text/css" href="./{relativePathWhereYouPutThem}/dist/ol-geometry-editor.min.css" />
+    <!-- [... your styles ...] -->
+
+    <!-- [... jQuery and openlayers scripts ...] -->
+    <!-- ol-geomettry-editor js : -->
+    <script type="text/javascript" src="./{relativePathWhereYouPutThem}/dist/ol-geometry-editor.min.js"></script>
+    <!-- [... your scripts ...] -->
+```
+
+## How to enable a geometry editor ?
 
 Given "the_geom" input in a form :
 
 ```html
-<textarea class="geometry" name="the_geom" style="width: 400px;">
+<textarea class="geometry">
 {"type":"Point","coordinates":[2.33,48.85]}
 </textarea>
 ```
@@ -30,14 +69,15 @@ $('.geometry').geometryEditor({
 Or the `GeometryEditor` class :
 
 ```javascript
-var editor = new ge.GeometryEditor($('.geometry').get(0), {
+var editor = new ge.GeometryEditor(document.getElementById("geometry"), {
     geometryType: 'Point',
     editable: true
 });
 ```
 
-=> GeoJSON geometry will be hidden and a map will be provided as edition widget
+=> GeoJSON geometry will be hidden and a map will be provided as edition widget (option "hide" can change this).
 
+See the list of options below.
 
 
 ## Main components
@@ -63,7 +103,7 @@ var editor = new ge.GeometryEditor($('.geometry').get(0), {
 | centerOnResults | Zoom to geometry after each edition                     | true                   |
 | onResult        | Callback function for geometry edition                  | null                   |
 
-## Supported geometry types
+## Supported geometry types (option "geometryType")
 
 * Point
 * LineString
@@ -79,5 +119,5 @@ var editor = new ge.GeometryEditor($('.geometry').get(0), {
 ## Dependencies
 
 * jQuery >= 1.12.0
-* openlayers >= 4.6.4
+* openlayers >= 4.6.4 and opelayers < 5.0.0
 
