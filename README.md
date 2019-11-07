@@ -104,6 +104,7 @@ See the list of options below.
 | onResult        | Callback function for geometry edition                  | null                   |
 | precision       | Maximum number of decimal places for coordinates when   | 7                      |
 |                 | read from geometry drawing                              |                        |
+|----------------------------------------------------------------------------------------------------|
 
 ## Supported geometry types (option "geometryType")
 
