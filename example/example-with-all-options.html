@@ -1,0 +1,114 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Exemple with all options</title>
+
+    <!--css -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol-debug.css" rel="stylesheet">
+
+    <!--js -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol-debug.js"></script>
+
+    <!-- ol-geomettry-editor css -->
+    <link rel="stylesheet" type="text/css" href="../dist/ol-geometry-editor.min.css" />
+
+    <!-- jquery-geomettry-editor js -->
+    <script type="text/javascript" src="../dist/ol-geometry-editor.min.js"></script>
+
+    <!--example css & js-->
+    <link href="style.css" rel="stylesheet">
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('.geometry').geometryEditor({
+                'geometryType': 'Point',
+                'editable': true,
+                'hide': false,
+                'precision': 6,
+                'width': '100%',
+                'height': '500px',
+                'lon': 2.424573,
+                'lat': 48.845726,
+                'zoom': 17,
+                'maxZoom': 18,
+                'centerOnResults': false,
+                'tileLayers': [
+                    {
+                        url: "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                        attribution: '©<a href="http://openstreetmap.org">OpenStreetMap contributors</a>'
+                    }
+                ],
+                'onResult': function (geoJSON) {
+                    var textResult;
+                    if (!geoJSON) {
+                        textResult = "No geoJSON geometry found";
+                    } else {
+                        textResult = "GeoJSON of geometry drawn : " + geoJSON + ".";
+                    }
+                    $("#result").html(textResult);
+                }
+            });
+        });
+
+    </script>
+</head>
+
+<body>
+
+    <h1>Demonstration with all options</h1>
+    <div class="container">
+        <div class="col-xs-6">
+            <h2>Geometry</h2>
+            <input type="text" id="the_geom" class="geometry form-control" name="the_geom"
+                value='{"type":"Point","coordinates":[2.424573,48.845726]}' />
+        </div>
+        <h3>Result</h3>
+        <div class="col-xs-6 well">
+            <span id="on_result"></span>
+        </div>
+    </div>
+    <br>
+    <div class="container">
+        <pre class="col-xs-12">
+            $(document).ready(function () {
+                $('.geometry').geometryEditor({
+                    'geometryType': 'Point',
+                    'editable': true,
+                    'hide': false,
+                    'precision': 6,
+                    'width': '100%',
+                    'height': '500px',
+                    'lon': 2.424573,
+                    'lat': 48.845726,
+                    'zoom': 17,
+                    'maxZoom': 18,
+                    'centerOnResults': false,
+                    'tileLayers': [
+                        {
+                            url: "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                            attribution: '©<a href="http://openstreetmap.org">OpenStreetMap contributors</a>'
+                        }
+                    ],
+                    'onResult': function (geoJSON) {
+                        var textResult;
+                        if (!geoJSON) {
+                            textResult = "No geoJSON geometry found";
+                        } else {
+                            textResult = "GeoJSON of geometry drawn : " + geoJSON + ".";
+                        }
+                        $("#result").html(textResult);
+                    }
+                });
+            });
+        </pre>
+
+    </div>
+
+</body>
+
+</html>

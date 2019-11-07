@@ -102,6 +102,8 @@ See the list of options below.
 | maxZoom         | Maximum zoom level                                      | 20                     |
 | centerOnResults | Zoom to geometry after each edition                     | true                   |
 | onResult        | Callback function for geometry edition                  | null                   |
+| precision       | Maximum number of decimal places for coordinates when   | 7                      |
+|                 | read from geometry drawing                              |                        |
 
 ## Supported geometry types (option "geometryType")
 
