@@ -22,9 +22,11 @@ var GeometryEditor = function (dataElement, options) {
     });
 
     // init map
-    this.map = this.initMap();
+    this.map = null;
+    this.initMap();
 
     // init features
+    this.drawLayer = null;
     this.initDrawLayer();
 
     // draw controls
@@ -46,7 +48,7 @@ var GeometryEditor = function (dataElement, options) {
  * @return ol.Map
  */
 GeometryEditor.prototype.initMap = function () {
-    return this.viewer.initMap({
+    this.viewer.initMap({
         width: this.settings.width,
         height: this.settings.height,
         dataElement: this.dataElement,
@@ -57,6 +59,8 @@ GeometryEditor.prototype.initMap = function () {
         maxZoom: this.settings.maxZoom,
         minZoom: this.settings.minZoom
     });
+
+    this.map = this.viewer.getMap();
 };
 
 /**
@@ -129,13 +133,12 @@ GeometryEditor.prototype.setGeometry = function (geometry) {
 };
 
 
-
 /**
  * Init map from dataElement data
  */
 GeometryEditor.prototype.initDrawLayer = function () {
     this.featuresCollection = this.viewer.createFeaturesCollection();
-    this.layer = this.viewer.addLayer(this.featuresCollection);
+    this.drawLayer = this.viewer.addLayer(this.featuresCollection);
     this.updateDrawLayer();
     this.dataElement.on('change', this.updateDrawLayer.bind(this));
 };
@@ -171,7 +174,7 @@ GeometryEditor.prototype.getGeometryType = function () {
 
 /**
  * Init draw controls
- *  
+ *
  * @private
  */
 GeometryEditor.prototype.initDrawControls = function () {
@@ -208,7 +211,7 @@ GeometryEditor.prototype.initDrawControls = function () {
 
 /**
  * Serialize geometry to dataElement
- * 
+ *
  * @private
  */
 GeometryEditor.prototype.serializeGeometry = function () {

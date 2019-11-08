@@ -64,12 +64,16 @@ $('.geometry').geometryEditor({
     geometryType: 'Point',
     editable: true
 });
+
+var geometryEditor = $("#geometry_pluggin_span").data('editor');
+
 ```
+
 
 Or the `GeometryEditor` class :
 
 ```javascript
-var editor = new ge.GeometryEditor(document.getElementById("geometry"), {
+var geometryEditor = new ge.GeometryEditor(document.getElementById("geometry"), {
     geometryType: 'Point',
     editable: true
 });

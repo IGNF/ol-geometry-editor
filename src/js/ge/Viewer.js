@@ -23,20 +23,21 @@ var Viewer = function (options) {
 
     $.extend(this.settings, options); // deep copy
 
+    this.map = null;
     this.initMap(this.settings);
 };
 
 /**
  * Initialise a map
  * @param {Object} options - options are :
- * 
+ *
  * @param {string|int} options.height - map height
  * @param {string|int} options.width - map width
  * @param {float} options.lat - latitude at start for map center
  * @param {float} options.lon - longitude at start for map center
  * @param {float} options.zoom - map zoom
- * 
- * @param {Object[]} options.layers - array of layer configurations 
+ *
+ * @param {Object[]} options.layers - array of layer configurations
  * @param {string} options.layers[].url - url
  * @param {string} options.layers[].attribution - attribution
  *
@@ -74,7 +75,7 @@ Viewer.prototype.addControl = function (control) {
  * Create map
  * @param {string} target - Emplacement cible (id)
  * @param {object} options - options (zoom, minZooom, maxZoom, lon, lat)
- * 
+ *
  * @return {ol.Map}
  */
 Viewer.prototype.createMap = function (target, options) {
@@ -98,11 +99,11 @@ Viewer.prototype.createMap = function (target, options) {
 
 /**
  * Add layers to Viewer map
- * 
- * @param {Object[]} layers - array of layer configurations 
+ *
+ * @param {Object[]} layers - array of layer configurations
  * @param {string} layers[].url - url
  * @param {string} layers[].attribution - attribution
- * 
+ *
  */
 Viewer.prototype.addLayersToMap = function (layers) {
 
@@ -116,6 +117,23 @@ Viewer.prototype.addLayersToMap = function (layers) {
             })
         }));
 
+    }
+
+};
+
+/**
+ * remove layers from Viewer map
+ *
+ */
+Viewer.prototype.removeLayersFromMap = function () {
+console.log(this.getMap().getTarget());
+return;
+this.getMap().getLayers().forEach(function(e){
+    console.log(e);
+});
+    for (var i in this.getMap().getLayers()) {
+        console.log(this.getMap().getLayers()[i]);
+        this.getMap().removeLayer(this.getMap().getLayers()[i]);
     }
 
 };
