@@ -8,45 +8,6 @@
 
 This components provides an easy way to integrate geometry edition in HTML forms.
 
-
-## How to add this in your project ?
-
-To add this in your project, you will need those two dependancies : jQuery ( version >= 1.12.0 ) and openlayers (version >= 4.6.4 and version < 5.0.0 ).
-
-### with npm
-
-1. Get the lastest version of ol-geometry-editor
-npm install git+https://github.com/IGNF/ol-geometry-editor.git --save
-
-
-2. Simply use the content of the dist repertory in node_modules/ol-geometry-editor like this (you have to put them after jQuery and openlayers styles and scripts) :
-```html
-    <!-- [... openlayers style ...] -->
-    <!-- ol-geomettry-editor css : -->
-    <link rel="stylesheet" type="text/css" href="./node_modules/ol-geometry-editor/dist/ol-geometry-editor.min.css" />
-    <!-- [... your styles ...] -->
-
-    <!-- [... jQuery and openlayers scripts ...] -->
-    <!-- ol-geomettry-editor js : -->
-    <script type="text/javascript" src="./node_modules/ol-geometry-editor/dist/ol-geometry-editor.min.js"></script>
-    <!-- [... your scripts ...] -->
-```
-A better way is to copy those files in your public directory instead of use them directly (tools like Grunt can do the job).
-
-### by your own hand (not recommanded)
-Just copy the dist repertory in your project then call them (you have to put them after jQuery and openlayers styles and scripts) :
-```html
-    <!-- [... openlayers style ...] -->
-    <!-- ol-geomettry-editor css : -->
-    <link rel="stylesheet" type="text/css" href="./{relativePathWhereYouPutThem}/dist/ol-geometry-editor.min.css" />
-    <!-- [... your styles ...] -->
-
-    <!-- [... jQuery and openlayers scripts ...] -->
-    <!-- ol-geomettry-editor js : -->
-    <script type="text/javascript" src="./{relativePathWhereYouPutThem}/dist/ol-geometry-editor.min.js"></script>
-    <!-- [... your scripts ...] -->
-```
-
 ## How to enable a geometry editor ?
 
 Given "the_geom" input in a form :
@@ -66,7 +27,6 @@ $('.geometry').geometryEditor({
 });
 
 var geometryEditor = $("#geometry_pluggin_span").data('editor');
-
 ```
 
 
@@ -92,39 +52,45 @@ See the list of options below.
 
 ## Options
 
-| Option          | Description                                             | Default                |
-|-----------------|---------------------------------------------------------|------------------------|
-| geometryType    | Restrict geometry type                                  | Geometry               |
-| hide            | true to hide form input                                 | true                   |
-| editable        | Allows to enable a viewer mode without geometry edition | true                   |
-| tileLayers      | Allows to change background map                         | tile.openstreetmap.org |
-| width           | Map width                                               | 100%                   |
-| height          | Map height                                              | 500                    |
-| lon             | Longitude for initial view                              | 2.0                    |
-| lat             | Latitude for initial view                               | 45.0                   |
-| zoom            | Zoom for initial view                                   | 4                      |
-| maxZoom         | Maximum zoom level                                      | 20                     |
-| centerOnResults | Zoom to geometry after each edition                     | true                   |
-| onResult        | Callback function for geometry edition                  | null                   |
-| precision       | Maximum number of decimal places for coordinates when   | 7                      |
-|                 | read from geometry drawing                              |                        |
-|----------------------------------------------------------------------------------------------------|
+| Option            | Description                                             | Default                  |
+| ----------------- | ------------------------------------------------------- | ------------------------ |
+| `geometryType`    | Restrict geometry type                                  | `Geometry`               |
+| `hide`            | true to hide form input                                 | `true`                   |
+| `editable`        | Allows to enable a viewer mode without geometry edition | `true`                   |
+| `tileLayers`      | Allows to change background map                         | `tile.openstreetmap.org` |
+| `width`           | Map width                                               | `100%`                   |
+| `height`          | Map height                                              | `500`                    |
+| `lon`             | Longitude for initial view                              | `2.0`                    |
+| `lat`             | Latitude for initial view                               | `45.0`                   |
+| `zoom`            | Zoom for initial view                                   | `4`                      |
+| `maxZoom`         | Maximum zoom level                                      | `20`                     |
+| `centerOnResults` | Zoom to geometry after each edition                     | `true`                   |
+| `onResult`        | Callback function for geometry edition                  | `null`                   |
+| `precision`       | Maximum number of decimal for coordinates               | `7`                      |
+
 
 ## Supported geometry types (option "geometryType")
 
-* Point
-* LineString
-* Polygon
-* MultiPoint
-* MultiLineString
-* MultiPolygon
-* Rectangle
-* Geometry (no restriction, GeometryCollection if required)
+* `Point`
+* `LineString`
+* `Polygon`
+* `MultiPoint`
+* `MultiLineString`
+* `MultiPolygon`
+* `Rectangle`
+* `Geometry` (no restriction, `GeometryCollection` if required)
 
-![Supported geometry types](doc/geometry-types.png)
+![Supported geometry types](doc/images/geometry-types.png)
+
+## Get started
+
+See [example/geometry-types.html](example/geometry-types.html)
 
 ## Dependencies
 
 * jQuery >= 1.12.0
-* openlayers >= 4.6.4 and opelayers < 5.0.0
+* openlayers >= 4.6.4 and openlayers < 5.0.0
 
+## License
+
+See [LICENCE.md](LICENCE.md)

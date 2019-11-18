@@ -10,4 +10,4 @@ http://www.cecill.info/licences/Licence_CeCILL-B_V1-fr.txt (french)
 
 see http://www.cecill.info/
 
-Copyright (c) 2018 IGN
+Copyright (c) 2019 IGN

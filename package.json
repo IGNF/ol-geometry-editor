@@ -1,7 +1,7 @@
 {
   "name": "ol-geometry-editor",
-  "version": "1.1.0",
-  "description": "Outil de lecture de géométries à partir d'une carte et d'outils de dessin généré sous openlayers.",
+  "version": "1.2.0",
+  "description": "Outil d'édition et de visualisation des géométries.",
   "main": "src/index.js",
   "directories": {
     "example": "example"
@@ -14,10 +14,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://gitlab.dockerforge.ign.fr/sai/ol-geometry-editor.git"
+    "url": "https://github.com/IGNF/ol-geometry-editor.git"
   },
   "author": "Mickaël Borne <mickael.borne@ign.fr>, Alexis Hordé <alexis.horde@ign.fr>",
-  "license": "BSD-2-Clause",
+  "license": "CECILL-B",
   "dependencies": {},
   "devDependencies": {
     "babel-core": "^6.26.3",
