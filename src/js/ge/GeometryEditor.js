@@ -25,6 +25,13 @@ var GeometryEditor = function (dataElement, options) {
     this.map = null;
     this.initMap();
 
+
+    // tile layer switcher
+    if (this.settings.switchableLayers && Object.keys(this.settings.switchableLayers).length > 0 ) {
+        var tileLayerSwitcherControl = this.initSwitchableLayerGroups();
+        tileLayerSwitcherControl.setFondCartoByTilePosition(this.settings.defaultSwitchableTile);
+    }
+
     // init features
     this.drawLayer = null;
     this.initDrawLayer();
@@ -52,7 +59,7 @@ GeometryEditor.prototype.initMap = function () {
         width: this.settings.width,
         height: this.settings.height,
         dataElement: this.dataElement,
-        layers: this.settings.tileLayers,
+        tileLayers: this.settings.tileLayers,
         lon: this.settings.lon,
         lat: this.settings.lat,
         zoom: this.settings.zoom,
@@ -129,7 +136,7 @@ GeometryEditor.prototype.setGeometry = function (geometry) {
         this.viewer.fitViewToFeaturesCollection(this.featuresCollection);
     }
 
-    this.serializeGeometry();
+    //this.serializeGeometry(); // doublon avec le serializeGeometry après la modification d'un dessin
 };
 
 
@@ -227,7 +234,19 @@ GeometryEditor.prototype.serializeGeometry = function () {
     }
 
     this.settings.onResult(geometryGeoJson);
+    this.getMap().dispatchEvent({type:'change:geometry', 'geometry': geometryGeoJson});
+
     this.setRawData(geometryGeoJson);
+};
+
+
+/**
+ * Initialize the control of switchable group of layers
+ *
+ * @private
+ */
+GeometryEditor.prototype.initSwitchableLayerGroups = function () {
+    return this.viewer.addTileLayerSwitcher(this.settings.switchableLayers, this.settings.coordSwitchableLayers);
 };
 
 

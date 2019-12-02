@@ -24,7 +24,36 @@
 
     <script type="text/javascript">
 
+
+        var GEOPORTAL_API_KEY = "pratique";
+
+        function getGeoportalURL(layerName) {
+            var url = "https://wxs.ign.fr/";
+            url += GEOPORTAL_API_KEY;
+            url += "/geoportail/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile";
+            url += "&LAYER=" + layerName;
+            url += "&STYLE=normal&FORMAT=image/jpeg";
+            url += "&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}";
+            return url;
+        }
+
         $(document).ready(function () {
+
+            var layer = ge.createTileLayer("https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png");
+            var layer2 = ge.createTileLayer("https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png");
+            var layer3 = ge.createTileLayer(getGeoportalURL("ORTHOIMAGERY.ORTHOPHOTOS"), {
+                attributions: ['©<a href="http://api.ign.fr/conditions-generales">IGN</a>']
+            })
+
+            var switchableLayers = {
+                "couche 1": [layer],
+                "couche 2": [layer2],
+                "couche 3": [layer3],
+                "couche 2 & 3": [layer2, layer3],
+
+                "blanc": []
+            };
+
             $('.geometry').geometryEditor({
                 'geometryType': 'Point',
                 'editable': true,
@@ -38,11 +67,13 @@
                 'maxZoom': 18,
                 'centerOnResults': false,
                 'tileLayers': [
-                    {
-                        url: "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                        attribution: '©<a href="http://openstreetmap.org">OpenStreetMap contributors</a>'
-                    }
+                    layer,
+                    layer2,
+                    layer3
                 ],
+                'switchableLayers': switchableLayers,
+                'defaultSwitchableTile' : 1,
+                'coordSwitchableLayers': [9, 269, -189], //corse
                 'onResult': function (geoJSON) {
                     var textResult;
                     if (!geoJSON) {
@@ -52,6 +83,17 @@
                     }
                     $("#result").html(textResult);
                 }
+            });
+
+            /* Lecture des evenements */
+            var geometryEditor = $(".geometry").data('editor');
+            var map = geometryEditor.getMap();
+            map.on('change:tile', function (e) {
+                console.log(e.tile);
+            });
+
+            map.on('change:geometry', function (e) {
+                console.log(e.geometry);
             });
         });
 
@@ -77,32 +119,62 @@
     <div class="container">
 
         <div class="btn-group pull-right">
-            <button type="button" class="btn btn-primary dropdown-toggle right help-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button type="button" class="btn btn-primary dropdown-toggle right help-button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
                 ?
             </button>
-         <pre class="dropdown-menu help-content">
-| Option          | Description                                             | Default                |
-|-----------------|---------------------------------------------------------|------------------------|
-| geometryType    | Restrict geometry type                                  | Geometry               |
-| hide            | true to hide form input                                 | true                   |
-| editable        | Allows to enable a viewer mode without geometry edition | true                   |
-| tileLayers      | Allows to change background map                         | tile.openstreetmap.org |
-| width           | Map width                                               | 100%                   |
-| height          | Map height                                              | 500                    |
-| lon             | Longitude for initial view                              | 2.0                    |
-| lat             | Latitude for initial view                               | 45.0                   |
-| zoom            | Zoom for initial view                                   | 4                      |
-| maxZoom         | Maximum zoom level                                      | 20                     |
-| centerOnResults | Zoom to geometry after each edition                     | true                   |
-| onResult        | Callback function for geometry edition                  | null                   |
-| precision       | Maximum number of decimal places for coordinates when   | 7                      |
-|                 | read from geometry drawing                              |                        |
-|----------------------------------------------------------------------------------------------------|
+            <pre class="dropdown-menu help-content">
+| Option                 | Description                                             | Default                  |
+| ---------------------- | ------------------------------------------------------- | ------------------------ |
+| `geometryType`         | Restrict geometry type                                  | `Geometry`               |
+| `hide`                 | true to hide form input                                 | `true`                   |
+| `editable`             | Allows to enable a viewer mode without geometry edition | `true`                   |
+| `tileLayers`           | init background map                                     | `tile.openstreetmap.org` |
+| `switchableLayers`     | List of layer groups to allow to change map background  | `{}`                     |
+| `defaultSwitchableTile`| Tile position active at load                            | `1`                      |
+| `coordSwitchableLayers`| Coordinates of the image for the layer switcher         | `[9,269,-189]` (corse)   |
+| `width`                | Map width                                               | `100%`                   |
+| `height`               | Map height                                              | `500`                    |
+| `lon`                  | Longitude for initial view                              | `2.0`                    |
+| `lat`                  | Latitude for initial view                               | `45.0`                   |
+| `zoom`                 | Zoom for initial view                                   | `4`                      |
+| `maxZoom`              | Maximum zoom level                                      | `20`                     |
+| `centerOnResults`      | Zoom to geometry after each edition                     | `true`                   |
+| `onResult`             | Callback function for geometry edition                  | `null`                   |
+| `precision`            | Maximum number of decimal for coordinates               | `7`                      |
             </pre>
         </div>
 
         <pre class="col-xs-12">
+            var GEOPORTAL_API_KEY = "pratique";
+
+            function getGeoportalURL(layerName) {
+                var url = "https://wxs.ign.fr/";
+                url += GEOPORTAL_API_KEY;
+                url += "/geoportail/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile";
+                url += "&LAYER=" + layerName;
+                url += "&STYLE=normal&FORMAT=image/jpeg";
+                url += "&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}";
+                return url;
+            }
+
             $(document).ready(function () {
+
+                var layer = ge.createTileLayer("https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png");
+                var layer2 = ge.createTileLayer("https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png");
+                var layer3 = ge.createTileLayer(getGeoportalURL("ORTHOIMAGERY.ORTHOPHOTOS"), {
+                    attributions: ['©<a href="http://api.ign.fr/conditions-generales">IGN</a>']
+                })
+
+                var switchableLayers = {
+                    "couche 1": [layer],
+                    "couche 2": [layer2],
+                    "couche 3": [layer3],
+                    "couche 2 & 3": [layer2, layer3],
+
+                    "blanc": []
+                };
+
                 $('.geometry').geometryEditor({
                     'geometryType': 'Point',
                     'editable': true,
@@ -116,11 +188,13 @@
                     'maxZoom': 18,
                     'centerOnResults': false,
                     'tileLayers': [
-                        {
-                            url: "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                            attribution: '©<a href="http://openstreetmap.org">OpenStreetMap contributors</a>'
-                        }
+                        layer,
+                        layer2,
+                        layer3
                     ],
+                    'switchableLayers': switchableLayers,
+                    'defaultSwitchableTile' : 1,
+                    'coordSwitchableLayers': [9, 269, -189], //corse
                     'onResult': function (geoJSON) {
                         var textResult;
                         if (!geoJSON) {
@@ -130,6 +204,17 @@
                         }
                         $("#result").html(textResult);
                     }
+                });
+
+                /* Lecture des evenements */
+                var geometryEditor = $(".geometry").data('editor');
+                var map = geometryEditor.getMap();
+                map.on('change:tile', function (e) {
+                    console.log(e.tile);
+                });
+
+                map.on('change:geometry', function (e) {
+                    console.log(e.geometry);
                 });
             });
         </pre>

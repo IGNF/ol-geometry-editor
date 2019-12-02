@@ -1,8 +1,10 @@
 require("../css/draw-control.css");
+require("../css/tilelayerswitcher-control.css");
 //require("../images/.css");
 
 global.ge = {
     defaultParams: require('./ge/defaultParams'),
+    createTileLayer: require('./ge/util/createTileLayer'),
     GeometryEditor: require('./ge/GeometryEditor')
 };
 

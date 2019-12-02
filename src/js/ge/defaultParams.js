@@ -1,17 +1,16 @@
-
+var createTileLayer = require('./util/createTileLayer');
 /**
  * Default GeometryEditor parameters
  */
 var defaultParams = {
     tileLayers: [
-       {
-           url: "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-           attribution: '©<a href="http://openstreetmap.org">OpenStreetMap contributors</a>'
-       }
+        createTileLayer("https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
+            attributions: ['©<a href="http://openstreetmap.org">OpenStreetMap contributors</a>']
+        })
     ],
-    /*
-     * display or hide corresponding form item
-     */
+    switchableLayers: {},
+    coordSwitchableLayers: [9,269,-189],
+    defaultSwitchableTile: 1,
     hide: true,
     editable: true,
     width: '100%',

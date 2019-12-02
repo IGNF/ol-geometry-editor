@@ -1,5 +1,6 @@
 
 var DrawToolsControl = require('./controls/DrawToolsControl');
+var TileLayerSwitcher = require('./controls/TileLayerSwitcherControl');
 
 var guid = require('./util/guid');
 var featureCollectionToGeometry = require('./util/featureCollectionToGeometry.js');
@@ -24,7 +25,6 @@ var Viewer = function (options) {
     $.extend(this.settings, options); // deep copy
 
     this.map = null;
-    this.initMap(this.settings);
 };
 
 /**
@@ -53,8 +53,7 @@ Viewer.prototype.initMap = function (options) {
 
     // create map
     this.map = this.createMap(mapTargetId, options);
-
-    this.addLayersToMap(options.layers);
+    this.addLayersToMap(options.tileLayers);
 
 };
 
@@ -100,47 +99,18 @@ Viewer.prototype.createMap = function (target, options) {
 /**
  * Add layers to Viewer map
  *
- * @param {Object[]} layers - array of layer configurations
- * @param {string} layers[].url - url
- * @param {string} layers[].attribution - attribution
+ * @param {array<ol.layer.Layer>} layers - array of layer configurations
  *
  */
 Viewer.prototype.addLayersToMap = function (layers) {
-
     for (var i in layers) {
-
-        this.getMap().addLayer(new ol.layer.Tile({
-            source: new ol.source.XYZ({
-                attributions: [layers[i].attribution],
-                url: layers[i].url,
-                crossOrigin: "Anonymous"
-            })
-        }));
-
+        this.getMap().addLayer(layers[i]);
     }
-
-};
-
-/**
- * remove layers from Viewer map
- *
- */
-Viewer.prototype.removeLayersFromMap = function () {
-console.log(this.getMap().getTarget());
-return;
-this.getMap().getLayers().forEach(function(e){
-    console.log(e);
-});
-    for (var i in this.getMap().getLayers()) {
-        console.log(this.getMap().getLayers()[i]);
-        this.getMap().removeLayer(this.getMap().getLayers()[i]);
-    }
-
 };
 
 /**
  * Ajoute des features dans une feature collection à partir d'un tableau de géométries GeoJson
- * 
+ *
  * @param {ol.Collection} featuresCollection
  * @param {array} geometries - simple geometries
  */
@@ -203,7 +173,7 @@ Viewer.prototype.fitViewToFeaturesCollection = function (featuresCollection) {
 
 
 /**
- * 
+ *
  * @param {ol.Collection} featuresCollection
  * @returns {ol.layer.Vector}
  */
@@ -221,7 +191,7 @@ Viewer.prototype.addLayer = function (featuresCollection) {
 };
 
 /**
- * 
+ *
  * @returns {ol.Collection}
  */
 Viewer.prototype.createFeaturesCollection = function () {
@@ -246,7 +216,7 @@ Viewer.prototype.getGeometryType = function () {
 
 /**
  * @description Ajoute les controles de dessin
- * 
+ *
  * @param {object} drawOptions - (featuresCollection, geometryType)
  */
 Viewer.prototype.addDrawToolsControl = function (drawOptions) {
@@ -279,9 +249,9 @@ Viewer.prototype.addDrawToolsEvents = function (events) {
 };
 
 /**
- * 
+ *
  * @param {ol.Collection} featuresCollection
- * @returns {ol.Geometry} 
+ * @returns {ol.Geometry}
  */
 Viewer.prototype.getGeometryByFeaturesCollection = function (featuresCollection, precision) {
 
@@ -298,7 +268,7 @@ Viewer.prototype.getGeometryByFeaturesCollection = function (featuresCollection,
 };
 
 /**
- * 
+ *
  * @param {ol.Collection} featuresCollection
  * @returns {number}
  */
@@ -306,6 +276,31 @@ Viewer.prototype.getFeaturesCount = function (featuresCollection) {
     return featuresCollection.getLength();
 };
 
+
+/**
+ * @param {array} tiles Liste sous la forme [{'couche 1': [ge.TileLayer1, ge.TileLayer2] },{...}]
+ */
+Viewer.prototype.addTileLayerSwitcher = function (tiles, tileCoord) {
+
+    var tileLayerSwitcherControl = new TileLayerSwitcher({
+        tileCoord: tileCoord
+    });
+
+    for( var tileLabel in tiles){
+        var layers = tiles[tileLabel];
+
+        tileLayerSwitcherControl.addTile(layers, tileLabel);
+    };
+
+    tileLayerSwitcherControl.on('change:tile', function (e) {
+       this.getMap().dispatchEvent({type:'change:tile', tile:e.tile});
+    }.bind(this));
+
+    this.addControl(tileLayerSwitcherControl);
+
+
+    return tileLayerSwitcherControl;
+};
 
 
 module.exports = Viewer;
