@@ -47,7 +47,6 @@ See the list of options below.
 ## Main components
 
 * `ge.GeometryEditor` : class providing a geometry editor
-* `ge.TileLayer` : class model for layer construction in get.GeometryEditor
 * `$.geometryEditor` : jQuery plugin
 
 
