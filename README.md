@@ -116,7 +116,7 @@ $('.geometry').geometryEditor({
     'tileLayerSwitcher': true,
 
     // by default, one layer by switch,but you can add multiple layers to one switch with this mapping option
-    'switchableLayers': [["OSM","Wikipedia"],"IGN", "Fond Blanc"]
+    'switchableLayers': ["OSM","Wikipedia",["OSM","Wikipedia"]]
 
     // the switch active by default at load
     'defaultSwitchableTile': 1,
