@@ -53,58 +53,28 @@ See the list of options below.
 
 ## Options
 
-| Option                 | Description                                             | Default                  |
-| ---------------------- | ------------------------------------------------------- | ------------------------ |
-| `geometryType`         | Restrict geometry type                                  | `Geometry`               |
-| `hide`                 | true to hide form input                                 | `true`                   |
-| `editable`             | Allows to enable a viewer mode without geometry edition | `true`                   |
-| `tileLayers`           | init background map                                     | `tile.openstreetmap.org` |
-| `switchableLayers`     | List of layer groups to allow to change map background  | `{}`                     |
-| `coordSwitchableLayers`| Coordinates of the image for the layer switcher         | `[9,269,-189]` (corse)   |
-| `width`                | Map width                                               | `100%`                   |
-| `height`               | Map height                                              | `500`                    |
-| `lon`                  | Longitude for initial view                              | `2.0`                    |
-| `lat`                  | Latitude for initial view                               | `45.0`                   |
-| `zoom`                 | Zoom for initial view                                   | `4`                      |
-| `maxZoom`              | Maximum zoom level                                      | `20`                     |
-| `centerOnResults`      | Zoom to geometry after each edition                     | `true`                   |
-| `onResult`             | Callback function for geometry edition                  | `null`                   |
-| `precision`            | Maximum number of decimal for coordinates               | `7`                      |
-
-## Initialise the background layers and the layer switcher
-
-First, create layers (ol.layer.Tile)
-
-```javascript
-    var layer = ge.createTileLayer("https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png");
-    var layer2 = ge.createTileLayer("https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png");
-```
-
-Then configure your geometry editor :
-
-```javascript
- $('.geometry').geometryEditor({
-    // Background layers
-    'tileLayers': [
-        tileLayer1,
-        tileLayer2
-    ],
-    // layer switcher
-    'switchableLayers': {
-        "Layer 1" : [tileLayer1],
-        "Layer 2" : [tileLayer2],
-        "Both Layers" : [tileLayer1,tileLayer2],
-        "White": []
-    },
-    // Tile (of layers) active by default by position
-    defaultSwitchableTile: 1,
-    // coordinates for the image representing each layer
-    'coordSwitchableLayers': [9,269,-189]
-});
-```
+| Option                 | Description                                                     | Default                  |
+| ---------------------- | --------------------------------------------------------------- | ------------------------ |
+| `geometryType`         | Restrict geometry type                                          | `Geometry`               |
+| `hide`                 | true to hide form input                                         | `true`                   |
+| `editable`             | Allows to enable a viewer mode without geometry edition         | `true`                   |
+| `tileLayers`           | init background map                                             | `tile.openstreetmap.org` |
+| `tileLayerSwitcher`    | true to put layers in a layerSwitcher                           | `false`                  |
+| `switchableLayers`     | mapping to put more than one layer by tile in layer switcher    |  []                      |
+| `tileCoordinates`      | Coordinates of the image for the layer switcher                 | `[9, 253, -177]`         |
+| `width`                | Map width                                                       | `100%`                   |
+| `height`               | Map height                                                      | `500`                    |
+| `lon`                  | Longitude for initial view                                      | `2.0`                    |
+| `lat`                  | Latitude for initial view                                       | `45.0`                   |
+| `zoom`                 | Zoom for initial view                                           | `4`                      |
+| `maxZoom`              | Maximum zoom level                                              | `20`                     |
+| `minZoom`              | Minimum zoom level                                              | `4`                      |
+| `centerOnResults`      | Zoom to geometry after each edition                             | `true`                   |
+| `precision`            | Maximum number of decimal for coordinates                       | `7`                      |
 
 
-## Get the map object and custom events:
+
+## Get the map object and custom events :
 
 ```javascript
 
@@ -121,6 +91,40 @@ Then configure your geometry editor :
         console.log(e.geometry);
     });
 
+```
+
+## Add a layer switcher :
+
+```javascript
+$('.geometry').geometryEditor({
+    geometryType: 'Point',
+
+    // add layers to the map with this option
+    tileLayers: [
+                    {
+                        'title': 'OSM',
+                        'url': 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        'attribution': '©<a href="http://openstreetmap.org">OpenStreetMap contributors</a>'
+                    },
+                    {
+                        'title': 'Wikipedia',
+                        'url': 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png'
+                    }
+    ],
+
+    // allow to show the layer switcher
+    'tileLayerSwitcher': true,
+
+    // by default, one layer by switch,but you can add multiple layers to one switch with this mapping option
+    'switchableLayers': [["OSM","Wikipedia"],"IGN", "Fond Blanc"]
+
+    // the switch active by default at load
+    'defaultSwitchableTile': 1,
+
+    // each switch got an image based on a tile of the layer(s) assigned to him,
+    // you can configure the coordinates with this option
+    'tileCoordinates': [9, 269, -189], //corse
+});
 ```
 
 ## Supported geometry types (option "geometryType")

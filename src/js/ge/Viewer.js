@@ -7,6 +7,8 @@ var featureCollectionToGeometry = require('./util/featureCollectionToGeometry.js
 var isSingleGeometryType = require('./util/isSingleGeometryType.js');
 var defaultStyleLayerFunction = require('./util/defaultStyleLayerFunction');
 
+var TileLayer = require('./models/TileLayer');
+
 
 
 
@@ -29,32 +31,47 @@ var Viewer = function (options) {
 
 /**
  * Initialise a map
- * @param {Object} options - options are :
+ * @param {Object} params - params are :
  *
- * @param {string|int} options.height - map height
- * @param {string|int} options.width - map width
- * @param {float} options.lat - latitude at start for map center
- * @param {float} options.lon - longitude at start for map center
- * @param {float} options.zoom - map zoom
+ * @param {string|int} params.height - map height
+ * @param {string|int} params.width - map width
+ * @param {float} params.lat - latitude at start for map center
+ * @param {float} params.lon - longitude at start for map center
+ * @param {float} params.zoom - map zoom
  *
- * @param {Object[]} options.layers - array of layer configurations
- * @param {string} options.layers[].url - url
- * @param {string} options.layers[].attribution - attribution
+ * @param {Object[]} params.tileLayers - array of layer configurations
+ * @param {string} params.tileLayers[].url - url
+ * @param {string} params.tileLayers[].attribution - attribution
+ * @param {string} params.tileLayers[].title - titre
  *
  */
-Viewer.prototype.initMap = function (options) {
+Viewer.prototype.initMap = function (params) {
+
     // create map div
     var mapTargetId = 'map-' + guid();
     var $mapDiv = $('<div id="' + mapTargetId + '"></div>');
     $mapDiv.addClass('map');
-    $mapDiv.css('width', options.width);
-    $mapDiv.css('height', options.height);
-    $mapDiv.insertAfter(options.dataElement);
+    $mapDiv.css('width', params.width);
+    $mapDiv.css('height', params.height);
+    $mapDiv.insertAfter(params.dataElement);
 
     // create map
-    this.map = this.createMap(mapTargetId, options);
-    this.addLayersToMap(options.tileLayers);
+    this.map = this.createMap(mapTargetId, params);
 
+    this.layers = this.createLayersFromTileLayersConfig(params.tileLayers);
+    this.addLayersToMap(this.layers);
+
+};
+
+/**
+ * @param {array|null} switchableLayers
+ * @param {array} tileCoordinates
+ * @param {string|int} defaultSwitchableTile
+ */
+Viewer.prototype.initTreeLayerSwitcher = function (params) {
+    var tileLayerSwitcherControl = this.addTileLayerSwitcher(this.layers, params);
+    tileLayerSwitcherControl.setFondCartoByTilePosition(params.defaultSwitchableTile);
+    return tileLayerSwitcherControl;
 };
 
 Viewer.prototype.getMap = function () {
@@ -104,7 +121,9 @@ Viewer.prototype.createMap = function (target, options) {
  */
 Viewer.prototype.addLayersToMap = function (layers) {
     for (var i in layers) {
-        this.getMap().addLayer(layers[i]);
+        if (layers[i] !== null) {
+            this.getMap().addLayer(layers[i]);
+        }
     }
 };
 
@@ -145,7 +164,7 @@ Viewer.prototype.setGeometries = function (featuresCollection, geometries) {
 
         var type = this.settings.geometryType;
 
-        if(type === "Geometry"){
+        if (type === "Geometry") {
             type = geometries[i].type;
         }
 
@@ -230,11 +249,13 @@ Viewer.prototype.addDrawToolsControl = function (drawOptions) {
 
     var drawToolsControl = new DrawToolsControl(drawControlOptions);
 
-    this.getMap().on('set:geometries',function(){
+    this.getMap().on('set:geometries', function () {
         drawToolsControl.deactivateControls();
     });
 
     this.addControl(drawToolsControl);
+
+    return drawToolsControl;
 };
 
 
@@ -256,12 +277,12 @@ Viewer.prototype.addDrawToolsEvents = function (events) {
 Viewer.prototype.getGeometryByFeaturesCollection = function (featuresCollection, precision) {
 
     var featuresGeoJson = (new ol.format.GeoJSON()).writeFeatures(
-            featuresCollection.getArray(),
-            {
-                featureProjection: this.settings.mapProjection,
-                dataProjection: this.settings.dataProjection,
-                decimals: precision
-            });
+        featuresCollection.getArray(),
+        {
+            featureProjection: this.settings.mapProjection,
+            dataProjection: this.settings.dataProjection,
+            decimals: precision
+        });
 
     return featureCollectionToGeometry(JSON.parse(featuresGeoJson));
 
@@ -278,22 +299,98 @@ Viewer.prototype.getFeaturesCount = function (featuresCollection) {
 
 
 /**
- * @param {array} tiles Liste sous la forme [{'couche 1': [ge.TileLayer1, ge.TileLayer2] },{...}]
+ * tileLayers to [ol.layer.Layer]
+ *
+ * @private
  */
-Viewer.prototype.addTileLayerSwitcher = function (tiles, tileCoord) {
+Viewer.prototype.createLayersFromTileLayersConfig = function (tileLayersConfig) {
 
-    var tileLayerSwitcherControl = new TileLayerSwitcher({
-        tileCoord: tileCoord
-    });
 
-    for( var tileLabel in tiles){
-        var layers = tiles[tileLabel];
-
-        tileLayerSwitcherControl.addTile(layers, tileLabel);
+    var extractTileLayerFromTileLayerConfig = function (tileLayerConfig) {
+        var url = tileLayerConfig.url;
+        var title = tileLayerConfig.title;
+        var options = {
+            minResolution: tileLayerConfig.minResolution,
+            maxResolution: tileLayerConfig.maxResolution,
+            opacity: tileLayerConfig.opacity,
+            attributions: [tileLayerConfig.attribution],
+            minZoom: tileLayerConfig.minZoom,
+            maxZoom: tileLayerConfig.maxZoom,
+            projection: tileLayerConfig.projection,
+            opaque: tileLayerConfig.opaque,
+            cacheSize: tileLayerConfig.cacheSize,
+            transition: tileLayerConfig.transition,
+            wrapX: tileLayerConfig.wrapX
+        };
+        return new TileLayer(url, title, options);
     };
 
+    var layers = [];
+
+    for (var i in tileLayersConfig) {
+        var tileLayer = extractTileLayerFromTileLayerConfig(tileLayersConfig[i]);
+        layers[tileLayer.getTitle()] = (tileLayer.getLayer());
+    }
+
+    return layers;
+};
+
+
+/**
+ * @param {array} layers Liste sous la forme {'couche 1': layer1 },{...}
+ * @param {object} params parametres
+ * @param {object} params.tileCoordinates coordonnées pour l'image tuile
+ * @param {object} params.switchableLayers Mapping des couches pour chaque tuile en fonction du title
+ */
+Viewer.prototype.addTileLayerSwitcher = function (layers, params) {
+
+    var tileLayerSwitcherControl = new TileLayerSwitcher({
+        tileCoord: params.tileCoordinates
+    });
+
+
+    var switchableLayers = params.switchableLayers
+
+    // switchableLayers not renseigned
+    if (switchableLayers === null || switchableLayers.length === 0) {
+
+        for (var title in layers) {
+            if (layers[title] === null) {
+                tileLayerSwitcherControl.addTile([], title);
+            } else {
+                tileLayerSwitcherControl.addTile([layers[title]], title);
+            }
+        };
+
+    // switchableLayers renseigned
+    } else {
+        for (var i in switchableLayers) {
+
+            // switchableLayers [["titre1","titre2"]]
+            if (Array.isArray(switchableLayers[i])) {
+                var groupedTitle = switchableLayers[i].join(' & ');
+                var groupedLayers = [];
+                for (var u in switchableLayers[i]) {
+
+                    if(layers[switchableLayers[i][u]] !== null){
+                        groupedLayers.push(layers[switchableLayers[i][u]]);
+                    }
+                }
+                tileLayerSwitcherControl.addTile(groupedLayers, groupedTitle);
+
+            // switchableLayers ["titre3"]
+            } else {
+                if(layers[switchableLayers[i]] === null){
+                    tileLayerSwitcherControl.addTile([], switchableLayers[i]);
+                }else{
+                    tileLayerSwitcherControl.addTile([layers[switchableLayers[i]]], switchableLayers[i]);
+                }
+            }
+        }
+    }
+
     tileLayerSwitcherControl.on('change:tile', function (e) {
-       this.getMap().dispatchEvent({type:'change:tile', tile:e.tile});
+        this.getMap().dispatchEvent({ type: 'change:tile', tile: e.tile });
     }.bind(this));
 
     this.addControl(tileLayerSwitcherControl);

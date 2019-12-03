@@ -19,7 +19,7 @@
  * @param {boolean} options.wrapX Whether to wrap the world horizontally. Default is true.
  * @param {number} options.transition Duration of the opacity transition for rendering. To disable the opacity transition, pass transition: 0.
  */
-var TileLayer = function (url, options) {
+var TileLayer = function (url, title, options) {
 
     this.settings = {
         url: url,
@@ -28,12 +28,18 @@ var TileLayer = function (url, options) {
 
     $.extend(true, this.settings, options); // deep copy
 
-    this.layer = new ol.layer.Tile({
-        source: new ol.source.XYZ(this.settings),
-        minResolution: this.settings.minResolution,
-        maxResolution: this.settings.maxResolution,
-        opacity: this.settings.opacity
-    });
+    this.layer = null;
+    if(url){
+        this.layer = new ol.layer.Tile({
+            source: new ol.source.XYZ(this.settings),
+            minResolution: this.settings.minResolution,
+            maxResolution: this.settings.maxResolution,
+            opacity: this.settings.opacity
+        });
+    }
+
+    this.url = url;
+    this.title = title;
 
     return this;
 };
@@ -46,6 +52,26 @@ var TileLayer = function (url, options) {
  */
 TileLayer.prototype.getLayer = function () {
     return this.layer;
+};
+
+
+/**
+ * get url
+ *
+ * @returns string
+ */
+TileLayer.prototype.getUrl = function () {
+    return this.url;
+};
+
+
+/**
+ * get title
+ *
+ * @returns string
+ */
+TileLayer.prototype.getTitle = function () {
+    return this.title;
 };
 
 

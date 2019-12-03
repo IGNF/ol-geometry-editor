@@ -4,7 +4,6 @@ require("../css/tilelayerswitcher-control.css");
 
 global.ge = {
     defaultParams: require('./ge/defaultParams'),
-    createTileLayer: require('./ge/util/createTileLayer'),
     GeometryEditor: require('./ge/GeometryEditor')
 };
 

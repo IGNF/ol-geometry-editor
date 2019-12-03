@@ -20,8 +20,9 @@ function getGeoportalURL( layerName ){
 
 if ( confirm("Display IGN data?") ){
 	ge.defaultParams.tileLayers = [
-		ge.createTileLayer(getGeoportalURL("ORTHOIMAGERY.ORTHOPHOTOS"),{
-            attributions: ['©<a href="http://api.ign.fr/conditions-generales">IGN</a>']
-        })
+		{
+			url: getGeoportalURL("ORTHOIMAGERY.ORTHOPHOTOS"),
+			attribution: '<a href="http://api.ign.fr/conditions-generales">IGN</a>'
+		}
 	];
 }

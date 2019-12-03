@@ -3,6 +3,7 @@ var extent = require('turf-extent');
 
 var defaultParams = require('./defaultParams.js');
 var geometryToSimpleGeometries = require('./util/geometryToSimpleGeometries');
+var isValidGeometry = require('./util/isValidGeometry');
 
 var Viewer = require('./Viewer');
 
@@ -13,28 +14,29 @@ var Viewer = require('./Viewer');
  */
 var GeometryEditor = function (dataElement, options) {
 
-    this.dataElement = $(dataElement);
-    this.settings = {};
+    this.settings = {
+        dataElement: $(dataElement)
+    };
+
     $.extend(true, this.settings, defaultParams, options); // deep copy
 
+
+    // init viewer
     this.viewer = new Viewer({
         geometryType: this.settings.geometryType
     });
 
     // init map
-    this.map = null;
-    this.initMap();
+    this.map = this.initMap();
 
-
-    // tile layer switcher
-    if (this.settings.switchableLayers && Object.keys(this.settings.switchableLayers).length > 0 ) {
-        var tileLayerSwitcherControl = this.initSwitchableLayerGroups();
-        tileLayerSwitcherControl.setFondCartoByTilePosition(this.settings.defaultSwitchableTile);
+    // init tileLayerSwitcher
+    this.tileLayerSwitcher = null;
+    if (this.settings.tileLayerSwitcher) {
+        this.tileLayerSwitcher = this.viewer.initTreeLayerSwitcher(this.settings);
     }
 
-    // init features
-    this.drawLayer = null;
-    this.initDrawLayer();
+    // init draw features
+    this.drawLayer = this.initDrawLayer();
 
     // draw controls
     if (this.settings.editable) {
@@ -43,7 +45,7 @@ var GeometryEditor = function (dataElement, options) {
 
     // hide data
     if (this.settings.hide) {
-        this.dataElement.hide();
+        this.settings.dataElement.hide();
     }
 
 };
@@ -55,19 +57,8 @@ var GeometryEditor = function (dataElement, options) {
  * @return ol.Map
  */
 GeometryEditor.prototype.initMap = function () {
-    this.viewer.initMap({
-        width: this.settings.width,
-        height: this.settings.height,
-        dataElement: this.dataElement,
-        tileLayers: this.settings.tileLayers,
-        lon: this.settings.lon,
-        lat: this.settings.lat,
-        zoom: this.settings.zoom,
-        maxZoom: this.settings.maxZoom,
-        minZoom: this.settings.minZoom
-    });
-
-    this.map = this.viewer.getMap();
+    this.viewer.initMap(this.settings);
+    return this.viewer.getMap();
 };
 
 /**
@@ -83,7 +74,7 @@ GeometryEditor.prototype.getMap = function () {
  * @private
  */
 GeometryEditor.prototype.isDataElementAnInput = function () {
-    return typeof this.dataElement.attr('value') !== 'undefined';
+    return typeof this.settings.dataElement.attr('value') !== 'undefined';
 };
 
 /**
@@ -92,9 +83,9 @@ GeometryEditor.prototype.isDataElementAnInput = function () {
  */
 GeometryEditor.prototype.getRawData = function () {
     if (this.isDataElementAnInput()) {
-        return $.trim(this.dataElement.val());
+        return $.trim(this.settings.dataElement.val());
     } else {
-        return $.trim(this.dataElement.html());
+        return $.trim(this.settings.dataElement.html());
     }
 };
 
@@ -109,9 +100,9 @@ GeometryEditor.prototype.setRawData = function (value) {
     }
 
     if (this.isDataElementAnInput()) {
-        this.dataElement.val(value);
+        this.settings.dataElement.val(value);
     } else {
-        this.dataElement.html(value);
+        this.settings.dataElement.html(value);
     }
 };
 
@@ -127,6 +118,10 @@ GeometryEditor.prototype.setGeometry = function (geometry) {
     }
 
     this.viewer.removeFeatures(this.featuresCollection);
+
+    if(!isValidGeometry(geometry)){
+        return;
+    }
 
     var geometries = geometryToSimpleGeometries(geometry);
 
@@ -145,9 +140,10 @@ GeometryEditor.prototype.setGeometry = function (geometry) {
  */
 GeometryEditor.prototype.initDrawLayer = function () {
     this.featuresCollection = this.viewer.createFeaturesCollection();
-    this.drawLayer = this.viewer.addLayer(this.featuresCollection);
+    var drawLayer = this.viewer.addLayer(this.featuresCollection);
     this.updateDrawLayer();
-    this.dataElement.on('change', this.updateDrawLayer.bind(this));
+    this.settings.dataElement.on('change', this.updateDrawLayer.bind(this));
+    return drawLayer;
 };
 
 /**
@@ -161,6 +157,7 @@ GeometryEditor.prototype.updateDrawLayer = function () {
             geometry = JSON.parse(data);
             this.setGeometry(geometry);
         } catch (err) {
+            console.log(err);
             this.viewer.removeFeatures(this.featuresCollection);
             return;
         }
@@ -233,21 +230,12 @@ GeometryEditor.prototype.serializeGeometry = function () {
         }
     }
 
-    this.settings.onResult(geometryGeoJson);
-    this.getMap().dispatchEvent({type:'change:geometry', 'geometry': geometryGeoJson});
+    this.getMap().dispatchEvent({ type: 'change:geometry', 'geometry': geometryGeoJson });
 
     this.setRawData(geometryGeoJson);
 };
 
 
-/**
- * Initialize the control of switchable group of layers
- *
- * @private
- */
-GeometryEditor.prototype.initSwitchableLayerGroups = function () {
-    return this.viewer.addTileLayerSwitcher(this.settings.switchableLayers, this.settings.coordSwitchableLayers);
-};
 
 
 module.exports = GeometryEditor;
