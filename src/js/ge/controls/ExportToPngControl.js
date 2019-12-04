@@ -10,6 +10,10 @@
  */
 var ExportToPngControl = function (options) {
 
+    if(!options){
+        options = {};
+    }
+
     var settings = {
         format: "png"
     };
@@ -62,15 +66,15 @@ var ExportToPngControl = function (options) {
         .attr('title', 'Fermer')
         .html('&times;')
         .appendTo(this.$modalPreviewElement)
-        .on("touchstart click", function(){
+        .on("touchstart click", function () {
             this.$modalBackground.hide();
         }.bind(this));
 
 
     this.$previewImage = $('<img>')
         .addClass('image-preview')
-        .attr('alt','Prévisualisation de la capture de la carte')
-        .attr('title','Prévisualisation de la capture de la carte')
+        .attr('alt', 'Prévisualisation de la capture de la carte')
+        .attr('title', 'Prévisualisation de la capture de la carte')
         .appendTo(this.$modalPreviewElement);
 
     $divDownloadModal = $('<div>')
@@ -102,38 +106,38 @@ ExportToPngControl.prototype.setMap = function (map) {
 
 ExportToPngControl.prototype.initControl = function () {
 
-    this.base64Png = null;
+    this.base64Image = null;
     this.$modalBackground.appendTo($(this.getMap().getViewport()));
 
-    this.$previewElement.on('touchstart click',function(){
+    this.$previewElement.on('touchstart click', function () {
         this.$modalBackground.show();
     }.bind(this));
 };
 
 ExportToPngControl.prototype.export = function () {
     var canvas = $(this.getMap().getViewport()).find("canvas").get(0);
-    var base64Png = canvas.toDataURL(this.settings.format);
+    var base64Image = canvas.toDataURL(this.settings.format);
 
 
 
-    if(this.base64Png !== base64Png){
-        this.getMap().dispatchEvent({ type: "export:png", src: base64Png });
+    if (this.base64Image !== base64Image) {
+        this.getMap().dispatchEvent({ type: "export:image", src: base64Image });
 
         //show button to show modal
         this.$previewElement.show();
 
         // add img to modal
-        this.$previewImage.attr('src',base64Png);
+        this.$previewImage.attr('src', base64Image);
 
         // show button to download and add attr to download for button in map
-        this.$downloadElement.attr('download', 'map-export.png').attr('href', base64Png).show();
+        this.$downloadElement.attr('download', 'map-export.' + this.settings.format).attr('href', base64Image).show();
 
         // add attr to download for button in modal
-        this.$downloadModalElement.attr('download', 'map-export.png').attr('href', base64Png);
+        this.$downloadModalElement.attr('download', 'map-export.' + this.settings.format).attr('href', base64Image);
 
-        this.base64Png = base64Png;
+        this.base64Image = base64Image;
 
-    }else{
+    } else {
         this.$previewElement.toggle();
         this.$downloadElement.toggle();
 

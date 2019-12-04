@@ -74,6 +74,8 @@
                 'switchableLayers': [["OSM", "Wikipedia"], "IGN", "Fond Blanc"],
                 'defaultSwitchableTile': 1,
                 'tileCoordinates': [9, 269, -189], //corse
+
+                'allowCapture': true
             });
 
             /* Lecture des evenements */
@@ -145,6 +147,7 @@
 | `minZoom`              | Minimum zoom level                                              | `4`                      |
 | `centerOnResults`      | Zoom to geometry after each edition                             | `true`                   |
 | `precision`            | Maximum number of decimal for coordinates                       | `7`                      |
+| `allowCapture`         | Add map control to show and save a capture of the map           | 'false'                  |
             </pre>
         </div>
 
@@ -197,6 +200,8 @@
                         'tileLayerSwitcher': true,
                         'defaultSwitchableTile': 1,
                         'tileCoordinates': [9, 269, -189], //corse
+
+                        'allowCapture': true
                     });
 
                     /* Lecture des evenements */

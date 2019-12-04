@@ -124,7 +124,7 @@ Viewer.prototype.initTreeLayerSwitcher = function (params) {
  * Init control export to png
  */
 Viewer.prototype.initExportToPngControl = function(){
-    var exportToPngControl = new ExportToPngControl({});
+    var exportToPngControl = new ExportToPngControl();
     this.addControl(exportToPngControl);
 };
 

@@ -48,8 +48,10 @@ var GeometryEditor = function (dataElement, options) {
         this.settings.dataElement.hide();
     }
 
-    // export control
-    this.viewer.initExportToPngControl();
+    // export to image control
+    if (this.settings.allowCapture) {
+        this.viewer.initExportToPngControl();
+    }
 
 };
 

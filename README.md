@@ -70,6 +70,7 @@ See the list of options below.
 | `minZoom`              | Minimum zoom level                                              | `4`                      |
 | `centerOnResults`      | Zoom to geometry after each edition                             | `true`                   |
 | `precision`            | Maximum number of decimal for coordinates                       | `7`                      |
+| `allowCapture`         | Add map control to show and save a capture of the map           | `false`                  |
 
 
 
