@@ -43,6 +43,17 @@
                 }
                 $("#result").html(textResult);
             });
+
+            map.on('export', function (e) {
+                $("#export").html('');
+                var imgSrc = e.src;
+                $('<img>').attr('src', imgSrc).appendTo($('#export'));
+
+                var today = new Date();
+                var time = today.getDay() + "_" + today.getMonth() + "_" + today.getFullYear() + "_" + today.getHours() + "_" + today.getMinutes() + "_" + today.getSeconds();
+
+                $('<a href="' + imgSrc + '" download="export-' + time + '.png">Télécharger<a>').appendTo($('#export'));
+            });
         });
 
     </script>
@@ -60,6 +71,7 @@
         <h3>Result</h3>
         <div class="col-xs-6">
             <div id="result" class="well"></div>
+            <div id="export" class="well"></div>
         </div>
 
     </div>

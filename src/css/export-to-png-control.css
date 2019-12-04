@@ -1,0 +1,155 @@
+/* ---- Control ---- */
+
+.ol-export-to-png{
+    position: absolute;
+    top : 0.5em;
+    right: 0.5em;
+}
+
+.ol-export-to-png.ol-control button {
+    background-image: url('../images/capture.png');
+    background-repeat: no-repeat;
+}
+
+.ol-export-to-png.ol-control a {
+    background-repeat: no-repeat;
+    cursor: pointer;
+    text-decoration: none;
+    background-color: rgba(0,60,136,0.5);
+    display: block;
+    margin: 1px;
+    padding: 0;
+    color: white;
+    font-size: 1.14em;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+    height: 1.375em;
+    width: 1.375em;
+    line-height: .4em;
+    border: none;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -khtml-border-radius: 2px;
+}
+
+.ol-export-to-png.ol-control a:hover {
+    background-color: rgba(0,60,136,0.7);
+}
+
+.ol-export-to-png.ol-control a.download{
+    background-image: url('../images/download.png');
+    background-position: 1px;
+}
+
+
+.ol-export-to-png.ol-control a.preview{
+    background-image: url('../images/preview.png');
+    background-position: 1px;
+}
+
+
+/* ----  Modal ---- */
+
+.modal-container-export div.modal-download-container{
+    text-align: center;
+}
+
+.modal-container-export a.download-modal {
+    text-decoration: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 5px;
+    display: inline-block;
+    background-color: rgba(0,60,136,0.7);
+    border-radius: 5px;
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+.modal-container-export a.download-modal:hover {
+    background-color: rgba(0,60,136,1);
+}
+
+
+
+/* The Modal (background) */
+.modal-container-export {
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    vertical-align: middle;
+}
+
+/* Modal Content */
+.modal-content-export {
+    box-shadow: 0 1px 5px 0 rgba(0,0,0,0.3);
+    -moz-box-shadow: 0 1px 5px 0 rgba(0,0,0,0.3);
+    -webkit-box-shadow: 0 1px 5px 0 rgba(0,0,0,0.3);
+
+    background-color: #fff;
+    margin: 0;
+    padding: 0px;
+    border: 0;
+    position: relative;
+    top: 0;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -khtml-border-radius: 10px;
+    padding: 10px;
+}
+
+.modal-content-export img{
+    border: 1px solid rgba(0,60,136,1);
+}
+
+.modal-content-export
+.modal-content-export img{
+    width: auto;
+    min-width: 500px;
+    max-width: 1000px;
+}
+
+.modal-content-export img{
+    width: auto;
+    min-width: 500px;
+    max-width: 980px;
+}
+
+/* Titre de la fenetre */
+.title-modal-export{
+    font-weight: bold;
+    font-size: 30px;
+    text-align: center;
+}
+
+/* The Close Button */
+.close-modal-export {
+    color: rgba(0,60,136,0.7);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 4px;
+    right: 10px;
+}
+
+.close-modal-export:hover,
+.close-modal-export:focus {
+    color: rgba(0,60,136,1);
+    text-decoration: none;
+    cursor: pointer;
+}

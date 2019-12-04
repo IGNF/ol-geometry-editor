@@ -1,6 +1,7 @@
 
 var DrawToolsControl = require('./controls/DrawToolsControl');
 var TileLayerSwitcher = require('./controls/TileLayerSwitcherControl');
+var ExportToPngControl = require('./controls/ExportToPngControl');
 
 var guid = require('./util/guid');
 var featureCollectionToGeometry = require('./util/featureCollectionToGeometry.js');
@@ -63,16 +64,6 @@ Viewer.prototype.initMap = function (params) {
 
 };
 
-/**
- * @param {array|null} switchableLayers
- * @param {array} tileCoordinates
- * @param {string|int} defaultSwitchableTile
- */
-Viewer.prototype.initTreeLayerSwitcher = function (params) {
-    var tileLayerSwitcherControl = this.addTileLayerSwitcher(this.layers, params);
-    tileLayerSwitcherControl.setFondCartoByTilePosition(params.defaultSwitchableTile);
-    return tileLayerSwitcherControl;
-};
 
 Viewer.prototype.getMap = function () {
     return this.map;
@@ -111,6 +102,30 @@ Viewer.prototype.createMap = function (target, options) {
         })]
     });
 
+};
+
+
+/**
+ * init TreeLayerSwitcher
+ *
+ * @param {array|null} switchableLayers
+ * @param {array} tileCoordinates
+ * @param {string|int} defaultSwitchableTile
+ *
+ * return TreeLayerSwitcher
+ */
+Viewer.prototype.initTreeLayerSwitcher = function (params) {
+    var tileLayerSwitcherControl = this.addTileLayerSwitcher(this.layers, params);
+    tileLayerSwitcherControl.setFondCartoByTilePosition(params.defaultSwitchableTile);
+    return tileLayerSwitcherControl;
+};
+
+/**
+ * Init control export to png
+ */
+Viewer.prototype.initExportToPngControl = function(){
+    var exportToPngControl = new ExportToPngControl({});
+    this.addControl(exportToPngControl);
 };
 
 /**

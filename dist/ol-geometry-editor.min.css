@@ -244,3 +244,158 @@
     color: #555;
 }
 
+/* ---- Control ---- */
+
+.ol-export-to-png{
+    position: absolute;
+    top : 0.5em;
+    right: 0.5em;
+}
+
+.ol-export-to-png.ol-control button {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAMAAADzapwJAAABDlBMVEX///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8AAADul31EAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAAAnYAAAJ2Adpg408AAAAHdElNRQfjDAMQFSniYFxrAAAAi0lEQVQY02NgoB5gZmEFAxZmFGE2DAYYsGIwGJiBmpkRpnFDOTB9/NwCyAbB9GlyazHoMDDo6XMjhCUYDBkYjFgYzIA0K1yYD6rDiUGSAUkYZqUmiIUp7IIqLAk3xBtZGGilIgNDkD+QRhEGO9CJwZkBTVhCDkiEIAmwoQcnGzxMQIDbGcpgplJsAQA1fgc4H7t17wAAAABJRU5ErkJggg==);
+    background-repeat: no-repeat;
+}
+
+.ol-export-to-png.ol-control a {
+    background-repeat: no-repeat;
+    cursor: pointer;
+    text-decoration: none;
+    background-color: rgba(0,60,136,0.5);
+    display: block;
+    margin: 1px;
+    padding: 0;
+    color: white;
+    font-size: 1.14em;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+    height: 1.375em;
+    width: 1.375em;
+    line-height: .4em;
+    border: none;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -khtml-border-radius: 2px;
+}
+
+.ol-export-to-png.ol-control a:hover {
+    background-color: rgba(0,60,136,0.7);
+}
+
+.ol-export-to-png.ol-control a.download{
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAB3RJTUUH4wwECTsoEEDFlwAAAYhJREFUOMutlDFrFVEQhb+z2SJqIVbBxtZCsUqtphY1pBGxVtKLgn9Af4KIlb1pBG30oaCFIlrY5hdEMJgUFkLeZ3NfuG7e23XBA8PevTP37JnZuQMDUBkFdVl9qe6rPyv7oV4bTao+sx9nRnARdRc41RP3FngNTCuzsoNin4Cv/0I4BndR99SPRfKS2tR1U1OlFLUpcYdWfB/U7y0Q4AtAkoPZ4eSQp1Vvl7inSX4vUPcZuNACTanB4jTgUVmfBB4u+idAmvIy7em9pWqdgf5MU4L+IkyCuqJuAquVa1XdVFeqkhxRmLn9lOwAN4D1yrUO3Eyy06dwxj6PdA14V22/T3Kp7+bMVQicAzZK+mvAC+BVkovFvwGc75yZ1gq7uAVsqcfUNsn1JFfUVl0GtkrMEbTdv1cwAR4A34BfnRSPl+ebOdnSFKlNp3YT4B6w37m707J3P8mk86HMCHbVJ0NTZGiEqY/VvbZIv6OeLjfGkcM2pfmvAs+jnigj6mwf2QACbAOX+d/4A8RPC+BcRp96AAAAAElFTkSuQmCC);
+    background-position: 1px;
+}
+
+
+.ol-export-to-png.ol-control a.preview{
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAC+lBMVEX///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8VN6D4AAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfjDAQKAh+kP1N7AAAAR0lEQVQY02NgoA7Y9/fvMVSRr39hACH2FwmgiIEYvxGif7EwoQwECaNQBf9iF8SqnQHZJX/gTIToHwyH4vESqveBWo9QKWwBt2+Xd5KHGy4AAAAASUVORK5CYII=);
+    background-position: 1px;
+}
+
+
+/* ----  Modal ---- */
+
+.modal-container-export div.modal-download-container{
+    text-align: center;
+}
+
+.modal-container-export a.download-modal {
+    text-decoration: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 5px;
+    display: inline-block;
+    background-color: rgba(0,60,136,0.7);
+    border-radius: 5px;
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+.modal-container-export a.download-modal:hover {
+    background-color: rgba(0,60,136,1);
+}
+
+
+
+/* The Modal (background) */
+.modal-container-export {
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    vertical-align: middle;
+}
+
+/* Modal Content */
+.modal-content-export {
+    box-shadow: 0 1px 5px 0 rgba(0,0,0,0.3);
+    -moz-box-shadow: 0 1px 5px 0 rgba(0,0,0,0.3);
+    -webkit-box-shadow: 0 1px 5px 0 rgba(0,0,0,0.3);
+
+    background-color: #fff;
+    margin: 0;
+    padding: 0px;
+    border: 0;
+    position: relative;
+    top: 0;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -khtml-border-radius: 10px;
+    padding: 10px;
+}
+
+.modal-content-export img{
+    border: 1px solid rgba(0,60,136,1);
+}
+
+.modal-content-export
+.modal-content-export img{
+    width: auto;
+    min-width: 500px;
+    max-width: 1000px;
+}
+
+.modal-content-export img{
+    width: auto;
+    min-width: 500px;
+    max-width: 980px;
+}
+
+/* Titre de la fenetre */
+.title-modal-export{
+    font-weight: bold;
+    font-size: 30px;
+    text-align: center;
+}
+
+/* The Close Button */
+.close-modal-export {
+    color: rgba(0,60,136,0.7);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 4px;
+    right: 10px;
+}
+
+.close-modal-export:hover,
+.close-modal-export:focus {
+    color: rgba(0,60,136,1);
+    text-decoration: none;
+    cursor: pointer;
+}

@@ -48,6 +48,9 @@ var GeometryEditor = function (dataElement, options) {
         this.settings.dataElement.hide();
     }
 
+    // export control
+    this.viewer.initExportToPngControl();
+
 };
 
 
