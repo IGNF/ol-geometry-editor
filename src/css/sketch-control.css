@@ -1,0 +1,93 @@
+.ol-sketch-tools{
+    position: absolute;
+    top : 5em;
+    right: 0.5em;
+}
+
+.ol-sketch-tools .ol-control{
+    position: static;
+}
+
+.ol-sketch-tools .ol-control button,
+.ol-sketch-tools button.ol-control:focus{
+    background-color: #fff;
+}
+
+
+.ol-sketch-tools .ol-control.active button,
+.ol-sketch-tools .ol-control button:active,
+.ol-sketch-tools .ol-control button:hover{
+    background-color: #ccc;
+}
+
+
+.ol-sketch-tools .ol-control button {
+    display: none;
+    background-image: url('../images/spritesheet.png');
+}
+
+.ol-sketch-tools .ol-control.ol-draw-point button ,
+.ol-sketch-tools .ol-control.ol-draw-multipoint button {
+    display: block;
+    background-position: -92px -3px;
+    background-repeat: no-repeat;
+}
+
+.ol-sketch-tools .ol-control.ol-draw-circle button {
+    display: block;
+    background-position: -94px -4px;
+    background-repeat: no-repeat;
+}
+
+.ol-sketch-tools .ol-control.ol-draw-linestring button,
+.ol-sketch-tools .ol-control.ol-draw-multilinestring button {
+    display: block;
+    background-position: -2px -1px;
+    background-repeat: no-repeat;
+}
+
+.ol-sketch-tools .ol-control.ol-draw-square button,
+.ol-sketch-tools .ol-control.ol-draw-multisquare button,
+.ol-sketch-tools .ol-control.ol-draw-rectangle button,
+.ol-sketch-tools .ol-control.ol-draw-multirectangle button {
+    display: block;
+    background-position: -64px -4px;
+    background-repeat: no-repeat;
+}
+
+.ol-sketch-tools .ol-control.ol-draw-polygon button,
+.ol-sketch-tools .ol-control.ol-draw-multipolygon button {
+    display: block;
+    background-position: -31px -2px;
+    background-repeat: no-repeat;
+}
+
+.ol-sketch-tools .ol-control.ol-edit button {
+    display: block;
+    background-position: -153px -2px;
+    background-repeat: no-repeat;
+}
+
+.ol-sketch-tools .ol-control.ol-edit.inactive button {
+    display: block;
+    background-position: -211px -5px;
+    background-repeat: no-repeat;
+}
+
+.ol-sketch-tools .ol-control.ol-delete button {
+    display: block;
+    background-position: -182px -2px;
+    background-repeat: no-repeat;
+}
+
+.ol-sketch-tools .ol-control.ol-delete.inactive button {
+    display: block;
+    background-position: -241px -2px;
+    background-repeat: no-repeat;
+}
+
+.ol-sketch-tools .ol-control.ol-translate button {
+    display: block;
+    background-image: url('../images/translate.png');
+    background-repeat: no-repeat;
+}

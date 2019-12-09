@@ -2,6 +2,7 @@
 var DrawToolsControl = require('./controls/DrawToolsControl');
 var TileLayerSwitcher = require('./controls/TileLayerSwitcherControl');
 var ExportToPngControl = require('./controls/ExportToPngControl');
+var SketchToolsControl = require('./controls/SketchToolsControl');
 
 var guid = require('./util/guid');
 var featureCollectionToGeometry = require('./util/featureCollectionToGeometry.js');
@@ -123,9 +124,19 @@ Viewer.prototype.initTreeLayerSwitcher = function (params) {
 /**
  * Init control export to png
  */
-Viewer.prototype.initExportToPngControl = function(){
+Viewer.prototype.initExportToPngControl = function () {
     var exportToPngControl = new ExportToPngControl();
     this.addControl(exportToPngControl);
+};
+
+/**
+ * Init control with sketch tools */
+Viewer.prototype.initSketchTools = function () {
+
+    /* -----------------[ Add Bar control ]----------------- */
+    var sketchControl = new SketchToolsControl();
+    this.addControl(sketchControl);
+    return sketchControl;
 };
 
 /**
@@ -256,7 +267,8 @@ Viewer.prototype.getGeometryType = function () {
 Viewer.prototype.addDrawToolsControl = function (drawOptions) {
 
     var drawControlOptions = {
-        featuresCollection: drawOptions.featuresCollection,
+        layer: drawOptions.layer,
+        // featuresCollection: drawOptions.featuresCollection,
         type: drawOptions.geometryType,
         multiple: !isSingleGeometryType(drawOptions.geometryType),
         translations: drawOptions.translations
@@ -377,7 +389,7 @@ Viewer.prototype.addTileLayerSwitcher = function (layers, params) {
             }
         };
 
-    // switchableLayers renseigned
+        // switchableLayers renseigned
     } else {
         for (var i in switchableLayers) {
 
@@ -387,17 +399,17 @@ Viewer.prototype.addTileLayerSwitcher = function (layers, params) {
                 var groupedLayers = [];
                 for (var u in switchableLayers[i]) {
 
-                    if(layers[switchableLayers[i][u]] !== null){
+                    if (layers[switchableLayers[i][u]] !== null) {
                         groupedLayers.push(layers[switchableLayers[i][u]]);
                     }
                 }
                 tileLayerSwitcherControl.addTile(groupedLayers, groupedTitle);
 
-            // switchableLayers ["titre3"]
+                // switchableLayers ["titre3"]
             } else {
-                if(layers[switchableLayers[i]] === null){
+                if (layers[switchableLayers[i]] === null) {
                     tileLayerSwitcherControl.addTile([], switchableLayers[i]);
-                }else{
+                } else {
                     tileLayerSwitcherControl.addTile([layers[switchableLayers[i]]], switchableLayers[i]);
                 }
             }

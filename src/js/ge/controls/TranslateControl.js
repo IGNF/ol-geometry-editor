@@ -11,6 +11,7 @@
 var TranslateControl = function (options) {
 
     this.title = options.title || 'Move a geometry';
+    this.featuresCollection = options.featuresCollection;
 
     var element = $("<div>").addClass('ol-translate ol-unselectable ol-control');
 
@@ -72,6 +73,7 @@ TranslateControl.prototype.setActive = function (active) {
 
 TranslateControl.prototype.addTranslateInteraction = function () {
     var translateInteraction = new ol.interaction.Translate({
+        features: this.featuresCollection,
         hitTolerance: 10
     });
 

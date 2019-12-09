@@ -40,7 +40,7 @@ var GeometryEditor = function (dataElement, options) {
 
     // draw controls
     if (this.settings.editable) {
-        this.initDrawControls();
+        this.drawToolsControl = this.initDrawControls();
     }
 
     // hide data
@@ -51,6 +51,23 @@ var GeometryEditor = function (dataElement, options) {
     // export to image control
     if (this.settings.allowCapture) {
         this.viewer.initExportToPngControl();
+    }
+
+    // add sketch tools
+    if (this.settings.sketchTools) {
+        this.sketchToolsControl = this.viewer.initSketchTools();
+    }
+
+    // deactivate one when other change to active
+    if (this.settings.sketchTools && this.settings.editable) {
+
+        this.drawToolsControl.on('tool:active', function(){
+            this.sketchToolsControl.deactivateControls();
+        }.bind(this));
+
+        this.sketchToolsControl.on('tool:active', function(){
+            this.drawToolsControl.deactivateControls();
+        }.bind(this));
     }
 
 };
@@ -190,11 +207,12 @@ GeometryEditor.prototype.initDrawControls = function () {
 
     var drawOptions = {
         geometryType: this.getGeometryType(),
-        featuresCollection: this.featuresCollection,
+        // featuresCollection: this.featuresCollection,
+        layer: this.drawLayer,
         translations: this.settings.translations
     };
 
-    this.viewer.addDrawToolsControl(drawOptions);
+    var drawToolsControl = this.viewer.addDrawToolsControl(drawOptions);
 
     var events = {
         onDrawCreated: function (e) {
@@ -215,6 +233,8 @@ GeometryEditor.prototype.initDrawControls = function () {
     };
 
     this.viewer.addDrawToolsEvents(events);
+
+    return drawToolsControl;
 };
 
 

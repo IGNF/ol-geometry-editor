@@ -29,20 +29,20 @@
 .ol-draw-tools .ol-control.ol-draw-point button ,
 .ol-draw-tools .ol-control.ol-draw-multipoint button {
     display: block;
-    background-position: -125px -4px;
+    background-position: -122px -4px;
     background-repeat: no-repeat;
 }
 
 .ol-draw-tools .ol-control.ol-draw-circle button {
     display: block;
-    background-position: -95px -4px;
+    background-position: -92px -4px;
     background-repeat: no-repeat;
 }
 
 .ol-draw-tools .ol-control.ol-draw-linestring button,
 .ol-draw-tools .ol-control.ol-draw-multilinestring button {
     display: block;
-    background-position: -4px -4px;
+    background-position: -2px -1px;
     background-repeat: no-repeat;
 }
 
@@ -58,31 +58,31 @@
 .ol-draw-tools .ol-control.ol-draw-polygon button,
 .ol-draw-tools .ol-control.ol-draw-multipolygon button {
     display: block;
-    background-position: -33px -4px;
+    background-position: -31px -2px;
     background-repeat: no-repeat;
 }
 
 .ol-draw-tools .ol-control.ol-edit button {
     display: block;
-    background-position: -154px -4px;
+    background-position: -153px -2px;
     background-repeat: no-repeat;
 }
 
 .ol-draw-tools .ol-control.ol-edit.inactive button {
     display: block;
-    background-position: -214px -4px;
+    background-position: -211px -5px;
     background-repeat: no-repeat;
 }
 
 .ol-draw-tools .ol-control.ol-delete button {
     display: block;
-    background-position: -184px -4px;
+    background-position: -182px -2px;
     background-repeat: no-repeat;
 }
 
 .ol-draw-tools .ol-control.ol-delete.inactive button {
     display: block;
-    background-position: -244px -4px;
+    background-position: -241px -2px;
     background-repeat: no-repeat;
 }
 
@@ -433,27 +433,27 @@
 
 
 .ol-sketch-tools .ol-control button {
-    display:none;
+    display: none;
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQ4AAAAeCAYAAADdEPCKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA8JJREFUeNrsms912kAQxgWPu0kFkApiVxA4wDVQQVAFQAU2FYArMKnAnNEBpYIoHcgVWK7AmXFGyUYWSIIdIZTv956eFu0+Dfvv0+zsOg4AAAAAAAAAAAAAAAAAAAAAAAAAAKgCDTQBqDrD4bBNt9l2u71TeDe/8zbxeKFhqwie503oFgwGg8Dye1PrS3YK1bdlsQNe4zQ1ekOpg6d0baRjw5pPli7dRnS15VHEddeut0xSttuVR6HYjZRtXiefk01f8nacT+kOPXMV/sIfoZBxVoYwXBt9GxPSBA5FNB64zyndty0eplCIkJzH45DOfabrA99tCwe9P25Ik7WmgJhCeAglkZzRbbkne042V0p15sH8aIiGY4jHmOwGCoLB9nop2dy/c0lzW/AYcOk/rJW8jExRsehJLFNEg4W5L/dYLLndWTiiE20Wqm8e76NhqfN35hfD5mTaIxrqAnIu4cgQDTXxkH78IaLBA/VesqYykLl9b2x6HmRzJ6IRyhXDArWQceXIhLpmD+SSvUiawD2jTsm6zGUO8Vh3pQ3CU0VDi5ZF0eCK9i0PrCzRcORLNKlDvEaWJ8scRZdU1vayxVye9GPvgu0YgjISobbFm2iQrY8ZH6MeldmUENtQ9TYMz8olQVineCLxWJ9S/k0JsY2jvI2ThKMiolE3RgXL2vQ6PhleVGCmqS/in12FOm8yRMNNeCNW1/pn6ufNAdF4m0scA9GIbdh6UbOKoiEUEY2gJsLRVip7TKzjXZq4UjD3kiEageHe1wJz+ZEmGuJ1jqpch2ZFRcMp6BJHNRlTnTPafjLSO3blxZ3f7SmjwcwUDQmEjjRFsgL8IxoiKpOq/+lmRUUjdqvyvvt7TQbRzzOK5TrhzdzK1T5SzE/Byu7JBWGKxkXQqqho8No6JJv3Tr5tpLp4HBsnX3D03TrZQntH1N6LA+290Oxv+Q/s4dz9R4LBy5aLDOo3c4oGb00+lyUaBqucolCLGIfsksxzFJ0rnV/h9k57b+jYDcSafMmTLztOtcDzvFGOvE6V69AqMKgbIiBliUb8FczyOiJHL+p+DvFYyS5G6QfApL3H4lmaJ1bHSn3u09WT8xxpy83P8rHya3JS2Jex/EACwXV7SeRfGfGNb3VZqrzGg6vkicRBuq/O761AX0TiSdKB1v/ROBFaUDx4KVL6kXPZfuXI/qM8sn5i1GDs/D052jsw2cZK9jPPNVhelvgkGK58FGYHPoR8zsO/9PoCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKggvwQYACihxUu99ixmAAAAAElFTkSuQmCC);
 }
 
 .ol-sketch-tools .ol-control.ol-draw-point button ,
 .ol-sketch-tools .ol-control.ol-draw-multipoint button {
     display: block;
-    background-position: -94px -4px;
+    background-position: -92px -3px;
     background-repeat: no-repeat;
 }
 
 .ol-sketch-tools .ol-control.ol-draw-circle button {
     display: block;
-    background-position: -95px -4px;
+    background-position: -94px -4px;
     background-repeat: no-repeat;
 }
 
 .ol-sketch-tools .ol-control.ol-draw-linestring button,
 .ol-sketch-tools .ol-control.ol-draw-multilinestring button {
     display: block;
-    background-position: -4px -4px;
+    background-position: -2px -1px;
     background-repeat: no-repeat;
 }
 
@@ -469,31 +469,31 @@
 .ol-sketch-tools .ol-control.ol-draw-polygon button,
 .ol-sketch-tools .ol-control.ol-draw-multipolygon button {
     display: block;
-    background-position: -33px -4px;
+    background-position: -31px -2px;
     background-repeat: no-repeat;
 }
 
 .ol-sketch-tools .ol-control.ol-edit button {
     display: block;
-    background-position: -154px -4px;
+    background-position: -153px -2px;
     background-repeat: no-repeat;
 }
 
 .ol-sketch-tools .ol-control.ol-edit.inactive button {
     display: block;
-    background-position: -214px -4px;
+    background-position: -211px -5px;
     background-repeat: no-repeat;
 }
 
 .ol-sketch-tools .ol-control.ol-delete button {
     display: block;
-    background-position: -184px -4px;
+    background-position: -182px -2px;
     background-repeat: no-repeat;
 }
 
 .ol-sketch-tools .ol-control.ol-delete.inactive button {
     display: block;
-    background-position: -244px -4px;
+    background-position: -241px -2px;
     background-repeat: no-repeat;
 }
 
