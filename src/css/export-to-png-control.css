@@ -2,17 +2,26 @@
 
 .ol-export-to-png{
     position: absolute;
-    top : 0.5em;
+    top : 0.0em;
+    right: 0.0em;
+}
+
+
+.ol-export-to-png.ol-control a,
+.ol-export-to-png.ol-control button {
+    position: absolute;
+    top: 0.5em;
     right: 0.5em;
+    background-repeat: no-repeat;
+    cursor: pointer;
 }
 
 .ol-export-to-png.ol-control button {
     background-image: url('../images/capture.png');
-    background-repeat: no-repeat;
+    background-position: 1px;
 }
 
 .ol-export-to-png.ol-control a {
-    background-repeat: no-repeat;
     cursor: pointer;
     text-decoration: none;
     background-color: rgba(0,60,136,0.5);
@@ -40,13 +49,15 @@
 
 .ol-export-to-png.ol-control a.download{
     background-image: url('../images/download.png');
-    background-position: 1px;
+    background-position: 3px;
+    right: 2.0em;
 }
 
 
 .ol-export-to-png.ol-control a.preview{
     background-image: url('../images/preview.png');
-    background-position: 1px;
+    background-position: 2px;
+    right: 3.5em;
 }
 
 
