@@ -53,23 +53,6 @@ var GeometryEditor = function (dataElement, options) {
         this.viewer.initExportToPngControl();
     }
 
-    // add sketch tools
-    if (this.settings.sketchTools) {
-        this.sketchToolsControl = this.viewer.initSketchTools();
-    }
-
-    // deactivate one when other change to active
-    if (this.settings.sketchTools && this.settings.editable) {
-
-        this.drawToolsControl.on('tool:active', function(){
-            this.sketchToolsControl.deactivateControls();
-        }.bind(this));
-
-        this.sketchToolsControl.on('tool:active', function(){
-            this.drawToolsControl.deactivateControls();
-        }.bind(this));
-    }
-
 };
 
 

@@ -2,7 +2,6 @@
 var DrawToolsControl = require('./controls/DrawToolsControl');
 var TileLayerSwitcher = require('./controls/TileLayerSwitcherControl');
 var ExportToPngControl = require('./controls/ExportToPngControl');
-var SketchToolsControl = require('./controls/SketchToolsControl');
 
 var guid = require('./util/guid');
 var featureCollectionToGeometry = require('./util/featureCollectionToGeometry.js');
@@ -129,15 +128,6 @@ Viewer.prototype.initExportToPngControl = function () {
     this.addControl(exportToPngControl);
 };
 
-/**
- * Init control with sketch tools */
-Viewer.prototype.initSketchTools = function () {
-
-    /* -----------------[ Add Bar control ]----------------- */
-    var sketchControl = new SketchToolsControl();
-    this.addControl(sketchControl);
-    return sketchControl;
-};
 
 /**
  * Add layers to Viewer map
