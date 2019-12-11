@@ -1,0 +1,237 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Exemple with all options</title>
+
+    <!--css -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol-debug.css" rel="stylesheet">
+
+    <!--js -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol-debug.js"></script>
+
+    <!-- ol-geomettry-editor css -->
+    <link rel="stylesheet" type="text/css" href="../dist/ol-geometry-editor.min.css" />
+
+    <!-- jquery-geomettry-editor js -->
+    <script type="text/javascript" src="../dist/ol-geometry-editor.min.js"></script>
+
+    <!--example css & js-->
+    <link href="style.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+
+
+        var GEOPORTAL_API_KEY = "pratique";
+
+        function getGeoportalURL(layerName) {
+            var url = "https://wxs.ign.fr/";
+            url += GEOPORTAL_API_KEY;
+            url += "/geoportail/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile";
+            url += "&LAYER=" + layerName;
+            url += "&STYLE=normal&FORMAT=image/jpeg";
+            url += "&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}";
+            return url;
+        }
+
+        $(document).ready(function () {
+
+            $('.geometry').geometryEditor({
+                'geometryType': 'Geometry',
+                'editable': true,
+                'hide': false,
+                'precision': 6,
+                'width': '100%',
+                'height': '500px',
+                'lon': 2.424573,
+                'lat': 48.845726,
+                'zoom': 17,
+                'maxZoom': 18,
+                'centerOnResults': false,
+                'tileLayers': [
+                    {
+                        'title': 'OSM',
+                        'url': 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        'attribution': '©<a href="http://openstreetmap.org">OpenStreetMap contributors</a>'
+                    },
+                    {
+                        'title': 'Wikipedia',
+                        'url': 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png'
+                    },
+                    {
+                        'title': 'IGN',
+                        'url': getGeoportalURL("ORTHOIMAGERY.ORTHOPHOTOS"),
+                        'attribution': '©<a href="http://api.ign.fr/conditions-generales">IGN</a>'
+                    },
+                    {
+                        'title': 'Fond Blanc'
+                    }
+                ],
+                'tileLayerSwitcher': true,
+                'switchableLayers': [["OSM", "Wikipedia"], "IGN", "Fond Blanc"],
+                'defaultSwitchableTile': 1,
+                'tileCoordinates': [9, 269, -189], //corse
+
+                'allowCapture': true,
+
+            });
+
+            /* Lecture des evenements */
+            var geometryEditor = $(".geometry").data('editor');
+            var map = geometryEditor.getMap();
+
+            map.on('change:tile', function (e) {
+                var tile = e.tile;
+                var textTile = "Tile '" + tile.title + "' (position " + tile.position + ") is active.";
+
+                $("#tile").html(textTile);
+            });
+
+            map.on('change:geometry', function (e) {
+                var geoJSON = e.geometry;
+                var textResult;
+                if (!geoJSON) {
+                    textResult = "No geoJSON geometry found";
+                } else {
+                    textResult = "GeoJSON of geometry drawn : " + geoJSON + ".";
+                }
+                $("#result").html(textResult);
+            });
+        });
+
+    </script>
+</head>
+
+<body>
+
+    <h1>Demonstration with all options</h1>
+    <div class="container">
+        <div class="col-xs-6">
+            <h2>Geometry</h2>
+            <input type="text" id="the_geom" class="geometry form-control" name="the_geom"
+                value='{"type":"Point","coordinates":[2.424573,48.845726]}' />
+        </div>
+        <h3>Result</h3>
+        <div class="col-xs-6">
+            <div id="result" class="well"></div>
+            <div id="tile" class="well"></div>
+        </div>
+
+    </div>
+    <br>
+    <div class="container">
+
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-primary dropdown-toggle right help-button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                ?
+            </button>
+            <pre class="dropdown-menu help-content">
+| Option                 | Description                                                     | Default                  |
+| ---------------------- | --------------------------------------------------------------- | ------------------------ |
+| `geometryType`         | Restrict geometry type                                          | `Geometry`               |
+| `hide`                 | true to hide form input                                         | `true`                   |
+| `editable`             | Allows to enable a viewer mode without geometry edition         | `true`                   |
+| `tileLayers`           | init background map                                             | `tile.openstreetmap.org` |
+| `tileLayerSwitcher`    | true to put layers in a layerSwitcher                           | `false`                  |
+| `switchableLayers`     | mapping to put more than one layer by tile in layer switcher    |  []                      |
+| `tileCoordinates`      | Coordinates of the image for the layer switcher                 | `[9, 253, -177]`         |
+| `width`                | Map width                                                       | `100%`                   |
+| `height`               | Map height                                                      | `500`                    |
+| `lon`                  | Longitude for initial view                                      | `2.0`                    |
+| `lat`                  | Latitude for initial view                                       | `45.0`                   |
+| `zoom`                 | Zoom for initial view                                           | `4`                      |
+| `maxZoom`              | Maximum zoom level                                              | `20`                     |
+| `minZoom`              | Minimum zoom level                                              | `4`                      |
+| `centerOnResults`      | Zoom to geometry after each edition                             | `true`                   |
+| `precision`            | Maximum number of decimal for coordinates                       | `7`                      |
+| `allowCapture`         | Add map control to show and save a capture of the map           | 'false'                  |
+            </pre>
+        </div>
+
+        <pre class="col-xs-12">
+                var GEOPORTAL_API_KEY = "pratique";
+
+                function getGeoportalURL(layerName) {
+                    var url = "https://wxs.ign.fr/";
+                    url += GEOPORTAL_API_KEY;
+                    url += "/geoportail/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile";
+                    url += "&LAYER=" + layerName;
+                    url += "&STYLE=normal&FORMAT=image/jpeg";
+                    url += "&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}";
+                    return url;
+                }
+
+                $(document).ready(function () {
+
+                    $('.geometry').geometryEditor({
+                        'geometryType': 'Point',
+                        'editable': true,
+                        'hide': false,
+                        'precision': 6,
+                        'width': '100%',
+                        'height': '500px',
+                        'lon': 2.424573,
+                        'lat': 48.845726,
+                        'zoom': 17,
+                        'maxZoom': 18,
+                        'centerOnResults': false,
+                        'tileLayers': [
+                            {
+                                'title': 'couche 1',
+                                'url': 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                'attribution': '©<a href="http://openstreetmap.org">OpenStreetMap contributors</a>'
+                            },
+                            {
+                                'url': 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                'title': 'couche 2'
+                            },
+                            {
+                                'title': 'couche 3',
+                                'url': getGeoportalURL("ORTHOIMAGERY.ORTHOPHOTOS"),
+                                'attribution': '©<a href="http://api.ign.fr/conditions-generales">IGN</a>'
+                            },
+                            {
+                                'title': 'Fond Blanc'
+                            }
+                        ],
+                        'tileLayerSwitcher': true,
+                        'defaultSwitchableTile': 1,
+                        'tileCoordinates': [9, 269, -189], //corse
+
+                        'allowCapture': true
+                    });
+
+                    /* Lecture des evenements */
+                    var geometryEditor = $(".geometry").data('editor');
+                    var map = geometryEditor.getMap();
+
+                    map.on('change:tile', function (e) {
+                        var tile = e.tile;
+                        var textTile = "Tile '" + tile.title + "' (position " + tile.position + ") is active.";
+
+                        $("#tile").html(textTile);
+                    });
+
+                    map.on('change:geometry', function (e) {
+                        var geoJSON = e.geometry;
+                        var textResult;
+                        if (!geoJSON) {
+                            textResult = "No geoJSON geometry found";
+                        } else {
+                            textResult = "GeoJSON of geometry drawn : " + geoJSON + ".";
+                        }
+                        $("#result").html(textResult);
+                    });
+                });
+        </pre>
+
+    </div>
+
+</body>
+
+</html>
