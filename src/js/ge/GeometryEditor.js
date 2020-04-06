@@ -40,12 +40,17 @@ var GeometryEditor = function (dataElement, options) {
 
     // draw controls
     if (this.settings.editable) {
-        this.initDrawControls();
+        this.drawToolsControl = this.initDrawControls();
     }
 
     // hide data
     if (this.settings.hide) {
         this.settings.dataElement.hide();
+    }
+
+    // export to image control
+    if (this.settings.allowCapture) {
+        this.viewer.initExportToPngControl();
     }
 
 };
@@ -185,11 +190,12 @@ GeometryEditor.prototype.initDrawControls = function () {
 
     var drawOptions = {
         geometryType: this.getGeometryType(),
-        featuresCollection: this.featuresCollection,
+        // featuresCollection: this.featuresCollection,
+        layer: this.drawLayer,
         translations: this.settings.translations
     };
 
-    this.viewer.addDrawToolsControl(drawOptions);
+    var drawToolsControl = this.viewer.addDrawToolsControl(drawOptions);
 
     var events = {
         onDrawCreated: function (e) {
@@ -210,6 +216,8 @@ GeometryEditor.prototype.initDrawControls = function () {
     };
 
     this.viewer.addDrawToolsEvents(events);
+
+    return drawToolsControl;
 };
 
 

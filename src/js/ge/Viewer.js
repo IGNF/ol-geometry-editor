@@ -1,6 +1,7 @@
 
 var DrawToolsControl = require('./controls/DrawToolsControl');
 var TileLayerSwitcher = require('./controls/TileLayerSwitcherControl');
+var ExportToPngControl = require('./controls/ExportToPngControl');
 
 var guid = require('./util/guid');
 var featureCollectionToGeometry = require('./util/featureCollectionToGeometry.js');
@@ -63,16 +64,6 @@ Viewer.prototype.initMap = function (params) {
 
 };
 
-/**
- * @param {array|null} switchableLayers
- * @param {array} tileCoordinates
- * @param {string|int} defaultSwitchableTile
- */
-Viewer.prototype.initTreeLayerSwitcher = function (params) {
-    var tileLayerSwitcherControl = this.addTileLayerSwitcher(this.layers, params);
-    tileLayerSwitcherControl.setFondCartoByTilePosition(params.defaultSwitchableTile);
-    return tileLayerSwitcherControl;
-};
 
 Viewer.prototype.getMap = function () {
     return this.map;
@@ -112,6 +103,31 @@ Viewer.prototype.createMap = function (target, options) {
     });
 
 };
+
+
+/**
+ * init TreeLayerSwitcher
+ *
+ * @param {array|null} switchableLayers
+ * @param {array} tileCoordinates
+ * @param {string|int} defaultSwitchableTile
+ *
+ * return TreeLayerSwitcher
+ */
+Viewer.prototype.initTreeLayerSwitcher = function (params) {
+    var tileLayerSwitcherControl = this.addTileLayerSwitcher(this.layers, params);
+    tileLayerSwitcherControl.setFondCartoByTilePosition(params.defaultSwitchableTile);
+    return tileLayerSwitcherControl;
+};
+
+/**
+ * Init control export to png
+ */
+Viewer.prototype.initExportToPngControl = function () {
+    var exportToPngControl = new ExportToPngControl();
+    this.addControl(exportToPngControl);
+};
+
 
 /**
  * Add layers to Viewer map
@@ -241,7 +257,8 @@ Viewer.prototype.getGeometryType = function () {
 Viewer.prototype.addDrawToolsControl = function (drawOptions) {
 
     var drawControlOptions = {
-        featuresCollection: drawOptions.featuresCollection,
+        layer: drawOptions.layer,
+        // featuresCollection: drawOptions.featuresCollection,
         type: drawOptions.geometryType,
         multiple: !isSingleGeometryType(drawOptions.geometryType),
         translations: drawOptions.translations
@@ -362,7 +379,7 @@ Viewer.prototype.addTileLayerSwitcher = function (layers, params) {
             }
         };
 
-    // switchableLayers renseigned
+        // switchableLayers renseigned
     } else {
         for (var i in switchableLayers) {
 
@@ -372,17 +389,17 @@ Viewer.prototype.addTileLayerSwitcher = function (layers, params) {
                 var groupedLayers = [];
                 for (var u in switchableLayers[i]) {
 
-                    if(layers[switchableLayers[i][u]] !== null){
+                    if (layers[switchableLayers[i][u]] !== null) {
                         groupedLayers.push(layers[switchableLayers[i][u]]);
                     }
                 }
                 tileLayerSwitcherControl.addTile(groupedLayers, groupedTitle);
 
-            // switchableLayers ["titre3"]
+                // switchableLayers ["titre3"]
             } else {
-                if(layers[switchableLayers[i]] === null){
+                if (layers[switchableLayers[i]] === null) {
                     tileLayerSwitcherControl.addTile([], switchableLayers[i]);
-                }else{
+                } else {
                     tileLayerSwitcherControl.addTile([layers[switchableLayers[i]]], switchableLayers[i]);
                 }
             }

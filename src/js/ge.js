@@ -1,6 +1,6 @@
 require("../css/draw-control.css");
 require("../css/tilelayerswitcher-control.css");
-//require("../images/.css");
+require("../css/export-to-png-control.css");
 
 global.ge = {
     defaultParams: require('./ge/defaultParams'),

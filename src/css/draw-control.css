@@ -17,7 +17,7 @@
 .ol-draw-tools .ol-control.active button,
 .ol-draw-tools .ol-control button:active,
 .ol-draw-tools .ol-control button:hover{
-    background-color: #f4f4f4;
+    background-color: #ccc;
 }
 
 
@@ -29,20 +29,20 @@
 .ol-draw-tools .ol-control.ol-draw-point button ,
 .ol-draw-tools .ol-control.ol-draw-multipoint button {
     display: block;
-    background-position: -125px -4px;
+    background-position: -122px -4px;
     background-repeat: no-repeat;
 }
 
 .ol-draw-tools .ol-control.ol-draw-circle button {
     display: block;
-    background-position: -95px -4px;
+    background-position: -92px -4px;
     background-repeat: no-repeat;
 }
 
 .ol-draw-tools .ol-control.ol-draw-linestring button,
 .ol-draw-tools .ol-control.ol-draw-multilinestring button {
     display: block;
-    background-position: -4px -4px;
+    background-position: -2px -1px;
     background-repeat: no-repeat;
 }
 
@@ -58,31 +58,31 @@
 .ol-draw-tools .ol-control.ol-draw-polygon button,
 .ol-draw-tools .ol-control.ol-draw-multipolygon button {
     display: block;
-    background-position: -33px -4px;
+    background-position: -31px -2px;
     background-repeat: no-repeat;
 }
 
 .ol-draw-tools .ol-control.ol-edit button {
     display: block;
-    background-position: -154px -4px;
+    background-position: -153px -2px;
     background-repeat: no-repeat;
 }
 
 .ol-draw-tools .ol-control.ol-edit.inactive button {
     display: block;
-    background-position: -214px -4px;
+    background-position: -211px -5px;
     background-repeat: no-repeat;
 }
 
 .ol-draw-tools .ol-control.ol-delete button {
     display: block;
-    background-position: -184px -4px;
+    background-position: -182px -2px;
     background-repeat: no-repeat;
 }
 
 .ol-draw-tools .ol-control.ol-delete.inactive button {
     display: block;
-    background-position: -244px -4px;
+    background-position: -241px -2px;
     background-repeat: no-repeat;
 }
 

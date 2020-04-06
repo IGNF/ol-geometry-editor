@@ -7,28 +7,28 @@ var ModifySquareInteraction = require('../interactions/ModifySquareInteraction')
  *
  * @constructor
  * @extends {ol.control.Control}
- * 
+ *
  * @param {object} options
- * 
+ *
  */
 var EditControl = function (options) {
 
-//    this.style = options.style;
-    this.featuresCollection = options.featuresCollection;
+    //    this.style = options.style;
+    this.layer = options.layer;
+    this.featuresCollection = this.layer.getSource().getFeaturesCollection();
     this.title = options.title || 'Edit a feature';
 
     var element = $("<div>").addClass('ol-edit ol-unselectable ol-control');
 
     $("<button>").attr('title', this.title)
-            .on("touchstart click", function (e)
-            {
-                if (e && e.preventDefault)
-                    e.preventDefault();
+        .on("touchstart click", function (e) {
+            if (e && e.preventDefault)
+                e.preventDefault();
 
-                this.setActive(!this.active);
+            this.setActive(!this.active);
 
-            }.bind(this))
-            .appendTo(element);
+        }.bind(this))
+        .appendTo(element);
 
 
     ol.control.Control.call(this, {
@@ -82,7 +82,7 @@ EditControl.prototype.addInteractions = function () {
 
     var modifyInteractionBasic = new ol.interaction.Modify({
         features: this.getFeaturesCollectionBasic(),
-//        style: this.style
+        hitTolerance: 10
     });
 
     var modifyInteractionBox = new ModifyBoxInteraction({
@@ -93,22 +93,31 @@ EditControl.prototype.addInteractions = function () {
         features: this.getFeaturesCollectionSquare()
     });
 
+    var translateInteraction = new ol.interaction.Translate({
+        layers : [this.layer],
+        hitTolerance: 0
+    });
+
+
     this.getInteractions = function () {
         return [
             modifyInteractionBasic,
             modifyInteractionBox,
-            modifyInteractionSquare
+            modifyInteractionSquare,
+            translateInteraction
         ];
     };
 
 
     var modifyEnd = function (e) {
-        this.getMap().dispatchEvent($.extend(e, {type: "draw:edited"}));
+        this.getMap().dispatchEvent($.extend(e, { type: "draw:edited" }));
     }.bind(this);
 
 
     this.getInteractions().forEach(function (interaction) {
         interaction.on('modifyend', modifyEnd);
+        interaction.on('translateend', modifyEnd);
+
         this.getMap().addInteraction(interaction);
     }.bind(this));
 
@@ -119,7 +128,7 @@ EditControl.prototype.addInteractions = function () {
 /**
  * Prepare des ol.Collections de features afin d'appliquer chaque groupe 
  * de features à une interaction de modification
- * 
+ *
  * @returns {undefined}
  */
 EditControl.prototype.reorganiseFeaturesCollectionByType = function () {

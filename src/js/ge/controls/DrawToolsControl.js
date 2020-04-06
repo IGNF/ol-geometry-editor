@@ -14,15 +14,16 @@ var defaultStyleDrawFunction = require('../util/defaultStyleDrawFunction');
  *
  * @constructor
  * @extends {ol.control.Control}
- * 
+ *
  * @param {object} options
  * @param {String} options.type le type d'élément dessiné ('Text', 'Point', 'LineString' ou 'Polygon')
- * 
+ *
  */
 var DrawToolsControl = function (options) {
     this.translations = $.extend(defaultTranslations, options.translations || {});
 
-    this.featuresCollection = options.featuresCollection || new ol.Collection();
+    this.layer = options.layer;
+    this.featuresCollection = this.layer.getSource().getFeaturesCollection();
     this.type = options.type || "Geometry";
     this.multiple = options.multiple || false;
     this.style = options.style;
@@ -49,7 +50,7 @@ DrawToolsControl.prototype.initControl = function () {
 
     this.addDrawControls();
     this.addEditControl();
-    this.addTranslateControl();
+    // this.addTranslateControl();
     this.addRemoveControl();
 
 };
@@ -82,6 +83,7 @@ DrawToolsControl.prototype.addDrawControl = function (options) {
 
     drawControl.on('draw:active', function () {
         this.deactivateControls(drawControl);
+        this.dispatchEvent('tool:active');
     }.bind(this));
 
     this.getMap().addControl(drawControl);
@@ -90,13 +92,15 @@ DrawToolsControl.prototype.addDrawControl = function (options) {
 
 DrawToolsControl.prototype.addEditControl = function () {
     var editControl = new EditControl({
-        featuresCollection: this.featuresCollection,
+        // featuresCollection: this.featuresCollection,
+        layer: this.layer,
         target: this.element,
         title: this.translations.edit[this.type.toLowerCase()]
     });
 
     editControl.on('edit:active', function () {
         this.deactivateControls(editControl);
+        this.dispatchEvent('tool:active');
     }.bind(this));
 
     this.getMap().addControl(editControl);
@@ -112,6 +116,7 @@ DrawToolsControl.prototype.addTranslateControl = function () {
 
     translateControl.on('translate:active', function () {
         this.deactivateControls(translateControl);
+        this.dispatchEvent('tool:active');
     }.bind(this));
 
     this.getMap().addControl(translateControl);
@@ -127,6 +132,7 @@ DrawToolsControl.prototype.addRemoveControl = function () {
 
     removeControl.on('remove:active', function () {
         this.deactivateControls(removeControl);
+        this.dispatchEvent('tool:active');
     }.bind(this));
 
     this.getMap().addControl(removeControl);
@@ -140,6 +146,10 @@ DrawToolsControl.prototype.deactivateControls = function (keepThisOne) {
             control.setActive(false);
         }
     });
+};
+
+DrawToolsControl.prototype.getControls = function () {
+    return this.controls;
 };
 
 

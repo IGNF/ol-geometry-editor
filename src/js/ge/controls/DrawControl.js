@@ -3,10 +3,10 @@
  *
  * @constructor
  * @extends {ol.control.Control}
- * 
+ *
  * @param {object} options
  * @param {String} options.type le type d'élément dessiné ('Point', 'LineString', 'Polygon' ou 'Rectangle')
- * 
+ *
  */
 var DrawControl = function (options) {
 
@@ -15,19 +15,19 @@ var DrawControl = function (options) {
     this.style = options.style;
     this.multiple = options.multiple;
     this.title = options.title || 'Draw a ' + this.type.toLowerCase();
+    this.eventBaseName = options.eventBaseName || 'draw';
 
     var element = $("<div>").addClass('ol-draw-' + this.type.toLowerCase() + ' ol-unselectable ol-control');
 
     $("<button>").attr('title', this.title)
-            .on("touchstart click", function (e)
-            {
-                if (e && e.preventDefault)
-                    e.preventDefault();
+        .on("touchstart click", function (e) {
+            if (e && e.preventDefault)
+                e.preventDefault();
 
-                this.setActive(!this.active);
+            this.setActive(!this.active);
 
-            }.bind(this))
-            .appendTo(element);
+        }.bind(this))
+        .appendTo(element);
 
 
 
@@ -60,13 +60,13 @@ DrawControl.prototype.setActive = function (active) {
     this.getInteraction().setActive(active);
 
     if (active && !this.getActive()) {
-        this.dispatchEvent('draw:active');
+        this.dispatchEvent(this.eventBaseName + ':active');
         $(this.element).addClass('active');
         this.active = true;
     }
 
     if (!active && this.getActive()) {
-        this.dispatchEvent('draw:inactive');
+        this.dispatchEvent(this.eventBaseName + 'inactive');
         $(this.element).removeClass('active');
         this.active = false;
     }
@@ -101,13 +101,13 @@ DrawControl.prototype.addInteraction = function () {
         }
 
         e.feature.set('type', this.type);
-//        e.feature.setStyle(this.style);
+        //        e.feature.setStyle(this.style);
     }.bind(this));
 
     this.featuresCollection.on('add', function (e) {
 
         this.getMap().dispatchEvent($.extend(e, {
-            type: "draw:created"
+            type: this.eventBaseName + ':created'
         }));
 
     }.bind(this));
