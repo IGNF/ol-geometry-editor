@@ -142,7 +142,7 @@ $('.geometry').geometryEditor({
 
 ## Get started
 
-See [example/geometry-types.html](example/geometry-types.html)
+See [index.html](index.html)
 
 ## Dependencies
 
