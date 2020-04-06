@@ -90,4 +90,157 @@
     display: block;
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gMTDwoZB4yV/wAAAQhJREFUOMutlCFuw0AQRV/dooBKCTEwcGGkolyiFwgx6CUKAyKvFF+uvKQHKLAMIpXaUkL+VqvVJN6k+6Uhf2b/zoz/GtLQKrKgBU6Kf4kugEMg5uOgnInHK4Jb4B0ogULcJLEj8HVLd09ADWyAIehuEFerJlnMYwn0gWAvzqqFYBS/swaobpik0pmFdcMOeAO+gV9xZXRpIc5jBXwAr8DessaoPfWKQR/CjzwZ+TG2VGtY495oC+CBfPjTchlGdrF6B3zKZ0vF2vDhOshvdKa79NQamTbVh3Vsm+zGtp7PJL6Sz2IfvgDPwI9qk9FoP2PQ4Siuuff31Rle6+Z2NgcXiLlchnWpYmcZIHBGz7u9nAAAAABJRU5ErkJggg==);
     background-repeat: no-repeat;
+}/*--------------- [ Style quand TileLayerSwitcher non déplié ] ------------ */
+
+.ol-tile-layer-switcher{
+    position: absolute;
+    top: 0.5em;
+    left: 3.5em;
+
+    padding: 0;
+    border: 0;
+
+    min-width: 70px;
+    min-height: 50px;
+
+    background-color: rgba(255,255,255,0.7);
+
+    border-radius: 10px !important;
+    -moz-border-radius: 10px !important;
+    -webkit-border-radius: 10px !important;
+    -khtml-border-radius: 10px !important;
+
+    box-shadow: 0 1px 5px 0 rgba(0,0,0,0.3);
+    -moz-box-shadow: 0 1px 5px 0 rgba(0,0,0,0.3);
+    -webkit-box-shadow: 0 1px 5px 0 rgba(0,0,0,0.3);
+
+    overflow: hidden;
 }
+
+
+.ol-tile-layer-switcher .ol-tile-item{
+    position: absolute;
+    float: left;
+    margin-left: 0;
+    text-align: center;
+    overflow: hidden;
+}
+
+.ol-tile-layer-switcher .ol-tile-item.active{
+    z-index: 100 !important;
+}
+
+.ol-tile-layer-switcher .ol-tile-item:nth-child(6n+1) {
+    clear: left;
+}
+
+.ol-tile-layer-switcher .ol-tile-item button{
+    float: left;
+    width: 70px;
+    height: 50px;
+    border: 2px solid #d9d9d9;
+    margin: 0;
+    padding: 0;
+
+    border-radius: 10px !important;
+    -moz-border-radius: 10px !important;
+    -webkit-border-radius: 10px !important;
+    -khtml-border-radius: 10px !important;
+
+    border-color: #d9d9d9;
+    overflow: hidden;
+}
+
+.ol-tile-layer-switcher .ol-tile-item.active button{
+
+    border: 2px solid white;
+
+    box-shadow: 0 0 5px 1px rgba(84,190,255,1);
+    -moz-box-shadow: 0 0 5px 1px rgba(84,190,255,1);
+    -webkit-box-shadow: 0 0 5px 1px rgba(84,190,255,1);
+
+}
+
+.ol-tile-layer-switcher .ol-tile-item button,
+.ol-tile-layer-switcher .ol-tile-item button:hover,
+.ol-tile-layer-switcher .ol-tile-item button:active
+.ol-tile-layer-switcher .ol-tile-item button:focus{
+    background-color: white;
+}
+
+
+.ol-tile-layer-switcher .ol-tile-item label{
+    display: none;
+}
+
+
+.ol-tile-layer-switcher .ol-tile-item .tile-images{
+    position: relative;
+    height: 66px;
+}
+
+.ol-tile-layer-switcher .ol-tile-item .tile-images img{
+    position: absolute;
+    margin: 0;
+    clip: rect(0px,70px,70px,0px);
+    left: -2px;
+    top: -2px;
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -khtml-border-radius: 10px;
+}
+
+/*--------------- [ Style quand TileLayerSwitcher déplié ] ------------ */
+.ol-tile-layer-switcher.deployed,
+.ol-tile-layer-switcher:hover{
+    border-radius: 15px !important;
+    -moz-border-radius: 15px !important;
+    -webkit-border-radius: 15px !important;
+    -khtml-border-radius: 15px !important;
+
+    border: 2px solid white;
+    min-width: 70px;
+    min-height: 50px;
+
+    background-color: rgba(255,255,255,0.8);
+
+}
+
+
+.ol-tile-layer-switcher.deployed .ol-tile-item,
+.ol-tile-layer-switcher:hover .ol-tile-item{
+    position: static;
+    float: left;
+}
+
+
+
+.ol-tile-layer-switcher.deployed div.ol-tile-item,
+.ol-tile-layer-switcher:hover div.ol-tile-item{
+    border-radius: 20px !important;
+    -moz-border-radius: 20px !important;
+    -webkit-border-radius: 20px !important;
+    -khtml-border-radius: 20px !important;
+}
+
+
+.ol-tile-layer-switcher.deployed .ol-tile-item button,
+.ol-tile-layer-switcher:hover .ol-tile-item button{
+    height: 70px;
+    margin: 5px;
+}
+
+
+.ol-tile-layer-switcher.deployed .ol-tile-item label,
+.ol-tile-layer-switcher:hover .ol-tile-item label{
+    display: block;
+    position: relative;
+    margin-top: 78px;
+    font-size: 12px;
+    width: 80px;
+    color: #555;
+}
+

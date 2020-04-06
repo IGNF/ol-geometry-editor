@@ -1,4 +1,5 @@
 require("../css/draw-control.css");
+require("../css/tilelayerswitcher-control.css");
 //require("../images/.css");
 
 global.ge = {
