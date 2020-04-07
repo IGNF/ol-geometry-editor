@@ -46,8 +46,6 @@
     background-repeat: no-repeat;
 }
 
-.ol-draw-tools .ol-control.ol-draw-square button,
-.ol-draw-tools .ol-control.ol-draw-multisquare button,
 .ol-draw-tools .ol-control.ol-draw-rectangle button,
 .ol-draw-tools .ol-control.ol-draw-multirectangle button {
     display: block;

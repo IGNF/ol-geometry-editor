@@ -1,5 +1,4 @@
 var ModifyBoxInteraction = require('../interactions/ModifyBoxInteraction');
-var ModifySquareInteraction = require('../interactions/ModifySquareInteraction');
 
 
 /**
@@ -89,9 +88,6 @@ EditControl.prototype.addInteractions = function () {
         features: this.getFeaturesCollectionBox()
     });
 
-    var modifyInteractionSquare = new ModifySquareInteraction({
-        features: this.getFeaturesCollectionSquare()
-    });
 
     var translateInteraction = new ol.interaction.Translate({
         layers : [this.layer],
@@ -103,7 +99,6 @@ EditControl.prototype.addInteractions = function () {
         return [
             modifyInteractionBasic,
             modifyInteractionBox,
-            modifyInteractionSquare,
             translateInteraction
         ];
     };
@@ -143,18 +138,10 @@ EditControl.prototype.reorganiseFeaturesCollectionByType = function () {
         return featuresCollectionBox;
     };
 
-    var featuresCollectionSquare = new ol.Collection();
-    this.getFeaturesCollectionSquare = function () {
-        return featuresCollectionSquare;
-    };
-
     var addFeatureOnMatchedCollection = function (feature) {
         switch (feature.get('type')) {
             case "Rectangle":
                 featuresCollectionBox.push(feature);
-                break;
-            case "Square":
-                featuresCollectionSquare.push(feature);
                 break;
             default:
                 featuresCollectionBasic.push(feature);
@@ -166,9 +153,6 @@ EditControl.prototype.reorganiseFeaturesCollectionByType = function () {
         switch (feature.get('type')) {
             case "Rectangle":
                 featuresCollectionBox.remove(feature);
-                break;
-            case "Square":
-                featuresCollectionSquare.remove(feature);
                 break;
 
             default:
