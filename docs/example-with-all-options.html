@@ -26,19 +26,8 @@
     <!--example css & js-->
     <link href="style.css" rel="stylesheet" />
 
+    <script type="text/javascript" src="customize-geoportal.js"></script>
     <script type="text/javascript">
-
-        var GEOPORTAL_API_KEY = "pratique";
-
-        function getGeoportalURL(layerName) {
-            var url = "https://wxs.ign.fr/";
-            url += GEOPORTAL_API_KEY;
-            url += "/geoportail/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile";
-            url += "&LAYER=" + layerName;
-            url += "&STYLE=normal&FORMAT=image/jpeg";
-            url += "&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}";
-            return url;
-        }
 
         $(document).ready(function () {
 
