@@ -1,61 +1,92 @@
 <html>
 
-    <head>
-        <meta charset="utf-8" />
-        <title>ol-geomerty-editor : Simple form example</title>
+<head>
+    <meta charset="utf-8" />
+    <title>ol-geomerty-editor : Draw a GeoJSON Point in a standard HTML form</title>
 
-        <!--css -->
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol-debug.css" rel="stylesheet">
+    <!--css -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol-debug.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/default.min.css" rel="stylesheet" >
 
-        <!--js -->
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-        <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol-debug.js"></script>
+    <!--js -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol-debug.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
 
-        <!-- ol-geomettry-editor css -->
-        <link rel="stylesheet" type="text/css" href="../dist/ol-geometry-editor.min.css" />
+    <!-- ol-geomettry-editor css -->
+    <link rel="stylesheet" type="text/css" href="../dist/ol-geometry-editor.min.css" />
 
-        <!-- jquery-geomettry-editor js -->
-        <script type="text/javascript" src="../dist/ol-geometry-editor.min.js"></script>
+    <!-- jquery-geomettry-editor js -->
+    <script type="text/javascript" src="../dist/ol-geometry-editor.min.js"></script>
 
-        <!--example css & js-->
-        <link href="style.css" rel="stylesheet">
-        <script type="text/javascript" src="customize-geoportal.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('.geometry').geometryEditor({
-                    'geometryType': 'Point',
-                    'editable': true,
-                    'hide': false,
-                    'precision': 4
-                });
+    <!--example css & js-->
+    <link href="style.css" rel="stylesheet">
+    <script type="text/javascript" src="customize-geoportal.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.geometry').geometryEditor({
+                'geometryType': 'Point',
+                'editable': true,
+                'hide': false,
+                'precision': 4
             });
-        </script>
-    </head>
+        });
+    </script>
+</head>
 
-    <body>
+<body>
 
-        <div class="container">
-            <h1>ol-geomerty-editor <a class="btn btn-primary" href="../index.html" role="button">Getting started</a></h1>
-            <h2>Simple form example</h2>
-            <form action="#" method="get">
-                <div class="form-group">
-                    <label for="name">name</label>
-                    <input id="name" class="form-control" type="text" placeholder="The place name" />
-                </div>
-                <div class="form-group">
-                    <label for="the_geom">the_geom</label>
-                    <input type="text" id="the_geom" class="geometry form-control" name="the_geom" value='{"type":"Point","coordinates":[2.33,48.85]}' />
-                </div>
-            </form>
+    <div class="container">
+        <h1>ol-geomerty-editor <a class="btn btn-primary" href="../index.html" role="button">Getting started</a></h1>
+        <h2>Draw a GeoJSON Point in a standard HTML form</h2>
+        <form action="#" method="get">
+            <div class="form-group">
+                <label for="name">name</label>
+                <input id="name" class="form-control" type="text" placeholder="The place name" />
+            </div>
+            <div class="form-group">
+                <label for="the_geom">the_geom</label>
+                <input type="text" id="the_geom" class="geometry form-control" name="the_geom" value='{"type":"Point","coordinates":[2.33,48.85]}' />
+            </div>
+        </form>
 
-            <p class="alert alert-info">
-                Note that you can submit your form as usual, no need to introduce GeoJSON Feature or FeatureCollection.
-            </p>
+        <p class="alert alert-info">
+            Note that you can submit your form as usual, no need to introduce GeoJSON Feature or FeatureCollection.
+        </p>
 
-        </div>
+        <h3>Code</h3>
+        <pre>
+html
+<code class="html">
+&lt;form action="#" method="get"&gt;
+&lt;div class="form-group"&gt;
+    &lt;label for="name"&gt;name&lt;/label&gt;
+    &lt;input id="name" class="form-control" type="text" placeholder="The place name" /&gt;
+&lt;/div&gt;
+&lt;div class="form-group"&gt;
+    &lt;label for="the_geom"&gt;the_geom&lt;/label&gt;
+    &lt;input type="text" id="the_geom" class="geometry form-control" name="the_geom" value='{"type":"Point","coordinates":[2.33,48.85]}' /&gt;
+&lt;/div&gt;
+&lt;/form&gt;
+</code>
+javscript
+<code class="JavaScript">
+$(document).ready(function () {
+$('.geometry').geometryEditor({
+    'geometryType': 'Point',
+    'editable': true,
+    'hide': false,
+    'precision': 4
+});
+});
+</code>
+        </pre>
 
-    </body>
+    </div>
+
+</body>
 
 </html>

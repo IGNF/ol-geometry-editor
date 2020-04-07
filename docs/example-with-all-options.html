@@ -2,17 +2,20 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>ol-geomerty-editor : Example with all options</title>
+    <title>ol-geomerty-editor : Example using all the options</title>
 
     <!--css -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol-debug.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/default.min.css" rel="stylesheet" >
 
     <!--js -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol-debug.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
 
     <!-- ol-geomettry-editor css -->
     <link rel="stylesheet" type="text/css" href="../dist/ol-geometry-editor.min.css" />
@@ -109,7 +112,7 @@
 
     <div class="container">
         <h1>ol-geomerty-editor <a class="btn btn-primary" href="../index.html" role="button">Getting started</a></h1>
-        <h2>Example with all options</h2>
+        <h2>Example using all the <a href="#" type="button" data-toggle="modal" data-target="#optionModal">options</a></h2>
         <div class="row">
             <div class="col-xs-6">
                 <h3>Input</h3>
@@ -133,181 +136,193 @@
                         Options ?
                     </button>
                 </h3>
-                <div class="modal fade" id="optionModal" tabindex="-1" role="dialog" aria-labelledby="optionModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg" role="document">
-                        <div class="modal-content">
-                            <div class="modal-body">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Option</th>
-                                            <th>Description</th>
-                                            <th>Default</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>geometryType</td>
-                                            <td>Restrict geometry type</td>
-                                            <td>Geometry</td>
-                                        </tr>
-                                        <tr>
-                                            <td>hide</td>
-                                            <td>true to hide form input</td>
-                                            <td>true</td>
-                                        </tr>
-                                        <tr>
-                                            <td>editable</td>
-                                            <td>Allows to enable a viewer mode without geometry edition</td>
-                                            <td>true</td>
-                                        </tr>
-                                        <tr>
-                                            <td>tileLayers</td>
-                                            <td>init background map</td>
-                                            <td>tile.openstreetmap.org</td>
-                                        </tr>
-                                        <tr>
-                                            <td>tileLayerSwitcher</td>
-                                            <td>Allow to show a layer switcher</td>
-                                            <td>false</td>
-                                        </tr>
-                                        <tr>
-                                            <td>defaultSwitchableTile</td>
-                                            <td>Tile position active at load</td>
-                                            <td>1</td>
-                                        </tr>
-                                        <tr>
-                                            <td>tileCoordinates</td>
-                                            <td>Coordinates of the image for the layer switcher</td>
-                                            <td>[9, 253, -177]</td>
-                                        </tr>
-                                        <tr>
-                                            <td>width</td>
-                                            <td>Map width</td>
-                                            <td>100%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>height</td>
-                                            <td>Map height</td>
-                                            <td>500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>height</td>
-                                            <td>Map height</td>
-                                            <td>500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>lon</td>
-                                            <td>Longitude for initial view</td>
-                                            <td>2.0</td>
-                                        </tr>
-                                        <tr>
-                                            <td>lat</td>
-                                            <td>Latitude for initial view</td>
-                                            <td>45.0</td>
-                                        </tr>
-                                        <tr>
-                                            <td>zoom</td>
-                                            <td>Zoom for initial view</td>
-                                            <td>4</td>
-                                        </tr>
-                                        <tr>
-                                            <td>maxZoom</td>
-                                            <td>Maximum zoom level</td>
-                                            <td>20</td>
-                                        </tr>
-                                        <tr>
-                                            <td>centerOnResults</td>
-                                            <td>Zoom to geometry after each edition</td>
-                                            <td>true</td>
-                                        </tr>
-                                        <tr>
-                                            <td>precision</td>
-                                            <td>Maximum number of decimal for coordinates</td>
-                                            <td>7</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <pre>
-                    var GEOPORTAL_API_KEY = "pratique";
+html
+<code class="html">
+&lt;!-- map input --&gt;
+&lt;input type="text" id="the_geom" class="geometry form-control" name="the_geom" value='{"type":"Point","coordinates":[2.424573,48.845726]}'/&gt;
+&lt;!-- data output --&gt;
+&lt;div id="result" class="well"&gt;&lt;/div&gt;
+</code>
+javascript
+<code class="JavaScript">
+var GEOPORTAL_API_KEY = "pratique";
 
-                    function getGeoportalURL(layerName) {
-                        var url = "https://wxs.ign.fr/";
-                        url += GEOPORTAL_API_KEY;
-                        url += "/geoportail/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile";
-                        url += "&LAYER=" + layerName;
-                        url += "&STYLE=normal&FORMAT=image/jpeg";
-                        url += "&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}";
-                        return url;
-                    }
+function getGeoportalURL(layerName) {
+    var url = "https://wxs.ign.fr/";
+    url += GEOPORTAL_API_KEY;
+    url += "/geoportail/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile";
+    url += "&LAYER=" + layerName;
+    url += "&STYLE=normal&FORMAT=image/jpeg";
+    url += "&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}";
+    return url;
+}
 
-                    $(document).ready(function () {
+$(document).ready(function () {
 
-                        $('.geometry').geometryEditor({
-                            'geometryType': 'Point',
-                            'editable': true,
-                            'hide': false,
-                            'precision': 6,
-                            'width': '100%',
-                            'height': '500px',
-                            'lon': 2.424573,
-                            'lat': 48.845726,
-                            'zoom': 17,
-                            'maxZoom': 18,
-                            'centerOnResults': false,
-                            'tileLayers': [
-                                {
-                                    'title': 'couche 1',
-                                    'url': 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                    'attribution': '©<a href="http://openstreetmap.org">OpenStreetMap contributors</a>'
-                                },
-                                {
-                                    'url': 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                    'title': 'couche 2'
-                                },
-                                {
-                                    'title': 'couche 3',
-                                    'url': getGeoportalURL("ORTHOIMAGERY.ORTHOPHOTOS"),
-                                    'attribution': '©<a href="http://api.ign.fr/conditions-generales">IGN</a>'
-                                },
-                                {
-                                    'title': 'Fond Blanc'
-                                }
-                            ],
-                            'tileLayerSwitcher': true,
-                            'defaultSwitchableTile': 1,
-                            'tileCoordinates': [9, 269, -189], //corse
+    $('.geometry').geometryEditor({
+        'geometryType': 'Point',
+        'editable': true,
+        'hide': false,
+        'precision': 6,
+        'width': '100%',
+        'height': '500px',
+        'lon': 2.424573,
+        'lat': 48.845726,
+        'zoom': 17,
+        'maxZoom': 18,
+        'centerOnResults': false,
+        'tileLayers': [
+            {
+                'title': 'couche 1',
+                'url': 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                'attribution': '©<a href="http://openstreetmap.org">OpenStreetMap contributors</a>'
+            },
+            {
+                'url': 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                'title': 'couche 2'
+            },
+            {
+                'title': 'couche 3',
+                'url': getGeoportalURL("ORTHOIMAGERY.ORTHOPHOTOS"),
+                'attribution': '©<a href="http://api.ign.fr/conditions-generales">IGN</a>'
+            },
+            {
+                'title': 'Fond Blanc'
+            }
+        ],
+        'tileLayerSwitcher': true,
+        'defaultSwitchableTile': 1,
+        'tileCoordinates': [9, 269, -189], //corse
 
-                            'allowCapture': true
-                        });
+        'allowCapture': true
+    });
 
-                        /* Lecture des evenements */
-                        var geometryEditor = $(".geometry").data('editor');
-                        var map = geometryEditor.getMap();
+    /* Lecture des evenements */
+    var geometryEditor = $(".geometry").data('editor');
+    var map = geometryEditor.getMap();
 
-                        map.on('change:tile', function (e) {
-                            var tile = e.tile;
-                            var textTile = "Tile '" + tile.title + "' (position " + tile.position + ") is active.";
+    map.on('change:tile', function (e) {
+        var tile = e.tile;
+        var textTile = "Tile '" + tile.title + "' (position " + tile.position + ") is active.";
 
-                            $("#tile").html(textTile);
-                        });
+        $("#tile").html(textTile);
+    });
 
-                        map.on('change:geometry', function (e) {
-                            var geoJSON = e.geometry;
-                            var textResult;
-                            if (!geoJSON) {
-                                textResult = "No geoJSON geometry found";
-                            } else {
-                                textResult = "GeoJSON of geometry drawn : " + geoJSON + ".";
-                            }
-                            $("#result").html(textResult);
-                        });
-                    });
+    map.on('change:geometry', function (e) {
+        var geoJSON = e.geometry;
+        var textResult;
+        if (!geoJSON) {
+            textResult = "No geoJSON geometry found";
+        } else {
+            textResult = "GeoJSON of geometry drawn : " + geoJSON + ".";
+        }
+        $("#result").html(textResult);
+    });
+});
+                    </code>
                 </pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Options modal -->
+    <div class="modal fade" id="optionModal" tabindex="-1" role="dialog" aria-labelledby="optionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Option</th>
+                            <th>Description</th>
+                            <th>Default</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>geometryType</td>
+                            <td>Restrict geometry type</td>
+                            <td>Geometry</td>
+                        </tr>
+                        <tr>
+                            <td>hide</td>
+                            <td>true to hide form input</td>
+                            <td>true</td>
+                        </tr>
+                        <tr>
+                            <td>editable</td>
+                            <td>Allows to enable a viewer mode without geometry edition</td>
+                            <td>true</td>
+                        </tr>
+                        <tr>
+                            <td>tileLayers</td>
+                            <td>init background map</td>
+                            <td>tile.openstreetmap.org</td>
+                        </tr>
+                        <tr>
+                            <td>tileLayerSwitcher</td>
+                            <td>Allow to show a layer switcher</td>
+                            <td>false</td>
+                        </tr>
+                        <tr>
+                            <td>defaultSwitchableTile</td>
+                            <td>Tile position active at load</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>tileCoordinates</td>
+                            <td>Coordinates of the image for the layer switcher</td>
+                            <td>[9, 253, -177]</td>
+                        </tr>
+                        <tr>
+                            <td>width</td>
+                            <td>Map width</td>
+                            <td>100%</td>
+                        </tr>
+                        <tr>
+                            <td>height</td>
+                            <td>Map height</td>
+                            <td>500</td>
+                        </tr>
+                        <tr>
+                            <td>height</td>
+                            <td>Map height</td>
+                            <td>500</td>
+                        </tr>
+                        <tr>
+                            <td>lon</td>
+                            <td>Longitude for initial view</td>
+                            <td>2.0</td>
+                        </tr>
+                        <tr>
+                            <td>lat</td>
+                            <td>Latitude for initial view</td>
+                            <td>45.0</td>
+                        </tr>
+                        <tr>
+                            <td>zoom</td>
+                            <td>Zoom for initial view</td>
+                            <td>4</td>
+                        </tr>
+                        <tr>
+                            <td>maxZoom</td>
+                            <td>Maximum zoom level</td>
+                            <td>20</td>
+                        </tr>
+                        <tr>
+                            <td>centerOnResults</td>
+                            <td>Zoom to geometry after each edition</td>
+                            <td>true</td>
+                        </tr>
+                        <tr>
+                            <td>precision</td>
+                            <td>Maximum number of decimal for coordinates</td>
+                            <td>7</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
