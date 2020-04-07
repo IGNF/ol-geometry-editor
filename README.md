@@ -142,7 +142,7 @@ $('.geometry').geometryEditor({
 
 ## Get started
 
-See [index.html](index.html)
+See [index.html](https://ignf.github.io/ol-geometry-editor/index.html)
 
 ## Dependencies
 
