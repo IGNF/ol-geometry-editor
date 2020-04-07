@@ -157,6 +157,9 @@ ModifyBoxInteraction.prototype.handleMoveEvent = function (evt) {
             this.previousCursor_ = element.style.cursor;
             element.style.cursor = this.grabCursor_;
         }
+
+        this.moveModifyPointsWithFeature_(feature);
+
     } else if (this.previousCursor_ !== undefined) {
         element.style.cursor = this.previousCursor_;
         this.previousCursor_ = undefined;
@@ -203,7 +206,7 @@ ModifyBoxInteraction.prototype.handleModify_ = function (e) {
 
         // cas d'une feature autre qu'un point pour bouger ses points de modification
     } else {
-        this.moveModifyPointsWithFeature_();
+        this.moveModifyPointsWithFeature_(this.feature_);
 
     }
 
@@ -359,18 +362,18 @@ ModifyBoxInteraction.prototype.redrawFeatureByModificationPointsPosition = funct
     feature.getGeometry().setCoordinates([newCoords]);
 };
 
-ModifyBoxInteraction.prototype.moveModifyPointsWithFeature_ = function () {
+ModifyBoxInteraction.prototype.moveModifyPointsWithFeature_ = function (feature) {
 
-    var modifyPoints = this.getModifyPointsOfFeature_(this.feature_);
+    var modifyPoints = this.getModifyPointsOfFeature_(feature);
+
     var coords;
-    switch (this.feature_.getGeometry().getType()) {
+    switch (feature.getGeometry().getType()) {
         case "Polygon":
-            coords = this.feature_.getGeometry().getCoordinates()[0];
+            coords = feature.getGeometry().getCoordinates()[0];
             coords.pop();
             break;
 
         default:
-
             break;
     }
 
