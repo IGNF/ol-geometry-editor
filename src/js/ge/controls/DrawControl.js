@@ -80,11 +80,6 @@ DrawControl.prototype.addInteraction = function () {
         features: this.featuresCollection
     };
 
-    if (this.type === 'Square') {
-        drawParams.type = "Circle";
-        drawParams.geometryFunction = ol.interaction.Draw.createRegularPolygon(4);
-    }
-
     if (this.type === 'Rectangle') {
         drawParams.type = "Circle";
         drawParams.geometryFunction = ol.interaction.Draw.createBox();
