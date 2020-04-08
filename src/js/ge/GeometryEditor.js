@@ -67,11 +67,19 @@ GeometryEditor.prototype.initMap = function () {
 };
 
 /**
- * Indicates if data element is an input field (<input>, <textarea>, etc.)
- * @private
+ * Get map object
+ * @public
  */
 GeometryEditor.prototype.getMap = function () {
     return this.map;
+};
+
+/**
+ * Get draw layer object
+ * @public
+ */
+GeometryEditor.prototype.getGeometryLayer = function () {
+    return this.drawLayer;
 };
 
 /**
@@ -222,11 +230,11 @@ GeometryEditor.prototype.initDrawControls = function () {
 
 
 /**
- * Serialize geometry to dataElement
+ * get Serialized geometrie(s)
  *
- * @private
+ * @public
  */
-GeometryEditor.prototype.serializeGeometry = function () {
+GeometryEditor.prototype.getSerializedGeometry = function () {
     var geometry = this.viewer.getGeometryByFeaturesCollection(this.featuresCollection, this.settings.precision);
 
     var geometryGeoJson = "";
@@ -237,6 +245,17 @@ GeometryEditor.prototype.serializeGeometry = function () {
             geometryGeoJson = JSON.stringify(geometry);
         }
     }
+    return geometryGeoJson;
+};
+
+/**
+ * Serialize geometry to dataElement
+ *
+ * @private
+ */
+GeometryEditor.prototype.serializeGeometry = function () {
+
+    var geometryGeoJson = this.getSerializedGeometry();
 
     this.getMap().dispatchEvent({ type: 'change:geometry', 'geometry': geometryGeoJson });
 
