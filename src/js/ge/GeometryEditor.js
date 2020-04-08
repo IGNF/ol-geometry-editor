@@ -162,7 +162,7 @@ GeometryEditor.prototype.updateDrawLayer = function () {
             geometry = JSON.parse(data);
             this.setGeometry(geometry);
         } catch (err) {
-            console.log(err);
+            console.error(err);
             this.viewer.removeFeatures(this.featuresCollection);
             return;
         }

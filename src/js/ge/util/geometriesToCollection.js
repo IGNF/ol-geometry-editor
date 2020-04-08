@@ -1,9 +1,29 @@
 
+var geometryToSimpleGeometries = require('./geometryToSimpleGeometries');
+
+var convertMultiGeomsToSimpleGeoms = function(geometries){
+    var simpleGeometries = [];
+
+    geometries.forEach(geometry => {
+        var geoms =  geometryToSimpleGeometries(geometry);
+
+        geoms.forEach(simpleGeom => {
+            simpleGeometries.push(simpleGeom);
+        });
+    });
+
+    return simpleGeometries;
+};
+
 /**
  * Converts an array of geometries to a collection (MultiPoint, MultiLineString,
  * MultiPolygon, GeometryCollection).
  */
 var geometriesToCollection = function(geometries){
+
+    /* First : convert all geometries in simple geometries */
+    geometries = convertMultiGeomsToSimpleGeoms(geometries);
+
     // count by geometry type
     var counts = {};
     geometries.forEach(function(geometry){
@@ -14,12 +34,17 @@ var geometriesToCollection = function(geometries){
         }
     }) ;
 
+    // list different geometry types
     var geometryTypes = Object.keys(counts) ;
+
+    // some different geometry types => GeometryCollection
     if ( geometryTypes.length > 1 ){
         return {
             "type": "GeometryCollection",
             "geometries": geometries
         } ;
+
+    // One geometry type  => Multi + simple Geometry type
     }else{
         var multiType = "Multi"+Object.keys(counts)[0] ;
         var coordinates = [];
