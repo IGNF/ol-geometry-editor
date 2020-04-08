@@ -52,7 +52,16 @@
 
             // when new location is seleted
             map.on('change:geometry', function (e) {
+
+                // reset previous datas
+                $("#parcel-data").html("");
+                $("#result").html("");
+                resultLayer.getSource().clear();
+
                 var geoJSON = e.geometry;
+                if(!geoJSON){
+                    return;
+                }
 
                 // request to APICARTO
                 $.ajax({
@@ -73,7 +82,6 @@
                             mapProjection: "EPSG:4326"
                         });
 
-                        resultLayer.getSource().clear();
                         resultLayer.getSource().addFeatures(features);
 
                         // center map on data
@@ -96,7 +104,6 @@
                 });
 
             });
-
 
             // manually trigger event if features at load
             if(geometryEditor.getGeometryLayer().getSource().getFeatures().length > 0){
