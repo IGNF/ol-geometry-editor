@@ -34,7 +34,10 @@
             // init geometry editor
             $('.geometry').geometryEditor({
                 'geometryType': 'Point',
-                'centerOnResults': false
+                'centerOnResults': false,
+                'zoom': 17,
+                'lon': 2.424610,
+                'lat': 48.844624
             });
 
             var geometryEditor = $(".geometry").data('editor');
@@ -85,12 +88,12 @@
                         resultLayer.getSource().addFeatures(features);
 
                         // center map on data
-                        if (features.length > 0) {
-                            map.getView().fit(resultLayer.getSource().getExtent(), {
-                                size: map.getSize(),
-                                duration: 100
-                            });
-                        }
+                        // if (features.length > 0) {
+                        //     map.getView().fit(resultLayer.getSource().getExtent(), {
+                        //         size: map.getSize(),
+                        //         duration: 100
+                        //     });
+                        // }
 
                         // show parcel data on html
                         var parcelDataHtml = "";
