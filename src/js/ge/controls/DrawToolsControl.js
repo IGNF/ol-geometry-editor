@@ -22,6 +22,17 @@ var defaultStyleDrawFunction = require('../util/defaultStyleDrawFunction');
 var DrawToolsControl = function (options) {
     this.translations = $.extend(defaultTranslations, options.translations || {});
 
+    this.availableDrawingToolTypes = [
+        "Point",
+        "LineString",
+        "Polygon",
+        "MultiPoint",
+        "MultiLineString",
+        "MultiPolygon",
+        "Geometry",
+        "Rectangle"
+    ];
+
     this.layer = options.layer;
     this.featuresCollection = this.layer.getSource().getFeaturesCollection();
     this.type = options.type || "Geometry";
@@ -57,6 +68,12 @@ DrawToolsControl.prototype.initControl = function () {
 
 
 DrawToolsControl.prototype.addDrawControls = function () {
+
+    if (!this.availableDrawingToolTypes.includes(this.type)){
+        console.error("option geometryType : "+ this.type + " not avalable (choose between "+this.availableDrawingToolTypes.join('|')+ ")");
+        return;
+    }
+
     if (this.type === "Geometry") {
         this.addDrawControl({type: "MultiPoint", multiple: true, title: this.translations.draw.multipoint});
         this.addDrawControl({type: "MultiLineString", multiple: true, title: this.translations.draw.multilinestring});
