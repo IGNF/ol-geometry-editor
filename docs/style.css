@@ -16,3 +16,7 @@ button.btn.help-button{
 pre.help-content{
     margin-top: 35px;
 }
+
+.height-500{
+    max-height: 500px;
+}

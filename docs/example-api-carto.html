@@ -1,0 +1,138 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>ol-geometry-editor : Usage with extarnal data (api-carto)</title>
+
+    <!--css -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol-debug.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/default.min.css"
+        rel="stylesheet">
+
+    <!--js -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol-debug.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/highlight.min.js"></script>
+
+    <!-- ol-geomettry-editor css -->
+    <link rel="stylesheet" type="text/css" href="../dist/ol-geometry-editor.min.css" />
+
+    <!-- jquery-geomettry-editor js -->
+    <script type="text/javascript" src="../dist/ol-geometry-editor.min.js"></script>
+
+    <!--example css & js-->
+    <link href="style.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+
+        var API_CARTO_PARCEL_URL = "https://apicarto.ign.fr/api/cadastre/parcelle";
+
+        $(document).ready(function () {
+
+            // init geometry editor
+            $('.geometry').geometryEditor({
+                'geometryType': 'Point',
+                'centerOnResults': false
+            });
+
+            var geometryEditor = $(".geometry").data('editor');
+            var map = geometryEditor.getMap();
+
+            // add layer to show collected data
+            var resultLayer = new ol.layer.Vector({
+                source: new ol.source.Vector(),
+            });
+            map.addLayer(resultLayer);
+
+            // place geometry layer above other (including resultLayer) to show marker above result
+            geometryEditor.getGeometryLayer().setZIndex(1);
+
+
+            // when new location is seleted
+            map.on('change:geometry', function (e) {
+                var geoJSON = e.geometry;
+
+                // request to APICARTO
+                $.ajax({
+                    dataType: "json",
+                    url: API_CARTO_PARCEL_URL,
+                    data: {
+                        geom: geoJSON
+                    },
+                    success: function (geoJSONFeaturesCollection) {
+                        // show raw data on html
+                        var textData = '<pre>' + hljs.highlight('json', JSON.stringify(geoJSONFeaturesCollection, null, 4)).value + '</pre>';
+                        $("#result").html(textData);
+
+
+                        // show feature data on map
+                        var features = (new ol.format.GeoJSON()).readFeatures(geoJSONFeaturesCollection, {
+                            featureProjection: "EPSG:3857",
+                            mapProjection: "EPSG:4326"
+                        });
+
+                        resultLayer.getSource().clear();
+                        resultLayer.getSource().addFeatures(features);
+
+                        // center map on data
+                        if (features.length > 0) {
+                            map.getView().fit(resultLayer.getSource().getExtent(), {
+                                size: map.getSize(),
+                                duration: 100
+                            });
+                        }
+
+                        // show parcel data on html
+                        var parcelDataHtml = "";
+                        features.forEach(feature => {
+                            var parcelData = feature.getProperties();
+                            delete parcelData.geometry; // useless heavy property to show
+                            parcelDataHtml += '<pre>' + hljs.highlight('json', JSON.stringify(parcelData, null, 4)).value + '</pre>';
+                        });
+                        $("#parcel-data").html(parcelDataHtml);
+                    }
+                });
+
+            });
+
+
+            // manually trigger event if features at load
+            if(geometryEditor.getGeometryLayer().getSource().getFeatures().length > 0){
+                var geometryGeoJson = geometryEditor.getSerializedGeometry();
+                map.dispatchEvent({ type: 'change:geometry', 'geometry': geometryGeoJson });
+            }
+        });
+
+    </script>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>ol-geometry-editor <a class="btn btn-primary" href="../index.html" role="button">Getting started</a></h1>
+        <h2>Example using data from APICARTO</h2>
+        <div class="row">
+            <div class="col-xs-6">
+                <h3>Select a location</h3>
+                <input type="text" id="the_geom" class="geometry form-control" name="the_geom" value='' />
+            </div>
+
+            <div class="col-xs-6">
+                <h3>Data from parcel</h3>
+                <div id="parcel-data" class="well height-500"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <h3>Raw data from APICARTO</h3>
+                <div id="result" class="well"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
