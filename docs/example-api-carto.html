@@ -100,6 +100,9 @@
                             parcelDataHtml += '<pre>' + hljs.highlight('json', JSON.stringify(parcelData, null, 4)).value + '</pre>';
                         });
                         $("#parcel-data").html(parcelDataHtml);
+                    },
+                    error: function(e){
+                        console.error(e.responseText);
                     }
                 });
 
@@ -123,7 +126,7 @@
         <div class="row">
             <div class="col-xs-6">
                 <h3>Select a location</h3>
-                <input type="text" id="the_geom" class="geometry form-control" name="the_geom" value='' />
+                <input type="text" id="the_geom" class="geometry form-control" name="the_geom" value='{"type":"Point","coordinates":[2.4249798,48.8445111]}' />
             </div>
 
             <div class="col-xs-6">
