@@ -4,7 +4,7 @@
 
 > Ce composant fournit un moyen simple d'intégrer une composante géométrique dans les formulaires HTML.
 > Nul besoin de révolutionner votre architecture, d'intégrer des `Feature` et `FeatureCollection` :
-> Une géométrie est un champ comme un autre qui peut être formaté en texte et éditer à l'aide d'une carte.
+> Une géométrie est un champ comme un autre qui peut être formaté en texte et édité à l'aide d'une carte.
 
 This components provides an easy way to integrate geometry edition in HTML forms.
 
