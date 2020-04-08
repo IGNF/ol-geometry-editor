@@ -1,148 +1,274 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<html>
 
-        <title>Supported geometry types</title>
-         
-        <!--css -->
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol-debug.css" rel="stylesheet">
+<head>
+    <meta charset="utf-8">
+    <title>ol-geometry-editor : Supported geometry types</title>
 
-        <!--js -->
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-        <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol-debug.js"></script>
+    <!--css -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol-debug.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/default.min.css" rel="stylesheet" >
 
-        <!-- ol-geomettry-editor css -->
-        <link rel="stylesheet" type="text/css" href="../dist/ol-geometry-editor.min.css" />
+    <!--js -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol-debug.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
 
-        <!-- jquery-geomettry-editor js -->
-        <script type="text/javascript" src="../dist/ol-geometry-editor.min.js"></script>
+    <!-- ol-geomettry-editor css -->
+    <link rel="stylesheet" type="text/css" href="../dist/ol-geometry-editor.min.css" />
 
-        <!--example css & js-->
-        <link href="style.css" rel="stylesheet">
-        <script type="text/javascript" src="customize-geoportal.js"></script>
-        <script type="text/javascript">
+    <!-- jquery-geomettry-editor js -->
+    <script type="text/javascript" src="../dist/ol-geometry-editor.min.js"></script>
 
-            $(document).ready(function () {
-                $('#point').geometryEditor({
-                    geometryType: 'Point',
-                    height: 300,
-                    maxZoom: 18
-                });
-                $('#linestring').geometryEditor({
-                    geometryType: 'LineString',
-                    height: 300
-                });
-                $('#polygon').geometryEditor({
-                    geometryType: 'Polygon',
-                    height: 300
-                });
+    <!--example css & js-->
+    <link href="style.css" rel="stylesheet">
+    <script type="text/javascript" src="customize-geoportal.js"></script>
+    <script type="text/javascript">
 
-                $('#multipoint').geometryEditor({
-                    geometryType: 'MultiPoint',
-                    height: 300
-                });
-                $('#multilinestring').geometryEditor({
-                    geometryType: 'MultiLineString',
-                    height: 300
-                });
-                $('#multipolygon').geometryEditor({
-                    geometryType: 'MultiPolygon',
-                    height: 300
-                });
-
-                $('#rectangle').geometryEditor({
-                    geometryType: 'Rectangle',
-                    height: 300
-                });
-
-                $('#geometry').geometryEditor({
-                    geometryType: 'Geometry',
-                    height: 300
-                });
+        $(document).ready(function () {
+            $('#point').geometryEditor({
+                geometryType: 'Point',
+                height: 300,
+                maxZoom: 18
+            });
+            $('#linestring').geometryEditor({
+                geometryType: 'LineString',
+                height: 300
+            });
+            $('#polygon').geometryEditor({
+                geometryType: 'Polygon',
+                height: 300
             });
 
-        </script>
-    </head>
-    <body>
+            $('#multipoint').geometryEditor({
+                geometryType: 'MultiPoint',
+                height: 300
+            });
+            $('#multilinestring').geometryEditor({
+                geometryType: 'MultiLineString',
+                height: 300
+            });
+            $('#multipolygon').geometryEditor({
+                geometryType: 'MultiPolygon',
+                height: 300
+            });
 
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-4">
-                    <h2>Point</h2>
+            $('#rectangle').geometryEditor({
+                geometryType: 'Rectangle',
+                height: 300
+            });
 
-                    <div id="point" class="geometry">
-                        {"type":"Point","coordinates":[2.424059808254242,48.844580316300906]}
-                    </div>
-                </div>
+            $('#geometry').geometryEditor({
+                geometryType: 'Geometry',
+                height: 300
+            });
+        });
 
-                <div class="col-sm-4">
-                    <h2>LineString</h2>
+    </script>
+</head>
+<body>
 
-                    <span id="linestring" class="geometry">
-                            {"type":"LineString","coordinates":[[2.379196286419756,48.85665404926806],[2.379775643566972,48.8575575912777],[2.3801404239929975,48.857684650564835],[2.380473017910844,48.85759994440923],[2.3811274769104784,48.85664699028189]]}
-                    </span>
-                </div>
+    <div class="container">
+        <h1>ol-geometry-editor <a class="btn btn-primary" href="../index.html" role="button">Getting started</a></h1>
+        <h2>Supported geometry types</h2>
+        <div class="row">
+            <div class="col-sm-4">
+                <h3>Point</h3>
 
-                <div class="col-sm-4">
-                    <h2>Polygon</h2>
-
-                    <span id="polygon" class="geometry">
-                        {"type":"Polygon","coordinates":[[[2.47467041015625,49.0796231770863],[1.95831298828125,48.97156360565644],[2.10113525390625,48.68225690458381],[2.57904052734375,48.55879557208034],[2.83172607421875,48.78732358929034],[2.68341064453125,48.97516937226341],[2.47467041015625,49.0796231770863]]]}
-                    </span>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-4">
-                    <h2>MultiPoint</h2>
-
-                    <span id="multipoint" class="geometry">
-                            {"type":"GeometryCollection","geometries":[{"type":"Point","coordinates":[2.4240598082542424,48.84458031630089]},{"type":"Point","coordinates":[6.130371093749999,43.51668853502909]},{"type":"Point","coordinates":[5.69091796875,47.010225655683485]},{"type":"MultiPoint","coordinates":[[-1.38427734375,43.229195113965034]]}]}
-                    </span>
-                </div>
-
-                <div class="col-sm-4">
-                    <h2>MultiLineString</h2>
-
-                    <span id="multilinestring" class="geometry">
-                        {"type":"MultiLineString","coordinates":[[[2.044830322265625,48.88928134706652],[2.344207763671875,48.85857124408756],[2.6930236816406246,48.8712188636798]],[[2.5138092041015625,48.9338677246169],[2.424545288085937,48.88964252469111],[2.3297882080078125,48.89686563951971]],[[2.2693634033203125,48.93025894405523],[2.3448944091796875,48.8670635367441]]]}
-                    </span>
-                </div>
-
-                <div class="col-sm-4">
-                    <h2>MultiPolygon</h2>
-
-                    <span id="multipolygon" class="geometry">
-                            {"type":"MultiPolygon","coordinates":[[[[2.350797951221466,48.853348923101066],[2.350679934024811,48.85320773386766],[2.351146638393402,48.853045365757026],[2.3512284457683563,48.85321267547607],[2.350797951221466,48.853348923101066]]],[[[2.3507979512214665,48.853347687675466],[2.35094279050827,48.853558588356464],[2.350996434688568,48.853553646782245],[2.351133227348327,48.853482699510806],[2.3512431979179382,48.853286799865884],[2.3512324690818787,48.853225382543656],[2.3512271046638484,48.85321444034372],[2.3507979512214665,48.853347687675466]]]]}
-                    </span>
+                <div id="point" class="geometry">
+                    {"type":"Point","coordinates":[2.424059808254242,48.844580316300906]}
                 </div>
             </div>
 
+            <div class="col-sm-4">
+                <h3>LineString</h3>
 
-            <div class="row">
-                <div class="col-sm-4">
-                    <h2>Rectangle (bounding box)</h2>
-
-                    <span id="rectangle" class="geometry">
-                        [-5.5,41.2,10.4,51.6]
-                    </span>
+                <div id="linestring" class="geometry">
+                        {"type":"LineString","coordinates":[[2.379196286419756,48.85665404926806],[2.379775643566972,48.8575575912777],[2.3801404239929975,48.857684650564835],[2.380473017910844,48.85759994440923],[2.3811274769104784,48.85664699028189]]}
                 </div>
+            </div>
 
-                <div class="col-sm-8">
-                    <h2>GeometryCollection</h2>
+            <div class="col-sm-4">
+                <h3>Polygon</h3>
 
-                    <span id="geometry" class="geometry">
-                            {"type":"GeometryCollection","geometries":[{"type":"MultiPoint","coordinates":[[2.968574166516191,48.38543506596059]]},{"type":"MultiPolygon","coordinates":[[[[2.9694324734009565,48.38572719810722],[2.969614863613969,48.385670196844416],[2.969174981335527,48.385007552479664],[2.969003319958574,48.385050303989374],[2.9694324734009565,48.38572719810722]]]]},{"type":"MultiLineString","coordinates":[[[2.9690882564682393,48.38537093916736],[2.9694369436401753,48.385891076382165],[2.970617115606728,48.38558113224349]]]}]}
-                    </span>
+                <div id="polygon" class="geometry">
+                    {"type":"Polygon","coordinates":[[[2.47467041015625,49.0796231770863],[1.95831298828125,48.97156360565644],[2.10113525390625,48.68225690458381],[2.57904052734375,48.55879557208034],[2.83172607421875,48.78732358929034],[2.68341064453125,48.97516937226341],[2.47467041015625,49.0796231770863]]]}
                 </div>
             </div>
         </div>
 
-    </body>
+        <div class="row">
+            <div class="col-sm-4">
+                <h3>MultiPoint</h3>
+
+                <div id="multipoint" class="geometry">
+                        {"type":"GeometryCollection","geometries":[{"type":"Point","coordinates":[2.4240598082542424,48.84458031630089]},{"type":"Point","coordinates":[6.130371093749999,43.51668853502909]},{"type":"Point","coordinates":[5.69091796875,47.010225655683485]},{"type":"MultiPoint","coordinates":[[-1.38427734375,43.229195113965034]]}]}
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <h3>MultiLineString</h3>
+
+                <div id="multilinestring" class="geometry">
+                    {"type":"MultiLineString","coordinates":[[[2.044830322265625,48.88928134706652],[2.344207763671875,48.85857124408756],[2.6930236816406246,48.8712188636798]],[[2.5138092041015625,48.9338677246169],[2.424545288085937,48.88964252469111],[2.3297882080078125,48.89686563951971]],[[2.2693634033203125,48.93025894405523],[2.3448944091796875,48.8670635367441]]]}
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <h3>MultiPolygon</h3>
+
+                <div id="multipolygon" class="geometry">
+                        {"type":"MultiPolygon","coordinates":[[[[2.350797951221466,48.853348923101066],[2.350679934024811,48.85320773386766],[2.351146638393402,48.853045365757026],[2.3512284457683563,48.85321267547607],[2.350797951221466,48.853348923101066]]],[[[2.3507979512214665,48.853347687675466],[2.35094279050827,48.853558588356464],[2.350996434688568,48.853553646782245],[2.351133227348327,48.853482699510806],[2.3512431979179382,48.853286799865884],[2.3512324690818787,48.853225382543656],[2.3512271046638484,48.85321444034372],[2.3507979512214665,48.853347687675466]]]]}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-4">
+                <h3>Rectangle (bounding box)</h3>
+
+                <div id="rectangle" class="geometry">
+                    [-5.5,41.2,10.4,51.6]
+                </div>
+            </div>
+
+            <div class="col-sm-8">
+                <h3>GeometryCollection</h3>
+
+                <div id="geometry" class="geometry">
+                        {"type":"GeometryCollection","geometries":[{"type":"MultiPoint","coordinates":[[2.968574166516191,48.38543506596059]]},{"type":"MultiPolygon","coordinates":[[[[2.9694324734009565,48.38572719810722],[2.969614863613969,48.385670196844416],[2.969174981335527,48.385007552479664],[2.969003319958574,48.385050303989374],[2.9694324734009565,48.38572719810722]]]]},{"type":"MultiLineString","coordinates":[[[2.9690882564682393,48.38537093916736],[2.9694369436401753,48.385891076382165],[2.970617115606728,48.38558113224349]]]}]}
+                </div>
+            </div>
+        </div>
+
+        <h3>Code</h3>
+            <pre>
+<h4>Point</h4>
+html
+<code class="html">
+&lt;div id="point" class="geometry"&gt;
+    {"type":"Point","coordinates":[2.424059808254242,48.844580316300906]}
+&lt;/div&gt;
+</code>
+javscript
+<code class="JavaScript">
+$('#point').geometryEditor({
+    geometryType: 'Point',
+    height: 300,
+    maxZoom: 18
+});
+</code>
+
+<h4>LineString</h4>
+html
+<code class="html">
+&lt;div id="linestring" class="geometry"&gt;
+    {"type":"LineString","coordinates":[[2.379196286419756,48.85665404926806],[2.379775643566972,48.8575575912777],[2.3801404239929975,48.857684650564835],[2.380473017910844,48.85759994440923],[2.3811274769104784,48.85664699028189]]}
+&lt;/div&gt;
+</code>
+javscript
+<code class="JavaScript">
+$('#linestring').geometryEditor({
+    geometryType: 'LineString',
+    height: 300
+});
+</code>
+
+<h4>Polygon</h4>
+html
+<code class="html">
+&lt;div id="polygon" class="geometry"&gt;
+    {"type":"Polygon","coordinates":[[[2.47467041015625,49.0796231770863],[1.95831298828125,48.97156360565644],[2.10113525390625,48.68225690458381],[2.57904052734375,48.55879557208034],[2.83172607421875,48.78732358929034],[2.68341064453125,48.97516937226341],[2.47467041015625,49.0796231770863]]]}
+&lt;/div&gt;
+</code>
+javscript
+<code class="JavaScript">
+$('#polygon').geometryEditor({
+    geometryType: 'Polygon',
+    height: 300
+});
+</code>
+
+<h4>MultiPoint</h4>
+html
+<code class="html">
+&lt;div id="multipoint" class="geometry"&gt;
+    {"type":"GeometryCollection","geometries":[{"type":"Point","coordinates":[2.4240598082542424,48.84458031630089]},{"type":"Point","coordinates":[6.130371093749999,43.51668853502909]},{"type":"Point","coordinates":[5.69091796875,47.010225655683485]},{"type":"MultiPoint","coordinates":[[-1.38427734375,43.229195113965034]]}]}
+&lt;/div&gt;
+</code>
+javscript
+<code class="JavaScript">
+$('#multipoint').geometryEditor({
+    geometryType: 'MultiPoint',
+    height: 300
+});
+</code>
+
+<h4>MultiLineString</h4>
+html
+<code class="html">
+&lt;div id="multilinestring" class="geometry"&gt;
+    {"type":"MultiLineString","coordinates":[[[2.044830322265625,48.88928134706652],[2.344207763671875,48.85857124408756],[2.6930236816406246,48.8712188636798]],[[2.5138092041015625,48.9338677246169],[2.424545288085937,48.88964252469111],[2.3297882080078125,48.89686563951971]],[[2.2693634033203125,48.93025894405523],[2.3448944091796875,48.8670635367441]]]}
+&lt;/div&gt;
+</code>
+javscript
+<code class="JavaScript">
+$('#multilinestring').geometryEditor({
+    geometryType: 'MultiLineString',
+    height: 300
+});
+</code>
+
+<h4>MultiPolygon</h4>
+html
+<code class="html">
+&lt;div id="multipolygon" class="geometry"&gt;
+    {"type":"MultiPolygon","coordinates":[[[[2.350797951221466,48.853348923101066],[2.350679934024811,48.85320773386766],[2.351146638393402,48.853045365757026],[2.3512284457683563,48.85321267547607],[2.350797951221466,48.853348923101066]]],[[[2.3507979512214665,48.853347687675466],[2.35094279050827,48.853558588356464],[2.350996434688568,48.853553646782245],[2.351133227348327,48.853482699510806],[2.3512431979179382,48.853286799865884],[2.3512324690818787,48.853225382543656],[2.3512271046638484,48.85321444034372],[2.3507979512214665,48.853347687675466]]]]}
+&lt;/div&gt;
+</code>
+javscript
+<code class="JavaScript">
+$('#multipolygon').geometryEditor({
+    geometryType: 'MultiPolygon',
+    height: 300
+});
+</code>
+
+<h4>Rectangle (bounding box)</h4>
+html
+<code class="html">
+&lt;div id="rectangle" class="geometry"&gt;
+    [-5.5,41.2,10.4,51.6]
+&lt;/div&gt;
+</code>
+javscript
+<code class="JavaScript">
+$('#rectangle').geometryEditor({
+    geometryType: 'Rectangle',
+    height: 300
+});
+</code>
+
+<h4>GeometryCollection</h4>
+html
+<code class="html">
+&lt;div id="geometry" class="geometry"&gt;
+    {"type":"GeometryCollection","geometries":[{"type":"MultiPoint","coordinates":[[2.968574166516191,48.38543506596059]]},{"type":"MultiPolygon","coordinates":[[[[2.9694324734009565,48.38572719810722],[2.969614863613969,48.385670196844416],[2.969174981335527,48.385007552479664],[2.969003319958574,48.385050303989374],[2.9694324734009565,48.38572719810722]]]]},{"type":"MultiLineString","coordinates":[[[2.9690882564682393,48.38537093916736],[2.9694369436401753,48.385891076382165],[2.970617115606728,48.38558113224349]]]}]}
+&lt;/div&gt;
+</code>
+javscript
+<code class="JavaScript">
+$('#geometry').geometryEditor({
+    geometryType: 'Geometry',
+    height: 300
+});
+</code>
+        </pre>
+    </div>
+
+</body>
 
 </html>
