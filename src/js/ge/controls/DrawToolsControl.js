@@ -92,8 +92,14 @@ DrawToolsControl.prototype.addDrawControl = function (options) {
         type: options.type,
         target: this.element,
         style: function(feature, resolution){
-            return defaultStyleDrawFunction(feature,resolution, options.type);
-        },
+            if(this.style){
+                if(typeof this.style === "function"){
+                    return this.style(feature, resolution);
+                }
+                return this.style;
+            }
+            return defaultStyleDrawFunction(options.type);
+        }.bind(this),
         multiple: options.multiple,
         title: options.title
     });
@@ -112,7 +118,16 @@ DrawToolsControl.prototype.addEditControl = function () {
         // featuresCollection: this.featuresCollection,
         layer: this.layer,
         target: this.element,
-        title: this.translations.edit[this.type.toLowerCase()]
+        title: this.translations.edit[this.type.toLowerCase()],
+        style: function(feature, resolution){
+            if(this.style){
+                if(typeof this.style === "function"){
+                    return this.style(feature, resolution);
+                }
+                return this.style;
+            }
+            return defaultStyleDrawFunction(options.type);
+        }.bind(this),
     });
 
     editControl.on('edit:active', function () {

@@ -212,12 +212,20 @@ Viewer.prototype.fitViewToFeaturesCollection = function (featuresCollection) {
  * @param {ol.Collection} featuresCollection
  * @returns {ol.layer.Vector}
  */
-Viewer.prototype.addLayer = function (featuresCollection) {
+Viewer.prototype.addLayer = function (featuresCollection, featureStyle) {
     var layer = new ol.layer.Vector({
         source: new ol.source.Vector({
             features: featuresCollection
         }),
-        style: defaultStyleLayerFunction
+        style: function(feature, resolution){
+            if(featureStyle){
+                if(typeof featureStyle === "function"){
+                    return featureStyle(feature, resolution);
+                }
+                return featureStyle;
+            }
+            return defaultStyleLayerFunction(feature.getGeometry().getType());
+        }
     });
 
     this.getMap().addLayer(layer);
@@ -261,7 +269,8 @@ Viewer.prototype.addDrawToolsControl = function (drawOptions) {
         // featuresCollection: drawOptions.featuresCollection,
         type: drawOptions.geometryType,
         multiple: !isSingleGeometryType(drawOptions.geometryType),
-        translations: drawOptions.translations
+        translations: drawOptions.translations,
+        style: drawOptions.style
     };
 
     var drawToolsControl = new DrawToolsControl(drawControlOptions);

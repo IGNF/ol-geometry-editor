@@ -29,7 +29,7 @@ var getDefaultStyle = function () {
 };
 
 
-var defaultStyleDrawFunction = function (feature, resolution, type) {
+var defaultStyleDrawFunction = function (type) {
 
     switch (type) {
         case "Point":

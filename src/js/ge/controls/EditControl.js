@@ -12,7 +12,7 @@ var ModifyBoxInteraction = require('../interactions/ModifyBoxInteraction');
  */
 var EditControl = function (options) {
 
-    //    this.style = options.style;
+    this.style = options.style;
     this.layer = options.layer;
     this.featuresCollection = this.layer.getSource().getFeaturesCollection();
     this.title = options.title || 'Edit a feature';
@@ -81,11 +81,13 @@ EditControl.prototype.addInteractions = function () {
 
     var modifyInteractionBasic = new ol.interaction.Modify({
         features: this.getFeaturesCollectionBasic(),
-        hitTolerance: 10
+        hitTolerance: 10,
+        style: this.style
     });
 
     var modifyInteractionBox = new ModifyBoxInteraction({
-        features: this.getFeaturesCollectionBox()
+        features: this.getFeaturesCollectionBox(),
+        style: this.style
     });
 
 
