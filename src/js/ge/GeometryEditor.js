@@ -153,7 +153,7 @@ GeometryEditor.prototype.setGeometry = function (geometry) {
  */
 GeometryEditor.prototype.initDrawLayer = function () {
     this.featuresCollection = this.viewer.createFeaturesCollection();
-    var drawLayer = this.viewer.addLayer(this.featuresCollection);
+    var drawLayer = this.viewer.addLayer(this.featuresCollection, this.settings.style);
     this.updateDrawLayer();
     this.settings.dataElement.on('change', this.updateDrawLayer.bind(this));
     return drawLayer;
@@ -200,7 +200,8 @@ GeometryEditor.prototype.initDrawControls = function () {
         geometryType: this.getGeometryType(),
         // featuresCollection: this.featuresCollection,
         layer: this.drawLayer,
-        translations: this.settings.translations
+        translations: this.settings.translations,
+        style: this.settings.style
     };
 
     var drawToolsControl = this.viewer.addDrawToolsControl(drawOptions);

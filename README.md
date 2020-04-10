@@ -71,6 +71,7 @@ See the list of options below.
 | `centerOnResults`      | Zoom to geometry after each edition                             | `true`                   |
 | `precision`            | Maximum number of decimal for coordinates                       | `7`                      |
 | `allowCapture`         | Add map control to show and save a capture of the map           | `false`                  |
+| `style`                | Custom ol.style.style or ol.StyleFunction of geometry layer     | `undefined`              |
 
 
 

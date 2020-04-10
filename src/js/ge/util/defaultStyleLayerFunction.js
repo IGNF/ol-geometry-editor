@@ -32,9 +32,7 @@ var getDefaultStyle = function () {
     ];
 };
 
-var defaultStyleLayerFunction = function (feature, resolution) {
-
-    type = feature.getGeometry().getType();
+var defaultStyleLayerFunction = function (type) {
 
     switch (type) {
         case "Point":
