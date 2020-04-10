@@ -2,13 +2,14 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>ol-geometry-editor : Usage with custom drawing tools style</title>
+    <title>ol-geometry-editor : Usage with custom drawing tools style (advanced)</title>
 
     <!--css -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol-debug.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.2.0/css/bootstrap-colorpicker.min.css"
         rel="stylesheet">"
+    <link href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/default.min.css" rel="stylesheet" >
 
     <!--js -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
@@ -17,6 +18,8 @@
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol-debug.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.2.0/js/bootstrap-colorpicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
 
     <!-- ol-geomettry-editor css -->
     <link rel="stylesheet" type="text/css" href="../dist/ol-geometry-editor.min.css" />
@@ -133,14 +136,6 @@
                 refreshLayerStyle(geometryEditor.getGeometryLayer());
             })
 
-
-            // TODO : set a custom style to added feature
-            // geometryEditor.getGeometryLayer().getSource().on('addfeature',function(e){
-            //     // open modal or popup to select new style of the feature added
-            //     // then apply style to feature
-            //     e.feature.setStyle(newStyle);
-            // });
-
         });
 
     </script>
@@ -161,7 +156,7 @@
                 <div id="style-options" class="card">
 
                     <div class="card card-body bg-light" id="point-style">
-                        <h4>Default layer style Point</h4>
+                        <h5>Default layer style Point</h5>
 
                         <div id="point-stroke-color-picker" class="input-group colorpicker-component">
                             <div class="input-group-prepend">
@@ -200,7 +195,7 @@
 
 
                     <div class="card card-body bg-light" id="linestring-style">
-                        <h4>Default layer style LineString</h4>
+                        <h5>Default layer style LineString</h5>
 
                         <div id="linestring-stroke-color-picker" class="input-group colorpicker-component">
                             <div class="input-group-prepend">
@@ -222,7 +217,7 @@
 
 
                     <div class="card card-body bg-light" id="polygon-style">
-                        <h4>Default layer style Polygon</h4>
+                        <h5>Default layer style Polygon</h5>
 
                         <div id="polygon-stroke-color-picker" class="input-group colorpicker-component">
                             <div class="input-group-prepend">
@@ -253,6 +248,139 @@
                     </div>
 
                 </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-12">
+                <pre>
+html
+<code class="html">
+&lt;!-- map input --&gt;
+&lt;input type="text" id="the_geom" class="geometry form-control" name="the_geom"
+value='{"type":"Point","coordinates":[2.4249798,48.8445111]}'/&gt;
+
+&lt;!-- features style inputs --&gt;
+&lt;div id="style-options" class="card"&gt;
+    &lt;!-- Point style --&gt;
+    &lt;input type="text" id="point-stroke-color" class="form-control" value="rgb(0, 130, 160)" /&gt;
+    &lt;input type="text" id="point-fill-color" class="form-control" value="rgba(255, 255, 255, 0.5)" /&gt;
+    &lt;input type="text" id="point-stroke-width" class="form-control" value="2" /&gt;
+    &lt;input type="text" id="point-radius" class="form-control" value="15" /&gt;
+
+    &lt;!-- LineString style --&gt;
+    &lt;input type="text" id="linestring-stroke-color" class="form-control" value="rgb(255, 0, 182)" /&gt;
+    &lt;input type="text" id="linestring-stroke-width" class="form-control" value="4" /&gt;
+
+    &lt;!-- Polygon style --&gt;
+    &lt;input type="text" id="polygon-stroke-color" class="form-control" value="rgb(36, 156, 70)" /&gt;
+    &lt;input type="text" id="polygon-fill-color" class="form-control" value="rgba(255, 0, 24, 0.26)" /&gt;
+    &lt;input type="text" id="polygon-stroke-width" class="form-control" value="3" /&gt;
+&lt;/div&gt;
+</code>
+javascript
+<code class="javascript">
+var getStyleForPolygon = function () {
+    var fillColor = $('#polygon-fill-color').val();
+    var strokeColor = $('#polygon-stroke-color').val();
+    var strokeWidth = $('#polygon-stroke-width').val();
+
+    var fill = new ol.style.Fill({
+        color: fillColor
+    });
+    var stroke = new ol.style.Stroke({
+        color: strokeColor,
+        width: strokeWidth
+    });
+
+    return [new ol.style.Style({
+        stroke: stroke,
+        fill: fill
+    })];
+};
+
+var getStyleForLineString = function () {
+    var strokeColor = $('#linestring-stroke-color').val();
+    var strokeWidth = $('#linestring-stroke-width').val();
+
+    var stroke = new ol.style.Stroke({
+        color: strokeColor,
+        width: strokeWidth
+    });
+
+    return [new ol.style.Style({
+        stroke: stroke
+    })];
+};
+
+var getStyleForPoint = function () {
+    var circleRadius = $('#point-radius').val();
+    var fillColor = $('#point-fill-color').val();
+    var strokeColor = $('#point-stroke-color').val();
+    var strokeWidth = $('#point-stroke-width').val();
+
+    var fill = new ol.style.Fill({
+        color: fillColor
+    });
+    var stroke = new ol.style.Stroke({
+        color: strokeColor,
+        width: strokeWidth
+    });
+    var image = new ol.style.Circle({
+        fill: fill,
+        stroke: stroke,
+        radius: circleRadius
+    });
+
+    return [new ol.style.Style({
+        image: image
+    })];
+};
+
+var getStyleByGeometryType = function (type) {
+    switch (type) {
+        case 'Point':
+        case 'MultiPoint':
+            return getStyleForPoint();
+            break;
+
+        case 'LineString':
+        case 'MultiLineString':
+            return getStyleForLineString();
+            break;
+
+        case 'Polygon':
+        case 'MultiPolygon':
+            return getStyleForPolygon();
+            break;
+        default:
+            break;
+    }
+    return null;
+};
+
+var refreshLayerStyle = function(layer){
+    layer.getSource().changed();
+};
+
+$(document).ready(function () {
+
+    $('.geometry').geometryEditor({
+        'geometryType': "Geometry",
+        'style': function (feature, resolution) {
+            return getStyleByGeometryType(feature.getGeometry().getType());
+        }
+    });
+
+    var geometryEditor = $(".geometry").data('editor');
+    // force refresh layer style when input change
+    $('#style-options input').on('change',function(){
+        refreshLayerStyle(geometryEditor.getGeometryLayer());
+    })
+
+});
+</code>
+                </pre>
             </div>
         </div>
     </div>
