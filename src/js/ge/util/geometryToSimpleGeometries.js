@@ -28,7 +28,19 @@ var multiToGeometries = function(multiGeometry){
 var geometryCollectionToGeometries = function(geometryCollection){
     var geometries = [] ;
     geometryCollection.geometries.forEach(function(geometry){
-        geometries.push(geometry);
+
+        switch (geometry.type){
+            case "MultiPoint":
+            case "MultiLineString":
+            case "MultiPolygon":
+                // when geometryCollection got MultiGeom inside
+                multiToGeometries(geometry).forEach(function(simpleGeometry){
+                    geometries.push(simpleGeometry);
+                });
+                break;
+            default:
+            geometries.push(geometry);
+        }
     });
     return geometries ;
 } ;
