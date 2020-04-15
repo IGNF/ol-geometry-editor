@@ -20,6 +20,17 @@ var convertMultiGeomsToSimpleGeoms = function(geometries){
  * MultiPolygon, GeometryCollection).
  */
 var geometriesToCollection = function(geometries){
+    if(!geometries){
+        return null;
+    }
+
+    if(geometries.length === 0){
+        return {};
+    }
+
+    if ( geometries.length == 1 ){
+        return geometries[0];
+    }
 
     /* First : convert all geometries in simple geometries */
     geometries = convertMultiGeomsToSimpleGeoms(geometries);

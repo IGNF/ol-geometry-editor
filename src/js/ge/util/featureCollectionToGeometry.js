@@ -14,11 +14,7 @@ var featureCollectionToGeometry = function(featureCollection){
         return null ;
     }
 
-    if ( geometries.length == 1 ){
-        return geometries[0];
-    }else{
-        return geometriesToCollection(geometries) ;
-    }
+    return geometriesToCollection(geometries) ;
 } ;
 
 module.exports = featureCollectionToGeometry ;
