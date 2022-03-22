@@ -108,7 +108,6 @@ Viewer.prototype.createMap = function (target, options) {
 Viewer.prototype.addLayersToMap = function (layers) {
 
     for (var i in layers) {
-
         this.getMap().addLayer(new ol.layer.Tile({
             source: new ol.source.XYZ({
                 attributions: [layers[i].attribution],
@@ -118,29 +117,11 @@ Viewer.prototype.addLayersToMap = function (layers) {
         }));
 
     }
-
-};
-
-/**
- * remove layers from Viewer map
- *
- */
-Viewer.prototype.removeLayersFromMap = function () {
-console.log(this.getMap().getTarget());
-return;
-this.getMap().getLayers().forEach(function(e){
-    console.log(e);
-});
-    for (var i in this.getMap().getLayers()) {
-        console.log(this.getMap().getLayers()[i]);
-        this.getMap().removeLayer(this.getMap().getLayers()[i]);
-    }
-
 };
 
 /**
  * Ajoute des features dans une feature collection à partir d'un tableau de géométries GeoJson
- * 
+ *
  * @param {ol.Collection} featuresCollection
  * @param {array} geometries - simple geometries
  */

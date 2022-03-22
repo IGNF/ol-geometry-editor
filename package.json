@@ -18,7 +18,6 @@
   },
   "author": "Mickaël Borne <mickael.borne@ign.fr>, Alexis Hordé <alexis.horde@ign.fr>",
   "license": "CECILL-B",
-  "dependencies": {},
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
