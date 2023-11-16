@@ -84,7 +84,7 @@ See the list of options below.
 
 ## Get started
 
-See [example/geometry-types.html](example/geometry-types.html)
+See [public/geometry-types.html](public/geometry-types.html)
 
 ## Dependencies
 
