@@ -26,7 +26,7 @@ $('.geometry').geometryEditor({
     editable: true
 });
 
-var geometryEditor = $("#geometry_pluggin_span").data('editor');
+let geometryEditor = $("#geometry_pluggin_span").data('editor');
 ```
 
 

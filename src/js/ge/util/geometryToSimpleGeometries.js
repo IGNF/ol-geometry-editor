@@ -5,9 +5,9 @@
  * @returns {Geometry[]} simple geometries
  */
 var multiToGeometries = function(multiGeometry){
-    var geometries = [] ;
+    let geometries = [] ;
 
-    var simpleType = multiGeometry.type.substring("Multi".length) ;
+    let simpleType = multiGeometry.type.substring("Multi".length) ;
     multiGeometry.coordinates.forEach(function(subCoordinates){
         geometries.push(
             {
@@ -26,7 +26,7 @@ var multiToGeometries = function(multiGeometry){
  * @returns {Geometry[]} simple geometries
  */
 var geometryCollectionToGeometries = function(geometryCollection){
-    var geometries = [] ;
+    let geometries = [] ;
     geometryCollection.geometries.forEach(function(geometry){
         geometries.push(geometry);
     });
@@ -59,4 +59,4 @@ var geometryToSimpleGeometries = function(geometry){
     }
 } ;
 
-module.exports = geometryToSimpleGeometries ;
+export default geometryToSimpleGeometries ;

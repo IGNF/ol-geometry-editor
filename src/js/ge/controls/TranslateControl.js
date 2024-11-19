@@ -12,7 +12,7 @@ var TranslateControl = function (options) {
 
     this.title = options.title || 'Move a geometry';
 
-    var element = $("<div>").addClass('ol-translate ol-unselectable ol-control');
+    let element = $("<div>").addClass('ol-translate ol-unselectable ol-control');
 
     $("<button>").attr('title', this.title)
             .on("touchstart click", function (e)
@@ -87,4 +87,4 @@ TranslateControl.prototype.addTranslateInteraction = function () {
 };
 
 
-module.exports = TranslateControl;
+export default TranslateControl;

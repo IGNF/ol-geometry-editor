@@ -1,24 +1,24 @@
 
-var geometriesToCollection = require('./geometriesToCollection.js') ;
+import geometriesToCollection from './geometriesToCollection.js';
 
 /**
  * Converts FeatureCollection to a normalized geometry
  */
 var featureCollectionToGeometry = function(featureCollection){
-    var geometries = [] ;
+    let geometries = [] ;
     featureCollection.features.forEach(function(feature){
         geometries.push( feature.geometry ) ;
     });
 
-    if ( geometries.length === 0 ){
+    if ( 0 === geometries.length ){
         return null ;
     }
 
-    if ( geometries.length == 1 ){
+    if ( 1 == geometries.length ){
         return geometries[0];
     }else{
         return geometriesToCollection(geometries) ;
     }
 } ;
 
-module.exports = featureCollectionToGeometry ;
+export default featureCollectionToGeometry ;

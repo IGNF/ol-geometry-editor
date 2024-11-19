@@ -1,5 +1,5 @@
-var ModifyBoxInteraction = require('../interactions/ModifyBoxInteraction');
-var ModifySquareInteraction = require('../interactions/ModifySquareInteraction');
+import ModifyBoxInteraction from '../interactions/ModifyBoxInteraction.js';
+import ModifySquareInteraction from '../interactions/ModifySquareInteraction.js';
 
 
 /**
@@ -7,9 +7,9 @@ var ModifySquareInteraction = require('../interactions/ModifySquareInteraction')
  *
  * @constructor
  * @extends {ol.control.Control}
- * 
+ *
  * @param {object} options
- * 
+ *
  */
 var EditControl = function (options) {
 
@@ -17,7 +17,7 @@ var EditControl = function (options) {
     this.featuresCollection = options.featuresCollection;
     this.title = options.title || 'Edit a feature';
 
-    var element = $("<div>").addClass('ol-edit ol-unselectable ol-control');
+    let element = $("<div>").addClass('ol-edit ol-unselectable ol-control');
 
     $("<button>").attr('title', this.title)
             .on("touchstart click", function (e)
@@ -124,17 +124,17 @@ EditControl.prototype.addInteractions = function () {
  */
 EditControl.prototype.reorganiseFeaturesCollectionByType = function () {
 
-    var featuresCollectionBasic = new ol.Collection();
+    let featuresCollectionBasic = new ol.Collection();
     this.getFeaturesCollectionBasic = function () {
         return featuresCollectionBasic;
     };
 
-    var featuresCollectionBox = new ol.Collection();
+    let featuresCollectionBox = new ol.Collection();
     this.getFeaturesCollectionBox = function () {
         return featuresCollectionBox;
     };
 
-    var featuresCollectionSquare = new ol.Collection();
+    let featuresCollectionSquare = new ol.Collection();
     this.getFeaturesCollectionSquare = function () {
         return featuresCollectionSquare;
     };
@@ -181,4 +181,4 @@ EditControl.prototype.reorganiseFeaturesCollectionByType = function () {
 };
 
 
-module.exports = EditControl;
+export default EditControl;

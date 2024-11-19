@@ -1,10 +1,10 @@
 
-var DrawToolsControl = require('./controls/DrawToolsControl');
+import DrawToolsControl from './controls/DrawToolsControl.js';
 
-var guid = require('./util/guid');
-var featureCollectionToGeometry = require('./util/featureCollectionToGeometry.js');
-var isSingleGeometryType = require('./util/isSingleGeometryType.js');
-var defaultStyleLayerFunction = require('./util/defaultStyleLayerFunction');
+import guid from './util/guid.js';
+import featureCollectionToGeometry from './util/featureCollectionToGeometry.js';
+import isSingleGeometryType from './util/isSingleGeometryType.js';
+import defaultStyleLayerFunction from './util/defaultStyleLayerFunction.js';
 
 
 
@@ -44,7 +44,7 @@ var Viewer = function (options) {
  */
 Viewer.prototype.initMap = function (options) {
     // create map div
-    var mapTargetId = 'map-' + guid();
+    let mapTargetId = 'map-' + guid();
     var $mapDiv = $('<div id="' + mapTargetId + '"></div>');
     $mapDiv.addClass('map');
     $mapDiv.css('width', options.width);
@@ -154,9 +154,9 @@ Viewer.prototype.setGeometries = function (featuresCollection, geometries) {
             geometry: geom.transform(this.settings.dataProjection, this.settings.mapProjection)
         });
 
-        var type = this.settings.geometryType;
+        let type = this.settings.geometryType;
 
-        if(type === "Geometry"){
+        if("Geometry" === type){
             type = geometries[i].type;
         }
 
@@ -171,7 +171,7 @@ Viewer.prototype.setGeometries = function (featuresCollection, geometries) {
  * @param {ol.Collection} featuresCollection
  */
 Viewer.prototype.fitViewToFeaturesCollection = function (featuresCollection) {
-    var geometries = [];
+    let geometries = [];
     featuresCollection.forEach(function (feature) {
         geometries.push(feature.getGeometry());
     });
@@ -239,7 +239,7 @@ Viewer.prototype.addDrawToolsControl = function (drawOptions) {
         translations: drawOptions.translations
     };
 
-    var drawToolsControl = new DrawToolsControl(drawControlOptions);
+    let drawToolsControl = new DrawToolsControl(drawControlOptions);
 
     this.getMap().on('set:geometries',function(){
         drawToolsControl.deactivateControls();
@@ -289,4 +289,4 @@ Viewer.prototype.getFeaturesCount = function (featuresCollection) {
 
 
 
-module.exports = Viewer;
+export default Viewer;

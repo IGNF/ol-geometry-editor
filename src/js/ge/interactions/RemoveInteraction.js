@@ -46,7 +46,7 @@ ol.inherits(RemoveInteraction, ol.interaction.Pointer);
  * @return {boolean} `true` to start the drag sequence.
  */
 RemoveInteraction.prototype.handleDownEvent = function (evt) {
-    var map = evt.map;
+    let map = evt.map;
 
     var feature = map.forEachFeatureAtPixel(evt.pixel,
             function (feature) {
@@ -66,7 +66,7 @@ RemoveInteraction.prototype.handleDownEvent = function (evt) {
  * @param {ol.MapBrowserEvent} evt Map browser event.
  */
 RemoveInteraction.prototype.handleDragEvent = function (evt) {
-    var map = evt.map;
+    let map = evt.map;
     var feature = map.forEachFeatureAtPixel(evt.pixel,
             function (feature) {
                 for (var i in this.features.getArray()) {
@@ -75,7 +75,7 @@ RemoveInteraction.prototype.handleDragEvent = function (evt) {
                     }
                 }
             }.bind(this));
-    var element = evt.map.getTargetElement();
+    let element = evt.map.getTargetElement();
 
     if (feature) {
         if (element.style.cursor != this.pointerCursor_) {
@@ -94,7 +94,7 @@ RemoveInteraction.prototype.handleDragEvent = function (evt) {
  * @param {ol.MapBrowserEvent} evt Event.
  */
 RemoveInteraction.prototype.handleMoveEvent = function (evt) {
-    var map = evt.map;
+    let map = evt.map;
     var feature = map.forEachFeatureAtPixel(evt.pixel,
             function (feature) {
                 for (var i in this.features.getArray()) {
@@ -103,7 +103,7 @@ RemoveInteraction.prototype.handleMoveEvent = function (evt) {
                     }
                 }
             }.bind(this));
-    var element = evt.map.getTargetElement();
+    let element = evt.map.getTargetElement();
 
     if (feature) {
         if (element.style.cursor != this.pointerCursor_) {
@@ -125,16 +125,16 @@ RemoveInteraction.prototype.handleMoveEvent = function (evt) {
  */
 RemoveInteraction.prototype.handleUpEvent = function (evt) {
 
-    var map = evt.map;
+    let map = evt.map;
 
-    var deletedFeature = map.forEachFeatureAtPixel(evt.pixel,
-            function (feature) {
-                for (var i in this.features.getArray()) {
-                    if (this.features.getArray()[i] === feature && this.feature_ === feature) {
-                        this.features.remove(feature);
-                    }
-                }
-            }.bind(this));
+    // var deletedFeature = map.forEachFeatureAtPixel(evt.pixel,
+    //         function (feature) {
+    //             for (var i in this.features.getArray()) {
+    //                 if (this.features.getArray()[i] === feature && this.feature_ === feature) {
+    //                     this.features.remove(feature);
+    //                 }
+    //             }
+    //         }.bind(this));
 
     var feature = map.forEachFeatureAtPixel(evt.pixel,
             function (feature) {
@@ -145,7 +145,7 @@ RemoveInteraction.prototype.handleUpEvent = function (evt) {
                 }
             }.bind(this));
 
-    var element = evt.map.getTargetElement();
+    let element = evt.map.getTargetElement();
 
     if (feature) {
         element.style.cursor = this.pointerCursor_;
@@ -161,4 +161,4 @@ RemoveInteraction.prototype.handleUpEvent = function (evt) {
 
 
 
-module.exports = RemoveInteraction;
+export default RemoveInteraction;

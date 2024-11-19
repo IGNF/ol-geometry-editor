@@ -16,7 +16,7 @@ var DrawControl = function (options) {
     this.multiple = options.multiple;
     this.title = options.title || 'Draw a ' + this.type.toLowerCase();
 
-    var element = $("<div>").addClass('ol-draw-' + this.type.toLowerCase() + ' ol-unselectable ol-control');
+    let element = $("<div>").addClass('ol-draw-' + this.type.toLowerCase() + ' ol-unselectable ol-control');
 
     $("<button>").attr('title', this.title)
             .on("touchstart click", function (e)
@@ -80,18 +80,18 @@ DrawControl.prototype.addInteraction = function () {
         features: this.featuresCollection
     };
 
-    if (this.type === 'Square') {
+    if ('Square' === this.type) {
         drawParams.type = "Circle";
         drawParams.geometryFunction = ol.interaction.Draw.createRegularPolygon(4);
     }
 
-    if (this.type === 'Rectangle') {
+    if ('Rectangle' === this.type) {
         drawParams.type = "Circle";
         drawParams.geometryFunction = ol.interaction.Draw.createBox();
     }
 
 
-    var drawInteraction = new ol.interaction.Draw(drawParams);
+    let drawInteraction = new ol.interaction.Draw(drawParams);
 
 
     drawInteraction.on('drawend', function (e) {
@@ -120,4 +120,4 @@ DrawControl.prototype.addInteraction = function () {
 };
 
 
-module.exports = DrawControl;
+export default DrawControl;

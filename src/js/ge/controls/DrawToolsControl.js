@@ -1,11 +1,11 @@
-var defaultTranslations = require('../translations/translation.fr.json');
+import defaultTranslations from '../translations/translation.fr.json';
 
 
-var DrawControl = require('./DrawControl');
-var EditControl = require('./EditControl');
-var TranslateControl = require('./TranslateControl');
-var RemoveControl = require('./RemoveControl');
-var defaultStyleDrawFunction = require('../util/defaultStyleDrawFunction');
+import DrawControl from './DrawControl.js';
+import EditControl from './EditControl.js';
+import TranslateControl from './TranslateControl.js';
+import RemoveControl from './RemoveControl.js';
+import defaultStyleDrawFunction from '../util/defaultStyleDrawFunction.js';
 
 
 
@@ -29,7 +29,7 @@ var DrawToolsControl = function (options) {
 
     this.controls = [];
 
-    var drawBar = $("<div>").addClass('ol-draw-tools ol-unselectable ol-control');
+    let drawBar = $("<div>").addClass('ol-draw-tools ol-unselectable ol-control');
 
     ol.control.Control.call(this, {
         element: drawBar.get(0),
@@ -56,7 +56,7 @@ DrawToolsControl.prototype.initControl = function () {
 
 
 DrawToolsControl.prototype.addDrawControls = function () {
-    if (this.type === "Geometry") {
+    if ("Geometry" === this.type) {
         this.addDrawControl({type: "MultiPoint", multiple: true, title: this.translations.draw.multipoint});
         this.addDrawControl({type: "MultiLineString", multiple: true, title: this.translations.draw.multilinestring});
         this.addDrawControl({type: "MultiPolygon", multiple: true, title: this.translations.draw.multipolygon});
@@ -143,4 +143,4 @@ DrawToolsControl.prototype.deactivateControls = function (keepThisOne) {
 };
 
 
-module.exports = DrawToolsControl;
+export default DrawToolsControl;

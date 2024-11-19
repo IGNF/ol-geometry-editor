@@ -1,9 +1,5 @@
-//import markerShadowUrl from '../../../images/marker-shadow.png';
-//import markerIconUrl from '../../../images/marker-icon.png';
-
-
-var markerShadowUrl = require('../../../images/marker-shadow.png');
-var markerIconUrl = require('../../../images/marker-icon.png');
+import markerShadowUrl from '../../../images/marker-shadow.png';
+import markerIconUrl from '../../../images/marker-icon.png';
 
 var getDefaultStyle = function () {
 
@@ -32,9 +28,9 @@ var getDefaultStyle = function () {
     ];
 };
 
-var defaultStyleLayerFunction = function (feature, resolution) {
+var defaultStyleLayerFunction = function (feature) {
 
-    type = feature.getGeometry().getType();
+    let type = feature.getGeometry().getType();
 
     switch (type) {
         case "Point":
@@ -66,6 +62,6 @@ var defaultStyleLayerFunction = function (feature, resolution) {
 
 };
 
-module.exports = defaultStyleLayerFunction;
+export default defaultStyleLayerFunction;
 
 

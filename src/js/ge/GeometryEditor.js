@@ -1,10 +1,10 @@
-var bboxPolygon = require('turf-bbox-polygon');
-var extent = require('turf-extent');
+import bboxPolygon from 'turf-bbox-polygon';
+import extent from 'turf-extent';
 
-var defaultParams = require('./defaultParams.js');
-var geometryToSimpleGeometries = require('./util/geometryToSimpleGeometries');
+import defaultParams from './defaultParams.js';
+import geometryToSimpleGeometries from './util/geometryToSimpleGeometries.js';
 
-var Viewer = require('./Viewer');
+import Viewer from './Viewer.js';
 
 /**
  * GeometryEditor constructor from a dataElement containing a serialized geometry
@@ -76,7 +76,7 @@ GeometryEditor.prototype.getMap = function () {
  * @private
  */
 GeometryEditor.prototype.isDataElementAnInput = function () {
-    return typeof this.dataElement.attr('value') !== 'undefined';
+    return 'undefined' !== typeof this.dataElement.attr('value');
 };
 
 /**
@@ -96,7 +96,7 @@ GeometryEditor.prototype.getRawData = function () {
  * @param {String} value
  */
 GeometryEditor.prototype.setRawData = function (value) {
-    var currentData = this.getRawData();
+    let currentData = this.getRawData();
     if (currentData === value) {
         return;
     }
@@ -115,17 +115,17 @@ GeometryEditor.prototype.setRawData = function (value) {
 GeometryEditor.prototype.setGeometry = function (geometry) {
 
     // hack to accept bbox
-    if (geometry instanceof Array && geometry.length === 4) {
+    if (geometry instanceof Array && 4 === geometry.length) {
         geometry = bboxPolygon(geometry).geometry;
     }
 
     this.viewer.removeFeatures(this.featuresCollection);
 
-    var geometries = geometryToSimpleGeometries(geometry);
+    let geometries = geometryToSimpleGeometries(geometry);
 
     this.viewer.setGeometries(this.featuresCollection, geometries);
 
-    if (this.settings.centerOnResults && geometries.length > 0) {
+    if (this.settings.centerOnResults && 0 < geometries.length) {
         this.viewer.fitViewToFeaturesCollection(this.featuresCollection);
     }
 
@@ -147,9 +147,9 @@ GeometryEditor.prototype.initDrawLayer = function () {
  * Update draw layer from data
  */
 GeometryEditor.prototype.updateDrawLayer = function () {
-    var data = this.getRawData();
+    let data = this.getRawData();
     var geometry;
-    if (data !== '') {
+    if ('' !== data) {
         try {
             geometry = JSON.parse(data);
             this.setGeometry(geometry);
@@ -188,19 +188,19 @@ GeometryEditor.prototype.initDrawControls = function () {
     this.viewer.addDrawToolsControl(drawOptions);
 
     var events = {
-        onDrawCreated: function (e) {
-            if (this.settings.centerOnResults && this.viewer.getFeaturesCount(this.featuresCollection) > 0) {
+        onDrawCreated: function () {
+            if (this.settings.centerOnResults && 0 < this.viewer.getFeaturesCount(this.featuresCollection)) {
                 this.viewer.fitViewToFeaturesCollection(this.featuresCollection);
             }
             this.serializeGeometry();
         }.bind(this),
-        onDrawModified: function (e) {
-            if (this.settings.centerOnResults && this.viewer.getFeaturesCount(this.featuresCollection) > 0) {
+        onDrawModified: function () {
+            if (this.settings.centerOnResults && 0 < this.viewer.getFeaturesCount(this.featuresCollection)) {
                 this.viewer.fitViewToFeaturesCollection(this.featuresCollection);
             }
             this.serializeGeometry();
         }.bind(this),
-        onDrawDeleted: function (e) {
+        onDrawDeleted: function () {
             this.serializeGeometry();
         }.bind(this)
     };
@@ -215,11 +215,11 @@ GeometryEditor.prototype.initDrawControls = function () {
  * @private
  */
 GeometryEditor.prototype.serializeGeometry = function () {
-    var geometry = this.viewer.getGeometryByFeaturesCollection(this.featuresCollection, this.settings.precision);
+    let geometry = this.viewer.getGeometryByFeaturesCollection(this.featuresCollection, this.settings.precision);
 
-    var geometryGeoJson = "";
+    let geometryGeoJson = "";
     if (geometry) {
-        if (this.getGeometryType() === 'Rectangle') {
+        if ('Rectangle' === this.getGeometryType()) {
             geometryGeoJson = JSON.stringify(extent(geometry));
         } else {
             geometryGeoJson = JSON.stringify(geometry);
@@ -231,4 +231,4 @@ GeometryEditor.prototype.serializeGeometry = function () {
 };
 
 
-module.exports = GeometryEditor;
+export default GeometryEditor;

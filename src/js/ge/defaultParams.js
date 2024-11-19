@@ -26,4 +26,4 @@ var defaultParams = {
     onResult: function(){}
 } ;
 
-module.exports = defaultParams ;
+export default defaultParams ;

@@ -4,7 +4,7 @@
  * @param {String} geometryType tested geometry type
  */
 var isSingleGeometryType = function(geometryType) {
-    return ["Point","LineString","Polygon","Rectangle"].indexOf(geometryType) !== -1 ;
+    return -1 !== ["Point","LineString","Polygon","Rectangle"].indexOf(geometryType) ;
 };
 
-module.exports = isSingleGeometryType ;
+export default isSingleGeometryType ;
