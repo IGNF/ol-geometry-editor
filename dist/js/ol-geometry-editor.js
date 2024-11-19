@@ -2663,7 +2663,7 @@ GeometryEditor.prototype.getMap = function () {
  * @private
  */
 GeometryEditor.prototype.isDataElementAnInput = function () {
-    return 'undefined' !== typeof this.dataElement.attr('value');
+    return this.dataElement.is('input') || this.dataElement.is('textarea');
 };
 
 /**
