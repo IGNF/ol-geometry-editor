@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Supported geometry types</title>
-         
+
         <!--css -->
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol-debug.css" rel="stylesheet">
@@ -17,10 +17,10 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol-debug.js"></script>
 
         <!-- ol-geomettry-editor css -->
-        <link rel="stylesheet" type="text/css" href="../dist/ol-geometry-editor.min.css" />
+        <link rel="stylesheet" type="text/css" href="../dist/css/ol-geometry-editor.min.css" />
 
         <!-- jquery-geomettry-editor js -->
-        <script type="text/javascript" src="../dist/ol-geometry-editor.min.js"></script>
+        <script type="text/javascript" src="../dist/js/ol-geometry-editor.min.js"></script>
 
         <!--example css & js-->
         <link href="style.css" rel="stylesheet">
@@ -31,38 +31,54 @@
                 $('#point').geometryEditor({
                     geometryType: 'Point',
                     height: 300,
-                    maxZoom: 18
+                    maxZoom: 18,
+                    hide: false,
+                    editable: true
                 });
                 $('#linestring').geometryEditor({
                     geometryType: 'LineString',
-                    height: 300
+                    height: 300,
+                    hide: false,
+                    editable: true
                 });
                 $('#polygon').geometryEditor({
                     geometryType: 'Polygon',
-                    height: 300
+                    height: 300,
+                    hide: false,
+                    editable: true
                 });
 
                 $('#multipoint').geometryEditor({
                     geometryType: 'MultiPoint',
-                    height: 300
+                    height: 300,
+                    hide: false,
+                    editable: true
                 });
                 $('#multilinestring').geometryEditor({
                     geometryType: 'MultiLineString',
-                    height: 300
+                    height: 300,
+                    hide: false,
+                    editable: true
                 });
                 $('#multipolygon').geometryEditor({
                     geometryType: 'MultiPolygon',
-                    height: 300
+                    height: 300,
+                    hide: false,
+                    editable: true
                 });
 
                 $('#rectangle').geometryEditor({
                     geometryType: 'Rectangle',
-                    height: 300
+                    height: 300,
+                    hide: false,
+                    editable: true
                 });
 
                 $('#geometry').geometryEditor({
                     geometryType: 'Geometry',
-                    height: 300
+                    height: 300,
+                    hide: false,
+                    editable: true
                 });
             });
 
@@ -91,9 +107,7 @@
                 <div class="col-sm-4">
                     <h2>Polygon</h2>
 
-                    <span id="polygon" class="geometry">
-                        {"type":"Polygon","coordinates":[[[2.47467041015625,49.0796231770863],[1.95831298828125,48.97156360565644],[2.10113525390625,48.68225690458381],[2.57904052734375,48.55879557208034],[2.83172607421875,48.78732358929034],[2.68341064453125,48.97516937226341],[2.47467041015625,49.0796231770863]]]}
-                    </span>
+                    <input type="text" id="polygon" class="geometry" value="{&quot;type&quot;:&quot;Polygon&quot;,&quot;coordinates&quot;:[[[2.47467041015625,49.0796231770863],[1.95831298828125,48.97156360565644],[2.10113525390625,48.68225690458381],[2.57904052734375,48.55879557208034],[2.83172607421875,48.78732358929034],[2.68341064453125,48.97516937226341],[2.47467041015625,49.0796231770863]]]}">
                 </div>
             </div>
 

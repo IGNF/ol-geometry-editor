@@ -1,5 +1,6 @@
 import webpack from "webpack";
 import path from "path";
+import CopyPlugin from 'copy-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
@@ -8,7 +9,7 @@ import TerserPlugin from "terser-webpack-plugin";
 
 const __dirname = path.resolve();
 
-let config = {
+const config = {
   target: 'web',
   entry: {
     'ol-geometry-editor': "./src/js/ge.js",
@@ -16,12 +17,17 @@ let config = {
   },
   output: {
     path: path.resolve(__dirname, "./dist"),
-    filename: "./[name].js"
+    filename: "./js/[name].js"
   },
   plugins: [
     new CleanWebpackPlugin({
       verbose: false,
       dry: false
+    }),
+    new CopyPlugin({
+      patterns: [
+        { context: './src/images/', from: '*.(png|gif|svg)', to: 'images/' },
+      ]
     }),
     new ESLintPlugin({
       extensions: ['js'],
@@ -29,7 +35,7 @@ let config = {
       fix: true
     }),
     new MiniCssExtractPlugin({
-      filename: "./[name].css"
+      filename: "./css/[name].css"
     }),
   ],
   module: {
