@@ -34,4 +34,4 @@ var defaultStyleSketchFunction = function (feature, resolution, type) {
 
 };
 
-module.exports = defaultStyleSketchFunction;
+export default defaultStyleSketchFunction;

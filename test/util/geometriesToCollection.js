@@ -1,6 +1,7 @@
-var expect = require('expect');
+import expect from 'expect';
 
-var geometriesToCollection = require('../../src/js/ge/util/geometriesToCollection.js');
+import geometriesToCollection from '../../src/js/ge/util/geometriesToCollection.js';
+
 
 describe('test geometriesToCollection', function () {
 

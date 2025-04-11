@@ -1,5 +1,5 @@
-var markerShadowUrl = require('../../../images/marker-shadow.png');
-var markerIconUrl = require('../../../images/marker-icon.png');
+import markerShadowUrl from '../../../images/marker-shadow.png';
+import markerIconUrl from '../../../images/marker-icon.png';
 
 var getDefaultStyle = function () {
 
@@ -59,4 +59,4 @@ var defaultStyleDrawFunction = function (type) {
 
 };
 
-module.exports = defaultStyleDrawFunction;
+export default defaultStyleDrawFunction;

@@ -1,4 +1,4 @@
-var RemoveInteraction = require('../interactions/RemoveInteraction');
+import RemoveInteraction from '../interactions/RemoveInteraction.js';
 
 
 /**
@@ -6,7 +6,7 @@ var RemoveInteraction = require('../interactions/RemoveInteraction');
  *
  * @constructor
  * @extends {ol.control.Control}
- * 
+ *
  * @param {object} options
  * @param {String} options.type le type d'élément dessiné ('Text', 'Point', 'LineString' ou 'Polygon')
  *
@@ -16,7 +16,7 @@ var RemoveControl = function (options) {
     this.featuresCollection = options.featuresCollection;
     this.title = options.title || 'Remove a geometry';
 
-    var element = $("<div>").addClass('ol-delete ol-unselectable ol-control');
+    let element = $("<div>").addClass('ol-delete ol-unselectable ol-control');
 
     $("<button>").attr('title', this.title)
             .on("touchstart click", function (e)
@@ -92,4 +92,4 @@ RemoveControl.prototype.addInteraction = function () {
 
 };
 
-module.exports = RemoveControl;
+export default RemoveControl;

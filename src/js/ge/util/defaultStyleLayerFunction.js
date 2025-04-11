@@ -1,9 +1,5 @@
-//import markerShadowUrl from '../../../images/marker-shadow.png';
-//import markerIconUrl from '../../../images/marker-icon.png';
-
-
-var markerShadowUrl = require('../../../images/marker-shadow.png');
-var markerIconUrl = require('../../../images/marker-icon.png');
+import markerShadowUrl from '../../../images/marker-shadow.png';
+import markerIconUrl from '../../../images/marker-icon.png';
 
 var getDefaultStyle = function () {
 
@@ -64,6 +60,6 @@ var defaultStyleLayerFunction = function (type) {
 
 };
 
-module.exports = defaultStyleLayerFunction;
+export default defaultStyleLayerFunction;
 
 

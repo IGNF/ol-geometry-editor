@@ -34,7 +34,8 @@ var TileLayer = function (url, title, options) {
             source: new ol.source.XYZ(this.settings),
             minResolution: this.settings.minResolution,
             maxResolution: this.settings.maxResolution,
-            opacity: this.settings.opacity
+            opacity: this.settings.opacity,
+            projection: this.settings.projection
         });
     }
 
@@ -75,4 +76,4 @@ TileLayer.prototype.getTitle = function () {
 };
 
 
-module.exports = TileLayer;
+export default TileLayer;

@@ -32,12 +32,12 @@ var isValidGeometry = function (geometry) {
         }
 
         // value 'coordinates' is coherent ?
-        if (new ol.format.GeoJSON().readGeometry(JSON.stringify(geometry)).getCoordinates().length == 0) {
+        if (0 == new ol.format.GeoJSON().readGeometry(JSON.stringify(geometry)).getCoordinates().length) {
             return false;
         }
 
         return true;
-    }
+    };
 
 
 
@@ -57,4 +57,4 @@ var isValidGeometry = function (geometry) {
 
 };
 
-module.exports = isValidGeometry;
+export default isValidGeometry;

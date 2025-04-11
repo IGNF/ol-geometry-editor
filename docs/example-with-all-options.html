@@ -10,24 +10,24 @@
     <link href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/default.min.css" rel="stylesheet" >
 
     <!--js -->
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol-debug.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol-debug.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
 
     <!-- ol-geomettry-editor css -->
-    <link rel="stylesheet" type="text/css" href="../dist/ol-geometry-editor.min.css" />
+    <link rel="stylesheet" type="text/css" href="../dist/css/ol-geometry-editor.min.css" />
 
     <!-- jquery-geomettry-editor js -->
-    <script type="text/javascript" src="../dist/ol-geometry-editor.min.js"></script>
+    <script src="../dist/js/ol-geometry-editor.min.js"></script>
 
     <!--example css & js-->
     <link href="style.css" rel="stylesheet" />
 
-    <script type="text/javascript" src="customize-geoportal.js"></script>
-    <script type="text/javascript">
+    <script src="customize-geoportal.js"></script>
+    <script>
 
         $(document).ready(function () {
 
@@ -50,12 +50,8 @@
                         'attribution': '©<a href="http://openstreetmap.org">OpenStreetMap contributors</a>'
                     },
                     {
-                        'title': 'Wikipedia',
-                        'url': 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png'
-                    },
-                    {
                         'title': 'IGN',
-                        'url': getGeoportalURL("ORTHOIMAGERY.ORTHOPHOTOS"),
+                        'url': getGeoportalURL("ORTHOIMAGERY.ORTHOPHOTOS", "image/jpeg"),
                         'attribution': '©<a href="http://api.ign.fr/conditions-generales">IGN</a>'
                     },
                     {
@@ -63,7 +59,7 @@
                     }
                 ],
                 'tileLayerSwitcher': true,
-                'switchableLayers': [["OSM", "Wikipedia"], "IGN", "Fond Blanc"],
+                'switchableLayers': [["OSM"], "IGN", "Fond Blanc"],
                 'defaultSwitchableTile': 1,
                 'tileCoordinates': [9, 269, -189], //corse
 

@@ -1,5 +1,5 @@
 
-var geometryToSimpleGeometries = require('./geometryToSimpleGeometries');
+import geometryToSimpleGeometries from './geometryToSimpleGeometries.js';
 
 var convertMultiGeomsToSimpleGeoms = function(geometries){
     var simpleGeometries = [];
@@ -24,11 +24,11 @@ var geometriesToCollection = function(geometries){
         return null;
     }
 
-    if(geometries.length === 0){
+    if(0 === geometries.length){
         return {};
     }
 
-    if ( geometries.length == 1 ){
+    if ( 1 == geometries.length ){
         return geometries[0];
     }
 
@@ -36,20 +36,18 @@ var geometriesToCollection = function(geometries){
     geometries = convertMultiGeomsToSimpleGeoms(geometries);
 
     // count by geometry type
-    var counts = {};
+    let counts = {};
     geometries.forEach(function(geometry){
-        if ( typeof counts[geometry.type] === 'undefined' ){
+        if ( 'undefined' === typeof counts[geometry.type] ){
             counts[geometry.type] = 1 ;
         }else{
             counts[geometry.type]++ ;
         }
     }) ;
 
-    // list different geometry types
-    var geometryTypes = Object.keys(counts) ;
-
     // some different geometry types => GeometryCollection
-    if ( geometryTypes.length > 1 ){
+    let geometryTypes = Object.keys(counts) ;
+    if ( 1 < geometryTypes.length ){
         return {
             "type": "GeometryCollection",
             "geometries": geometries
@@ -57,8 +55,8 @@ var geometriesToCollection = function(geometries){
 
     // One geometry type  => Multi + simple Geometry type
     }else{
-        var multiType = "Multi"+Object.keys(counts)[0] ;
-        var coordinates = [];
+        let multiType = "Multi"+Object.keys(counts)[0] ;
+        let coordinates = [];
         geometries.forEach(function(geometry){
             coordinates.push(geometry.coordinates);
         }) ;
@@ -69,4 +67,4 @@ var geometriesToCollection = function(geometries){
     }
 } ;
 
-module.exports = geometriesToCollection ;
+export default geometriesToCollection ;

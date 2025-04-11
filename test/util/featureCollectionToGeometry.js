@@ -1,6 +1,6 @@
-var expect = require('expect');
+import expect from 'expect';
 
-var featureCollectionToGeometry = require('../../src/js/ge/util/featureCollectionToGeometry.js');
+import featureCollectionToGeometry from '../../src/js/ge/util/featureCollectionToGeometry.js';
 
 describe('test featureCollectionToGeometry', function () {
 
@@ -17,13 +17,13 @@ describe('test featureCollectionToGeometry', function () {
         };
 
         it('should produce a point', function (done) {
-            var geometry = featureCollectionToGeometry(featureCollection);
+            let geometry = featureCollectionToGeometry(featureCollection);
             expect(geometry.type).toEqual("Point");
             done();
         });
 
         it('should keep coordinate', function (done) {
-            var geometry = featureCollectionToGeometry(featureCollection);
+            let geometry = featureCollectionToGeometry(featureCollection);
             expect(JSON.stringify(geometry.coordinates)).toEqual("[3.5,4.5]");
             done();
         });
@@ -52,13 +52,13 @@ describe('test featureCollectionToGeometry', function () {
         };
 
         it('should produce a MultiPoint', function (done) {
-            var geometry = featureCollectionToGeometry(featureCollection);
+            let geometry = featureCollectionToGeometry(featureCollection);
             expect(geometry.type).toEqual("MultiPoint");
             done();
         });
 
         it('should keep coordinate', function (done) {
-            var geometry = featureCollectionToGeometry(featureCollection);
+            let geometry = featureCollectionToGeometry(featureCollection);
             expect(JSON.stringify(geometry.coordinates)).toEqual("[[3.5,4.5],[6.5,7.5]]");
             done();
         });
@@ -101,7 +101,7 @@ describe('test featureCollectionToGeometry', function () {
         };
 
         it('should produce a GeometryCollection', function (done) {
-            var geometry = featureCollectionToGeometry(featureCollection);
+            let geometry = featureCollectionToGeometry(featureCollection);
             expect(geometry.type).toEqual("GeometryCollection");
             expect(JSON.stringify(geometry)).toEqual('{"type":"GeometryCollection","geometries":[{"type":"Point","coordinates":[102,0.5]},{"type":"LineString","coordinates":[[102,0],[103,1],[104,0],[105,1]]},{"type":"Polygon","coordinates":[[[100,0],[101,0],[101,1],[100,1],[100,0]]]}]}');
             done();

@@ -1,6 +1,6 @@
-var expect = require('expect');
+import expect from 'expect';
 
-var geometryToSimpleGeometries = require('../../src/js/ge/util/geometryToSimpleGeometries.js');
+import geometryToSimpleGeometries from '../../src/js/ge/util/geometryToSimpleGeometries.js';
 
 describe('test geometryToSimpleGeometries', function () {
 

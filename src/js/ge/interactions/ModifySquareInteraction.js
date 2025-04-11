@@ -3,12 +3,11 @@
  * @constructor
  * @extends {ol.interaction.Pointer}
  */
-var ModifyBoxInteraction = function (opt_options) {
+var ModifySquareInteraction = function (opt_options) {
 
     opt_options = $.extend({
         features: null
     }, opt_options);
-
 
     this.features = opt_options.features;
 
@@ -42,30 +41,7 @@ var ModifyBoxInteraction = function (opt_options) {
     this.previousCursor_ = undefined;
 
 
-    let white = [255, 255, 255, 1];
-    let blue = [0, 153, 255, 1];
-    let width = 3;
 
-    var fill = new ol.style.Fill({
-        color: blue
-    });
-
-    var stroke = new ol.style.Stroke({
-        color: white,
-        width: width / 2
-    });
-
-    var image = new ol.style.Circle({
-        fill: fill,
-        stroke: stroke,
-        radius: width * 2
-    });
-
-    var style = new ol.style.Style({
-        image: image,
-        fill: fill,
-        stroke: stroke
-    });
     /**
      * Draw overlay where sketch features are drawn.
      * @type {ol.layer.Vector}
@@ -76,31 +52,31 @@ var ModifyBoxInteraction = function (opt_options) {
             useSpatialIndex: false,
             wrapX: !!opt_options.wrapX
         }),
-        style: opt_options.style || style,
+        style: opt_options.style,
         updateWhileAnimating: true,
         updateWhileInteracting: true
     });
 
-
     this.overlayPoints_ = [];
 
     ol.interaction.Pointer.call(this, {
-        handleDownEvent: ModifyBoxInteraction.prototype.handleDownEvent,
-        handleDragEvent: ModifyBoxInteraction.prototype.handleDragEvent,
-        handleMoveEvent: ModifyBoxInteraction.prototype.handleMoveEvent,
-        handleUpEvent: ModifyBoxInteraction.prototype.handleUpEvent
+        handleDownEvent: ModifySquareInteraction.prototype.handleDownEvent,
+        handleDragEvent: ModifySquareInteraction.prototype.handleDragEvent,
+        handleMoveEvent: ModifySquareInteraction.prototype.handleMoveEvent,
+        handleUpEvent: ModifySquareInteraction.prototype.handleUpEvent
     });
+
 
 };
 
-ol.inherits(ModifyBoxInteraction, ol.interaction.Pointer);
+ol.inherits(ModifySquareInteraction, ol.interaction.Pointer);
 
 
 /**
  * @param {ol.MapBrowserEvent} evt Map browser event.
  * @return {boolean} `true` to start the drag sequence.
  */
-ModifyBoxInteraction.prototype.handleDownEvent = function (evt) {
+ModifySquareInteraction.prototype.handleDownEvent = function (evt) {
     this.deltaX = 0;
     this.deltaY = 0;
 
@@ -126,7 +102,7 @@ ModifyBoxInteraction.prototype.handleDownEvent = function (evt) {
 /**
  * @param {ol.MapBrowserEvent} evt Map browser event.
  */
-ModifyBoxInteraction.prototype.handleDragEvent = function (evt) {
+ModifySquareInteraction.prototype.handleDragEvent = function (evt) {
     let feature = this.getFeature_(evt);
 
     this.deltaX = evt.coordinate[0] - this.coordinate_[0];
@@ -147,7 +123,7 @@ ModifyBoxInteraction.prototype.handleDragEvent = function (evt) {
 /**
  * @param {ol.MapBrowserEvent} evt Event.
  */
-ModifyBoxInteraction.prototype.handleMoveEvent = function (evt) {
+ModifySquareInteraction.prototype.handleMoveEvent = function (evt) {
     let feature = this.getFeatureUnderMouse_(evt);
 
     let element = evt.map.getTargetElement();
@@ -157,9 +133,6 @@ ModifyBoxInteraction.prototype.handleMoveEvent = function (evt) {
             this.previousCursor_ = element.style.cursor;
             element.style.cursor = this.grabCursor_;
         }
-
-        this.moveModifyPointsWithFeature_(feature);
-
     } else if (this.previousCursor_ !== undefined) {
         element.style.cursor = this.previousCursor_;
         this.previousCursor_ = undefined;
@@ -170,7 +143,7 @@ ModifyBoxInteraction.prototype.handleMoveEvent = function (evt) {
 /**
  * @return {boolean} `false` to stop the drag sequence.
  */
-ModifyBoxInteraction.prototype.handleUpEvent = function (evt) {
+ModifySquareInteraction.prototype.handleUpEvent = function (evt) {
 
     this.deltaX = 0;
     this.deltaY = 0;
@@ -196,7 +169,7 @@ ModifyBoxInteraction.prototype.handleUpEvent = function (evt) {
 /**
  * @inheritDoc
  */
-ModifyBoxInteraction.prototype.handleModify_ = function () {
+ModifySquareInteraction.prototype.handleModify_ = function () {
     let featureModifiedByModifyPoint = this.getFeatureOfModifyPoint_(this.feature_);
 
     // cas d'une feature hors point modifié par un de ses points de modification
@@ -206,7 +179,7 @@ ModifyBoxInteraction.prototype.handleModify_ = function () {
 
         // cas d'une feature autre qu'un point pour bouger ses points de modification
     } else {
-        this.moveModifyPointsWithFeature_(this.feature_);
+        this.moveModifyPointsWithFeature_();
 
     }
 
@@ -215,7 +188,7 @@ ModifyBoxInteraction.prototype.handleModify_ = function () {
 /**
  * @inheritDoc
  */
-ModifyBoxInteraction.prototype.setActive = function (active) {
+ModifySquareInteraction.prototype.setActive = function (active) {
     ol.interaction.Pointer.prototype.setActive.call(this, active);
 
     if (active) {
@@ -226,10 +199,11 @@ ModifyBoxInteraction.prototype.setActive = function (active) {
 };
 
 //activer les points de modification
-ModifyBoxInteraction.prototype.enableModificationPoints = function (featuresCollection) {
+ModifySquareInteraction.prototype.enableModificationPoints = function (featuresCollection) {
     if (null !== this.getMap()) {
         this.getMap().addLayer(this.overlay_);
     }
+
     this.overlayPoints_ = [];
 
     featuresCollection.forEach(function (feature) {
@@ -239,12 +213,12 @@ ModifyBoxInteraction.prototype.enableModificationPoints = function (featuresColl
 };
 
 //desactiver les points de modification
-ModifyBoxInteraction.prototype.disableModificationPoints = function (featuresCollection) {
+ModifySquareInteraction.prototype.disableModificationPoints = function (featuresCollection) {
     this.removeModificationPoints_(featuresCollection);
 };
 
 
-ModifyBoxInteraction.prototype.removeModificationPoints_ = function (featuresCollection) {
+ModifySquareInteraction.prototype.removeModificationPoints_ = function (featuresCollection) {
     // retirer les interractions sur les points de modification
     for (var i in this.overlayPoints_) {
         for (var u in this.overlayPoints_[i].modificationPoints) {
@@ -261,7 +235,7 @@ ModifyBoxInteraction.prototype.removeModificationPoints_ = function (featuresCol
 
 };
 
-ModifyBoxInteraction.prototype.addModificationPoints_ = function (feature) {
+ModifySquareInteraction.prototype.addModificationPoints_ = function (feature) {
 
     let coordsOfBoxCorners = feature.getGeometry().getCoordinates()[0];
 
@@ -285,7 +259,7 @@ ModifyBoxInteraction.prototype.addModificationPoints_ = function (feature) {
 
 
 //desactiver les points de modification
-ModifyBoxInteraction.prototype.getFeatureUnderMouse_ = function (evt) {
+ModifySquareInteraction.prototype.getFeatureUnderMouse_ = function (evt) {
     return evt.map.forEachFeatureAtPixel(evt.pixel,
             function (feature) {
                 for (var i in this.features.getArray()) {
@@ -296,7 +270,7 @@ ModifyBoxInteraction.prototype.getFeatureUnderMouse_ = function (evt) {
             }.bind(this));
 };
 
-ModifyBoxInteraction.prototype.getFeature_ = function () {
+ModifySquareInteraction.prototype.getFeature_ = function () {
     return this.feature_;
 };
 
@@ -305,7 +279,7 @@ ModifyBoxInteraction.prototype.getFeature_ = function () {
  * - met à jour la position de tous les points de modification
  * - met à jour la feature modifiée en se basant sur la position des points de modification
  */
-ModifyBoxInteraction.prototype.setFeatureByModifyPoints_ = function (feature) {
+ModifySquareInteraction.prototype.setFeatureByModifyPoints_ = function (feature) {
 
     let modifyPoints = this.getModifyPointsOfFeature_(feature);
 
@@ -318,7 +292,7 @@ ModifyBoxInteraction.prototype.setFeatureByModifyPoints_ = function (feature) {
 
 };
 
-ModifyBoxInteraction.prototype.updateLinkedModifyPointForBBox = function (modifyPointChanged, modifyPointsToUpdate) {
+ModifySquareInteraction.prototype.updateLinkedModifyPointForBBox = function (modifyPointChanged, modifyPointsToUpdate) {
 
     var indice;
     for (var i in modifyPointsToUpdate) {
@@ -352,7 +326,7 @@ ModifyBoxInteraction.prototype.updateLinkedModifyPointForBBox = function (modify
 
 };
 
-ModifyBoxInteraction.prototype.redrawFeatureByModificationPointsPosition = function (feature, modifyPoints) {
+ModifySquareInteraction.prototype.redrawFeatureByModificationPointsPosition = function (feature, modifyPoints) {
 
     let newCoords = [];
     for (var j in modifyPoints) {
@@ -362,18 +336,18 @@ ModifyBoxInteraction.prototype.redrawFeatureByModificationPointsPosition = funct
     feature.getGeometry().setCoordinates([newCoords]);
 };
 
-ModifyBoxInteraction.prototype.moveModifyPointsWithFeature_ = function (feature) {
+ModifySquareInteraction.prototype.moveModifyPointsWithFeature_ = function () {
 
-    var modifyPoints = this.getModifyPointsOfFeature_(feature);
-
+    let modifyPoints = this.getModifyPointsOfFeature_(this.feature_);
     var coords;
-    switch (feature.getGeometry().getType()) {
+    switch (this.feature_.getGeometry().getType()) {
         case "Polygon":
-            coords = feature.getGeometry().getCoordinates()[0];
+            coords = this.feature_.getGeometry().getCoordinates()[0];
             coords.pop();
             break;
 
         default:
+
             break;
     }
 
@@ -385,7 +359,7 @@ ModifyBoxInteraction.prototype.moveModifyPointsWithFeature_ = function (feature)
 
 
 
-ModifyBoxInteraction.prototype.getFeatureOfModifyPoint_ = function (modifyPoint) {
+ModifySquareInteraction.prototype.getFeatureOfModifyPoint_ = function (modifyPoint) {
     for (var i in this.overlayPoints_) {
         for (var u in this.overlayPoints_[i].modificationPoints) {
 
@@ -396,7 +370,7 @@ ModifyBoxInteraction.prototype.getFeatureOfModifyPoint_ = function (modifyPoint)
     }
 };
 
-ModifyBoxInteraction.prototype.getModifyPointsOfFeature_ = function (feature) {
+ModifySquareInteraction.prototype.getModifyPointsOfFeature_ = function (feature) {
     for (var i in this.overlayPoints_) {
         if (this.overlayPoints_[i].feature === feature) {
             return this.overlayPoints_[i].modificationPoints;
@@ -406,4 +380,4 @@ ModifyBoxInteraction.prototype.getModifyPointsOfFeature_ = function (feature) {
 
 
 
-export default ModifyBoxInteraction;
+export default ModifySquareInteraction;

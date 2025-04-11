@@ -77,7 +77,7 @@ var ExportToPngControl = function (options) {
         .attr('title', 'Prévisualisation de la capture de la carte')
         .appendTo(this.$modalPreviewElement);
 
-    $divDownloadModal = $('<div>')
+    let $divDownloadModal = $('<div>')
         .addClass('modal-download-container')
         .appendTo(this.$modalPreviewElement);
 
@@ -146,4 +146,4 @@ ExportToPngControl.prototype.export = function () {
 };
 
 
-module.exports = ExportToPngControl;
+export default ExportToPngControl;

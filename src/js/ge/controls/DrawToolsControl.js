@@ -1,11 +1,11 @@
-var defaultTranslations = require('../translations/translation.fr.json');
+import defaultTranslations from '../translations/translation.fr.json';
 
 
-var DrawControl = require('./DrawControl');
-var EditControl = require('./EditControl');
-var TranslateControl = require('./TranslateControl');
-var RemoveControl = require('./RemoveControl');
-var defaultStyleDrawFunction = require('../util/defaultStyleDrawFunction');
+import DrawControl from './DrawControl.js';
+import EditControl from './EditControl.js';
+import TranslateControl from './TranslateControl.js';
+import RemoveControl from './RemoveControl.js';
+import defaultStyleDrawFunction from '../util/defaultStyleDrawFunction.js';
 
 
 
@@ -41,7 +41,7 @@ var DrawToolsControl = function (options) {
 
     this.controls = [];
 
-    var drawBar = $("<div>").addClass('ol-draw-tools ol-unselectable ol-control');
+    let drawBar = $("<div>").addClass('ol-draw-tools ol-unselectable ol-control');
 
     ol.control.Control.call(this, {
         element: drawBar.get(0),
@@ -74,7 +74,7 @@ DrawToolsControl.prototype.addDrawControls = function () {
         return;
     }
 
-    if (this.type === "Geometry") {
+    if ("Geometry" === this.type) {
         this.addDrawControl({type: "MultiPoint", multiple: true, title: this.translations.draw.multipoint});
         this.addDrawControl({type: "MultiLineString", multiple: true, title: this.translations.draw.multilinestring});
         this.addDrawControl({type: "MultiPolygon", multiple: true, title: this.translations.draw.multipolygon});
@@ -93,7 +93,7 @@ DrawToolsControl.prototype.addDrawControl = function (options) {
         target: this.element,
         style: function(feature, resolution){
             if(this.style){
-                if(typeof this.style === "function"){
+                if("function" === typeof this.style){
                     return this.style(feature, resolution);
                 }
                 return this.style;
@@ -121,12 +121,12 @@ DrawToolsControl.prototype.addEditControl = function () {
         title: this.translations.edit[this.type.toLowerCase()],
         style: function(feature, resolution){
             if(this.style){
-                if(typeof this.style === "function"){
+                if("function" === typeof this.style){
                     return this.style(feature, resolution);
                 }
                 return this.style;
             }
-            return defaultStyleDrawFunction(options.type);
+            return defaultStyleDrawFunction(this.type);
         }.bind(this),
     });
 
@@ -185,4 +185,4 @@ DrawToolsControl.prototype.getControls = function () {
 };
 
 
-module.exports = DrawToolsControl;
+export default DrawToolsControl;

@@ -1,10 +1,15 @@
-require("../css/draw-control.css");
-require("../css/tilelayerswitcher-control.css");
-require("../css/export-to-png-control.css");
+import '../css/draw-control.css';
+import '../css/tilelayerswitcher-control.css';
+import '../css/export-to-png-control.css';
 
-global.ge = {
-    defaultParams: require('./ge/defaultParams'),
-    GeometryEditor: require('./ge/GeometryEditor')
+import defaultParams from './ge/defaultParams.js';
+import GeometryEditor from './ge/GeometryEditor.js';
+
+//import ../images/.css
+
+let ge = {
+    defaultParams: defaultParams,
+    GeometryEditor: GeometryEditor
 };
 
 
@@ -14,10 +19,12 @@ if (jQuery) {
      */
     jQuery.fn.geometryEditor = function (options) {
         return this.each(function () {
-            var editor = new global.ge.GeometryEditor(this, options);
+            let editor = new ge.GeometryEditor(this, options);
             $(this).data('editor', editor);
         });
     };
 }
 
-module.exports = global.ge;
+window.ge = ge;
+
+export default ge;

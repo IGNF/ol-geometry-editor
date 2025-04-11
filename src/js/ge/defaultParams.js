@@ -26,4 +26,4 @@ var defaultParams = {
     precision: 7
 };
 
-module.exports = defaultParams;
+export default defaultParams ;

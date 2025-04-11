@@ -4,7 +4,7 @@
  *
  * @constructor
  * @extends {ol.control.Control}
- * 
+ *
  * @param {object} options
  *
  */
@@ -13,7 +13,7 @@ var TranslateControl = function (options) {
     this.title = options.title || 'Move a geometry';
     this.featuresCollection = options.featuresCollection;
 
-    var element = $("<div>").addClass('ol-translate ol-unselectable ol-control');
+    let element = $("<div>").addClass('ol-translate ol-unselectable ol-control');
 
     $("<button>").attr('title', this.title)
             .on("touchstart click", function (e)
@@ -89,4 +89,4 @@ TranslateControl.prototype.addTranslateInteraction = function () {
 };
 
 
-module.exports = TranslateControl;
+export default TranslateControl;

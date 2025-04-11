@@ -131,7 +131,7 @@ TileLayerSwitcherControl.prototype.setFondCarto = function (tileId, triggerEvent
         this.tiles[tileId].setActive(true);
     }
 
-    if (triggerEvent !== false) {
+    if (false !== triggerEvent) {
         this.dispatchEvent({ type: 'change:tile', id: tileId, tile: this.tiles[tileId] });
     }
 };
@@ -146,7 +146,7 @@ TileLayerSwitcherControl.prototype.setFondCarto = function (tileId, triggerEvent
  *
  */
 TileLayerSwitcherControl.prototype.setFondCartoByTilePosition = function (position, triggerEvent) {
-    this.setFondCarto(this.getTileByPosition(position).getId(), triggerEvent)
+    this.setFondCarto(this.getTileByPosition(position).getId(), triggerEvent);
 };
 
 
@@ -161,7 +161,7 @@ TileLayerSwitcherControl.prototype.deactivateAllTiles = function () {
 };
 
 TileLayerSwitcherControl.prototype.isTileExist = function (tileId) {
-    return typeof this.tiles[tileId] !== "undefined";
+    return "undefined" !== typeof this.tiles[tileId];
 };
 
 TileLayerSwitcherControl.prototype.getTiles = function () {
@@ -201,7 +201,7 @@ TileLayerSwitcherControl.prototype.getLayerImageUrl = function (layer) {
     return null;
 };
 
-module.exports = TileLayerSwitcherControl;
+export default TileLayerSwitcherControl;
 
 
 
@@ -234,7 +234,7 @@ TileItem.prototype.setActive = function (active) {
 TileItem.prototype.createElement = function () {
     this.element = $('<div class="ol-tile-item">');
     var button = $('<button>').attr('id', this.id).appendTo(this.element);
-    var title = $('<label>').html(this.title).appendTo(this.element);
+   $('<label>').html(this.title).appendTo(this.element);
     var buttonContent = $('<div class="tile-images">').appendTo(button);
 
     var image = $('<img>');

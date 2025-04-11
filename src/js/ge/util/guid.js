@@ -13,4 +13,4 @@ var guid = function() {
         s4() + '-' + s4() + s4() + s4();
 } ;
 
-module.exports = guid ;
+export default guid ;

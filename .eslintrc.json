@@ -1,0 +1,27 @@
+{
+    "rules": {
+        "semi": ["error", "always"],
+        "yoda": ["error", "always"]
+        // "quotes": ["error", "double"]
+    },
+    "parserOptions": {
+        "ecmaVersion": 2020,
+        "sourceType": "module"
+    },
+    "ignorePatterns": [
+        "dist/*"
+    ],
+    "extends": [
+        "eslint:recommended"
+    ],
+    "env": {
+        "browser": true,
+        "node": true,
+        "jquery": true,
+        "es6": true
+        // "phantomjs": true
+    },
+    "globals": {
+        "ol": "writable"
+    }
+}

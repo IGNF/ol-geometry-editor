@@ -1,14 +1,14 @@
 
-var DrawToolsControl = require('./controls/DrawToolsControl');
-var TileLayerSwitcher = require('./controls/TileLayerSwitcherControl');
-var ExportToPngControl = require('./controls/ExportToPngControl');
+import DrawToolsControl from './controls/DrawToolsControl.js';
+import TileLayerSwitcher from './controls/TileLayerSwitcherControl.js';
+import ExportToPngControl from './controls/ExportToPngControl.js';
 
-var guid = require('./util/guid');
-var featureCollectionToGeometry = require('./util/featureCollectionToGeometry.js');
-var isSingleGeometryType = require('./util/isSingleGeometryType.js');
-var defaultStyleLayerFunction = require('./util/defaultStyleLayerFunction');
+import guid from './util/guid.js';
+import featureCollectionToGeometry from './util/featureCollectionToGeometry.js';
+import isSingleGeometryType from './util/isSingleGeometryType.js';
+import defaultStyleLayerFunction from './util/defaultStyleLayerFunction.js';
 
-var TileLayer = require('./models/TileLayer');
+import TileLayer from './models/TileLayer.js';
 
 
 
@@ -49,7 +49,7 @@ var Viewer = function (options) {
 Viewer.prototype.initMap = function (params) {
 
     // create map div
-    var mapTargetId = 'map-' + guid();
+    let mapTargetId = 'map-' + guid();
     var $mapDiv = $('<div id="' + mapTargetId + '"></div>');
     $mapDiv.addClass('map');
     $mapDiv.css('width', params.width);
@@ -137,7 +137,7 @@ Viewer.prototype.initExportToPngControl = function () {
  */
 Viewer.prototype.addLayersToMap = function (layers) {
     for (var i in layers) {
-        if (layers[i] !== null) {
+        if (null !== layers[i]) {
             this.getMap().addLayer(layers[i]);
         }
     }
@@ -178,9 +178,9 @@ Viewer.prototype.setGeometries = function (featuresCollection, geometries) {
             geometry: geom.transform(this.settings.dataProjection, this.settings.mapProjection)
         });
 
-        var type = this.settings.geometryType;
+        let type = this.settings.geometryType;
 
-        if (type === "Geometry") {
+        if("Geometry" === type){
             type = geometries[i].type;
         }
 
@@ -195,7 +195,7 @@ Viewer.prototype.setGeometries = function (featuresCollection, geometries) {
  * @param {ol.Collection} featuresCollection
  */
 Viewer.prototype.fitViewToFeaturesCollection = function (featuresCollection) {
-    var geometries = [];
+    let geometries = [];
     featuresCollection.forEach(function (feature) {
         geometries.push(feature.getGeometry());
     });
@@ -219,7 +219,7 @@ Viewer.prototype.addLayer = function (featuresCollection, featureStyle) {
         }),
         style: function(feature, resolution){
             if(featureStyle){
-                if(typeof featureStyle === "function"){
+                if("function" === typeof featureStyle){
                     return featureStyle(feature, resolution);
                 }
                 return featureStyle;
@@ -273,7 +273,7 @@ Viewer.prototype.addDrawToolsControl = function (drawOptions) {
         style: drawOptions.style
     };
 
-    var drawToolsControl = new DrawToolsControl(drawControlOptions);
+    let drawToolsControl = new DrawToolsControl(drawControlOptions);
 
     this.getMap().on('set:geometries', function () {
         drawToolsControl.deactivateControls();
@@ -375,18 +375,18 @@ Viewer.prototype.addTileLayerSwitcher = function (layers, params) {
     });
 
 
-    var switchableLayers = params.switchableLayers
+    var switchableLayers = params.switchableLayers;
 
     // switchableLayers not renseigned
-    if (switchableLayers === null || switchableLayers.length === 0) {
+    if (null === switchableLayers || 0 === switchableLayers.length) {
 
         for (var title in layers) {
-            if (layers[title] === null) {
+            if (null === layers[title]) {
                 tileLayerSwitcherControl.addTile([], title);
             } else {
                 tileLayerSwitcherControl.addTile([layers[title]], title);
             }
-        };
+        }
 
         // switchableLayers renseigned
     } else {
@@ -398,7 +398,7 @@ Viewer.prototype.addTileLayerSwitcher = function (layers, params) {
                 var groupedLayers = [];
                 for (var u in switchableLayers[i]) {
 
-                    if (layers[switchableLayers[i][u]] !== null) {
+                    if (null !== layers[switchableLayers[i][u]]) {
                         groupedLayers.push(layers[switchableLayers[i][u]]);
                     }
                 }
@@ -406,7 +406,7 @@ Viewer.prototype.addTileLayerSwitcher = function (layers, params) {
 
                 // switchableLayers ["titre3"]
             } else {
-                if (layers[switchableLayers[i]] === null) {
+                if (null === layers[switchableLayers[i]]) {
                     tileLayerSwitcherControl.addTile([], switchableLayers[i]);
                 } else {
                     tileLayerSwitcherControl.addTile([layers[switchableLayers[i]]], switchableLayers[i]);
@@ -426,4 +426,4 @@ Viewer.prototype.addTileLayerSwitcher = function (layers, params) {
 };
 
 
-module.exports = Viewer;
+export default Viewer;
